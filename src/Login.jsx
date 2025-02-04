@@ -9,7 +9,7 @@ export default function Login() {
                     <div className="mx-auto w-full max-w-sm lg:w-96">
                         <div>
                             <img
-                                alt="Your Company"
+                                alt="NWMSU Logo"
                                 src={nwmsu_logo}
                                 className="h-10 w-auto"
                             />
