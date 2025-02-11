@@ -1,7 +1,18 @@
-import nwmsu_img_1 from './assets/northwestmissouri.jpg'
-import nwmsu_logo from './assets/nwmsu-logo.svg'
+import nwmsu_img_1 from './assets/northwestmissouri.jpg';
+import nwmsu_logo from './assets/nwmsu-logo.svg';
+// import api from './Config/axios';
+import {React, useState, useEffect} from 'react';
 
 export default function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = ()=>{
+        console.log('User Email: ', email);
+        console.log('User Password: ', password);
+    }
+
+    
     return (
         <>
             <div className="flex min-h-screen flex-1">
@@ -20,7 +31,7 @@ export default function Login() {
 
                         <div className="mt-10">
                             <div>
-                                <form method="POST" className="space-y-6">
+                                <form method="POST" className="space-y-6" onSubmit={handleSubmit()}>
                                     <div>
                                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                             Email address
@@ -33,6 +44,7 @@ export default function Login() {
                                                 required
                                                 autoComplete="email"
                                                 className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-800 sm:text-sm sm:leading-6"
+                                                onChange={(e)=>setEmail(e.target.value)}
                                             />
                                         </div>
                                     </div>
@@ -49,6 +61,7 @@ export default function Login() {
                                                 required
                                                 autoComplete="current-password"
                                                 className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-800 sm:text-sm sm:leading-6"
+                                                onChange={(e)=>setPassword(e.target.value)}
                                             />
                                         </div>
                                     </div>
