@@ -1,14 +1,25 @@
 import nwmsu_img_1 from './assets/northwestmissouri.jpg';
 import nwmsu_logo from './assets/nwmsu-logo.svg';
 import { React, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = () => {
         console.log('User Email: ', email);
         console.log('User Password: ', password);
+        try{
+            if(email == 'abcd@nwmissouri.edu'){
+                if(password == 'abcd'){
+                    navigate('/home')
+                }
+            }
+        }catch(error){
+            console.log('Wrong Creds')
+        }
     }
 
 
@@ -30,7 +41,8 @@ export default function Login() {
 
                         <div className="mt-10">
                             <div>
-                                <form method="POST" className="space-y-6" onSubmit={handleSubmit()}>
+                                {/* <form method="POST" className="space-y-6" onSubmit={()=>handleSubmit()}> */}
+                                <form className="space-y-6" onSubmit={()=>handleSubmit()}>
                                     <div>
                                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                             Email address
