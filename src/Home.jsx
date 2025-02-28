@@ -1,41 +1,86 @@
-import nwmsu_logo from './assets/nwmsu-logo.svg';
-import { React } from 'react';
-import { Link } from 'react-router-dom';
+import { UserCircleIcon, TruckIcon, WrenchScrewdriverIcon } from '@heroicons/react/20/solid'
+import { FaGasPump } from 'react-icons/fa';
+import { HiDocumentReport } from "react-icons/hi";
+import { FcSettings } from "react-icons/fc";
+import Navigation from './Navigation';
+import { useNavigate } from 'react-router-dom';
+
+const Content = [
+    {
+        name: 'User Accounts',
+        title: 'Add/Edit Users',
+        role: 'Admin',
+        imageUrl: UserCircleIcon,
+        href:'/Users'
+    },
+    {
+        name: 'Vehicle Records',
+        title: 'View, Add/Edit Vehicle Details',
+        role: 'Admin',
+        imageUrl: TruckIcon,
+        href: '/Vehicles'
+    },
+    {
+        name: 'Refueling Events',
+        title: 'Update/ Edit fleece refueling ',
+        role: 'Admin',
+        imageUrl: FaGasPump,
+        href:'#'
+    },
+    {
+        name: 'Maintainence Events',
+        title: 'Fleece Maintainence update/edit',
+        role: 'Admin',
+        imageUrl: WrenchScrewdriverIcon,
+        href:'#'
+    },
+    {
+        name: 'Reports',
+        title: 'Generate, Update & Report Analytics',
+        role: 'Admin',
+        imageUrl: HiDocumentReport,
+        href:'#'
+    },
+    {
+        name: 'Settings',
+        title: 'Update Password, User permissions & more',
+        role: 'Admin',
+        imageUrl: FcSettings,
+        href:'#'
+    },
+]
 
 export default function Home() {
-    const gridItems = [
-        { name: "Analytics", path: "/analytics", icon: "📊" },
-        { name: "Update Vehicle Details", path: "/update-vehicle", icon: "🚗" },
-        { name: "Generate Reports", path: "/reports", icon: "📄" },
-        { name: "Manage Users", path: "/manage-users", icon: "👥" },
-        { name: "Dummy 1", path: "/maintenance", icon: "🛠️" },
-        { name: "Dummy 2", path: "/billing", icon: "🛠️" },
-        { name: "Dummy 3", path: "/notifications", icon: "🔔" },
-        { name: "Dummy 4", path: "/support", icon: "🛠️" },
-        { name: "Dummy 5", path: "/settings", icon: "⚙️" },
-    ];
-
+    const navigate = useNavigate();
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center px-6 py-12">
-            {/* Header */}
-            <div className="w-full max-w-6xl flex items-center justify-between mb-10">
-                <img src={nwmsu_logo} alt="NWMSU Logo" className="h-12 w-auto" />
-                <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            </div>
-
-            {/* Grid Container */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
-                {gridItems.map((item, index) => (
-                    <Link 
-                        key={index}
-                        to={item.path}
-                        className="flex flex-col items-center justify-center bg-white shadow-md rounded-xl p-6 hover:shadow-lg transition-all duration-200 ease-in-out hover:bg-green-100"
-                    >
-                        <div className="text-4xl">{item.icon}</div>
-                        <h2 className="mt-4 text-lg font-semibold text-gray-900">{item.name}</h2>
-                    </Link>
-                ))}
-            </div>
+        <div className='min-h-screen bg-gray-200'>
+            <Navigation />
+            <main className='lg:pl-[25%] lg:pr-[5%] mt-[6%]'>
+                <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 mt-10 cursor-pointer">
+                    {Content.map((grid) => (
+                        <li
+                            key={grid.email}
+                            className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow"
+                            onClick={()=>navigate(grid.href)}
+                        >
+                            <div className="flex flex-1 flex-col p-8">
+                                <div className="mx-auto size-32 shrink-0 rounded-full">
+                                    <grid.imageUrl
+                                        className="size-32 text-gray-400"
+                                        aria-hidden="true"
+                                    />
+                                </div>
+                                <h3 className="mt-6 text-xl font-semibold text-gray-900">{grid.name}</h3>
+                                <dl className="mt-1 flex grow flex-col justify-between">
+                                    <dt className="sr-only">Title</dt>
+                                    <dd className="text-sm text-gray-500">{grid.title}</dd>
+                                    <dt className="sr-only">Role</dt>
+                                </dl>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </main>
         </div>
-    );
+    )
 }
