@@ -7,6 +7,7 @@ import Dashboard from './Navigation';
 import Users from './Users';
 import Vehicle from './Vehicle';
 import AddUsers from './AddUsers'
+import AddVehicles from './AddVehicles';
 // import api from './Config/axios';
 
 
@@ -21,6 +22,7 @@ function App() {
         <Route path='/Users' element={<Users/>}/>
         <Route path='/Vehicles' element = {<Vehicle/>}/>
         <Route path="/add-users" element={<AddUsers />} />
+        <Route path="/add-vehicles" element={<AddVehicles/>}/>
       </Routes>
 
     </Router>
