@@ -1,5 +1,6 @@
 import { EnvelopeIcon, PhoneIcon, MagnifyingGlassIcon, UserPlusIcon } from '@heroicons/react/20/solid'
 import Navigation from './Navigation'
+import { useNavigate } from 'react-router-dom';
 const people = [
     {
         name: 'Cindy Tu',
@@ -59,6 +60,12 @@ const people = [
 ]
 
 export default function Users() {
+
+    const navigate = useNavigate();
+
+    const handleAddUsersClick = () => {
+      navigate('/add-users'); // Navigate to the "Add Users" page
+    };
     return (
         <div className='min-h-screen bg-gray-200'>
             <Navigation />
@@ -85,6 +92,7 @@ export default function Users() {
                     <button
                         type="button"
                         className="absolute right-[100px] rounded-md bg-green-100 px-3.5 py-2.5 text-base font-semibold text-green-800 shadow-sm hover:bg-green-100"
+                        onClick={handleAddUsersClick}
                     >
                         <div className='flex flex-row gap-2'><UserPlusIcon className='w-6 h-6' /> <span>Add Users</span></div>
                     </button>
