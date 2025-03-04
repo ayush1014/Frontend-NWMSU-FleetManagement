@@ -26,6 +26,8 @@ import { FaGasPump } from 'react-icons/fa';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import Home from './Home'
 import nwmsu_logo from './assets/nwmsu-logo.svg';
+import { useNavigate } from 'react-router-dom';
+
 const navigation = [
     { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
     { name: 'Users', href: '/Users', icon: UsersIcon, current: false },
@@ -44,6 +46,7 @@ function classNames(...classes) {
 }
 
 export default function Navigation() {
+    const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     return (
@@ -75,7 +78,8 @@ export default function Navigation() {
                                         <img
                                             alt="Your Company"
                                             src={nwmsu_logo}
-                                            className="h-8 w-auto"
+                                            className="h-8 w-auto cursor-pointer"
+                                            onClick={()=>navigate('/home')}
                                         />
                                     </div>
                                     <nav className="flex flex-1 flex-col">

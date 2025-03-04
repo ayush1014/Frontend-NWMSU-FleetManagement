@@ -18,11 +18,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Login/>}/>
         <Route path='/home' element={<Home/>}/>
-        <Route path='/Dashboard' element= {<Dashboard/>}/>
         <Route path='/Users' element={<Users/>}/>
         <Route path='/Vehicles' element = {<Vehicle/>}/>
-        <Route path="/add-users" element={<AddUsers />} />
         <Route path="/add-vehicles" element={<AddVehicles/>}/>
+        <Route path="/add-users" element={<AddUsers/>}/>
       </Routes>
 
     </Router>

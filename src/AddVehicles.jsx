@@ -1,124 +1,173 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { TruckIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
+import { PhotoIcon, UserCircleIcon, PlusCircleIcon, TruckIcon } from '@heroicons/react/24/solid'
+import { ChevronDownIcon } from '@heroicons/react/16/solid'
+import Navigation from './Navigation'
+import { useState } from 'react';
 
-const AddVehicles = () => {
-  const navigate = useNavigate();
+const vehicleBrands = [
+  'Ford', 'Chevrolet', 'Toyota', 'Honda', 'Nissan', 'Jeep', 'Hyundai', 'Kia',
+  'Subaru', 'GMC', 'Ram', 'Dodge', 'Mercedes-Benz', 'BMW', 'Volkswagen', 'Audi',
+  'Lexus', 'Tesla', 'Mazda', 'Volvo', 'Porsche', 'Cadillac', 'Buick', 'Chrysler',
+  'Lincoln', 'Acura', 'Infiniti', 'Land Rover', 'Jaguar', 'Mitsubishi', 'Mini',
+  'Fiat', 'Alfa Romeo', 'Genesis', 'Rivian', 'Lucid', 'Fisker', 'Polestar'
+];
 
-  // State to manage form inputs
-  const [formData, setFormData] = useState({
-    name: '',
-    vin: '',
-    role: '',
-    imageUrl: '',
-  });
-
-  // Handle form input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here, you can add logic to save the new vehicle (e.g., send data to an API or update state)
-    console.log('New Vehicle Data:', formData);
-
-    // Redirect back to the Vehicles page after submission
-    navigate('/vehicles');
-  };
-
+export default function AddVehicles() {
+  const [selectedBrand, setSelectedBrand] = useState('');
   return (
-    <div className="min-h-screen bg-gray-200 p-6">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Add New Vehicle</h1>
-        <form onSubmit={handleSubmit}>
-          {/* Name Field */}
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              Vehicle Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
-              placeholder="Enter vehicle name"
-              required
-            />
+    <div className='min-h-screen bg-gray-50'>
+      <Navigation />
+      <main className='p-[2%] lg:pl-[25%] lg:pr-[5%] mt-[5%] md:pl-[10%] md:pr-[10%]'>
+        <form>
+          <div className="space-y-12">
+            <div className="border-b border-gray-900/10 pb-12">
+              <h2 className="text-base/7 font-semibold text-gray-900">Vehicle Information</h2>
+              <p className="mt-1 text-sm/6 text-gray-600">Please enter all the vehicle information.</p>
+
+              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div className="sm:col-span-3">
+                  <label htmlFor="vin" className="block text-sm/6 font-medium text-gray-900">
+                    Vehicle Vin Number
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="vin"
+                      name="vin"
+                      type="text"
+                      autoComplete="vin"
+                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:col-span-3">
+                  <label htmlFor="brand" className="block text-sm/6 font-medium text-gray-900">
+                    Vehicle Brand
+                  </label>
+                  <div className="mt-2 grid grid-cols-1">
+                    <select
+                      id="brand"
+                      name="brand"
+                      value={selectedBrand}
+                      onChange={(e) => setSelectedBrand(e.target.value)}
+                      autoComplete="brand-name"
+                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+                    >
+                      <option value="">Select a brand</option>
+                      {vehicleBrands.map((brand) => (
+                        <option key={brand} value={brand}>
+                          {brand}
+                        </option>))}
+                    </select>
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:col-span-3">
+                  <label htmlFor="vehicle-model" className="block text-sm/6 font-medium text-gray-900">
+                    Vehicle Model
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="vehicle-model"
+                      name="vehicle-model"
+                      type="text"
+                      autoComplete="car-name"
+                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:col-span-3">
+                  <label htmlFor="vehicle-year" className="block text-sm/6 font-medium text-gray-900">
+                    Vehicle Year
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="vehicle-year"
+                      name="vehicle-year"
+                      type="vehicle-year"
+                      autoComplete="vehicle-year"
+                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+                    />
+                  </div>
+                </div>
+
+
+
+                <div className="col-span-2">
+                  <label htmlFor="vehicle-color" className="block text-sm/6 font-medium text-gray-900">
+                    Vehicle Color
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="vehicle-color"
+                      name="vehicle-color"
+                      type="text"
+                      autoComplete="vehicle-color"
+                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label htmlFor="miles" className="block text-sm/6 font-medium text-gray-900">
+                    Miles on Vehicle
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="miles"
+                      name="miles"
+                      type="text"
+                      autoComplete="address-level2"
+                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label htmlFor="vehicle-license" className="block text-sm/6 font-medium text-gray-900">
+                    License Plate Number
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="vehicle-license"
+                      name="vehicle-license"
+                      type="text"
+                      autoComplete="vehicle-license"
+                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* VIN Field */}
-          <div className="mb-4">
-            <label htmlFor="vin" className="block text-sm font-medium text-gray-700">
-              VIN (Vehicle Identification Number)
-            </label>
-            <input
-              type="text"
-              name="vin"
-              id="vin"
-              value={formData.vin}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
-              placeholder="Enter VIN"
-              required
-            />
-          </div>
-
-          {/* Role Field */}
-          <div className="mb-4">
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-              Role
-            </label>
-            <input
-              type="text"
-              name="role"
-              id="role"
-              value={formData.role}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
-              placeholder="Enter role (e.g., Library, University Police Department)"
-              required
-            />
-          </div>
-
-          {/* Image URL Field */}
-          <div className="mb-6">
-            <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700">
-              Image URL (Optional)
-            </label>
-            <input
-              type="url"
-              name="imageUrl"
-              id="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
-              placeholder="Enter image URL"
-            />
-          </div>
-
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-            >
-              <TruckIcon className="h-5 w-5 mr-2" aria-hidden="true" />
-              <PlusCircleIcon className="h-4 w-4 mr-2" aria-hidden="true" />
-              Add Vehicle
+          <div className="mt-6 flex items-center justify-end gap-x-[21%]">
+            <button type="button" className="text-sm/6 font-semibold text-gray-900 mt-4">
+              Cancel
             </button>
+            <div className='mb-6'>
+              <button
+                type="button"
+                className="absolute right-[100px] rounded-md bg-green-100 px-3.5 py-2.5 text-base font-semibold text-green-800 shadow-sm hover:bg-green-100"
+              >
+                <div className='flex flex-row gap-2'>
+                  <div className='flex flex-row'>
+                    <TruckIcon className='w-6 h-6 -mr-[2px]' />
+                    <PlusCircleIcon className='w-[15px] h-[15px] mt-[2px]' />
+                  </div>
+                  <span>
+                    Add Vehicles
+                  </span>
+                </div>
+              </button>
+            </div>
           </div>
         </form>
-      </div>
+      </main>
     </div>
-  );
-};
-
-export default AddVehicles;
+  )
+}
