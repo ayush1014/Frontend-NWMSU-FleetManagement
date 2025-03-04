@@ -3,6 +3,7 @@ import { ChevronDownIcon } from '@heroicons/react/16/solid'
 import Navigation from './Navigation'
 import { useState } from 'react';
 
+// Vehicle Brands for dropdown
 const vehicleBrands = [
   'Ford', 'Chevrolet', 'Toyota', 'Honda', 'Nissan', 'Jeep', 'Hyundai', 'Kia',
   'Subaru', 'GMC', 'Ram', 'Dodge', 'Mercedes-Benz', 'BMW', 'Volkswagen', 'Audi',
