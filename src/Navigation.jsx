@@ -30,9 +30,9 @@ const navigation = [
     { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
     { name: 'Users', href: '/Users', icon: UsersIcon, current: false },
     { name: 'Vehicles', href: '/Vehicles', icon: TruckIcon, current: false },
-    { name: 'Refueling', href: '#', icon: FaGasPump, current: false },
-    { name: 'Maintainence', href: '#', icon: WrenchScrewdriverIcon, current: false },
-    { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+    { name: 'Refueling', href: '/refuling', icon: FaGasPump, current: false },
+    { name: 'Maintainence', href: '/maintainance', icon: WrenchScrewdriverIcon, current: false },
+    { name: 'Reports', href: '/reports', icon: ChartPieIcon, current: false },
 ]
 const userNavigation = [
     { name: 'Your profile', href: '#' },
