@@ -8,7 +8,7 @@ const vehicleBrands = [
   'Subaru', 'GMC', 'Ram', 'Dodge', 'Mercedes-Benz', 'BMW', 'Volkswagen', 'Audi',
   'Lexus', 'Tesla', 'Mazda', 'Volvo', 'Porsche', 'Cadillac', 'Buick', 'Chrysler',
   'Lincoln', 'Acura', 'Infiniti', 'Land Rover', 'Jaguar', 'Mitsubishi', 'Mini',
-  'Fiat', 'Alfa Romeo', 'Genesis', 'Rivian', 'Lucid', 'Fisker', 'Polestar'
+  'Fiat', 'Alfa Romeo', 'Genesis', 'Rivian', 'Lucid', 'Fisker', 'Polestar', 'Suzuki'
 ];
 
 export default function AddVehicles() {
