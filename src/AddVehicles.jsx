@@ -1,8 +1,8 @@
 import { PhotoIcon, UserCircleIcon, PlusCircleIcon, TruckIcon } from '@heroicons/react/24/solid'
 import { ChevronDownIcon } from '@heroicons/react/16/solid'
+import { ArrowLeftIcon } from '@heroicons/react/24/solid' // Added for backward arrow
 import Navigation from './Navigation'
 import { useState } from 'react';
-
 
 const vehicleBrands = [
   'Ford', 'Chevrolet', 'Toyota', 'Honda', 'Nissan', 'Jeep', 'Hyundai', 'Kia',
@@ -14,12 +14,31 @@ const vehicleBrands = [
 
 export default function AddVehicles() {
   const [selectedBrand, setSelectedBrand] = useState('');
+
   return (
     <div className='min-h-screen bg-gray-50'>
       {/* Navigation Reference from the Navigation file */}
       <Navigation />
       <main className='p-[2%] lg:pl-[25%] lg:pr-[5%] mt-[5%] md:pl-[10%] md:pr-[10%]'>
         <form>
+          {/* Added Backward Button Section */}
+          <div className="mb-6">
+            <button
+              type="button"
+              onClick={() => window.history.back()} // Navigates to previous page
+              className="rounded-md bg-green-100 px-3.5 py-2.5 text-base font-semibold text-green-800 shadow-sm hover:bg-green-100 group"
+            >
+              <div className='flex flex-row gap-2'>
+                <div className='flex flex-row items-center'>
+                  <ArrowLeftIcon className='w-6 h-6 transition-transform duration-300 group-hover:-translate-x-1' />
+                </div>
+                <span>
+                  Go Back
+                </span>
+              </div>
+            </button>
+          </div>
+
           <div className="space-y-12">
             <div className="border-b border-gray-900/10 pb-12">
               <h2 className="text-base/7 font-semibold text-gray-900">Vehicle Information</h2>
@@ -97,8 +116,6 @@ export default function AddVehicles() {
                   </div>
                 </div>
 
-
-
                 <div className="col-span-2">
                   <label htmlFor="vehicle-color" className="block text-sm/6 font-medium text-gray-900">
                     Vehicle Color
@@ -149,7 +166,7 @@ export default function AddVehicles() {
 
           <div className="mt-6 flex items-center justify-end gap-x-[21%]">
             <button type="button" className="text-sm/6 font-semibold text-gray-900 mt-4">
-              Cancel
+              
             </button>
             <div className='mb-6'>
               <button
