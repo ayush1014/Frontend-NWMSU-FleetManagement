@@ -16,6 +16,7 @@ export default function AddVehicles() {
   const [selectedBrand, setSelectedBrand] = useState('');
   return (
     <div className='min-h-screen bg-gray-50'>
+      {/* Navigation Reference from the Navigation file */}
       <Navigation />
       <main className='p-[2%] lg:pl-[25%] lg:pr-[5%] mt-[5%] md:pl-[10%] md:pr-[10%]'>
         <form>
