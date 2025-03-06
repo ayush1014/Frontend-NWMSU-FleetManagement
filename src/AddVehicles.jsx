@@ -165,7 +165,7 @@ export default function AddVehicles() {
 
           <div className="mt-6 flex items-center justify-end gap-x-[21%]">
             <button type="button" className="text-sm/6 font-semibold text-gray-900 mt-4">
-              Cancel
+              
             </button>
             <div className='mb-6'>
               <button
