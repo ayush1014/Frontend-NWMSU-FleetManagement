@@ -4,69 +4,78 @@ import Navigation from './Navigation'
 import { useNavigate } from 'react-router-dom';
 import { FaTruckPickup, FaShuttleVan, FaCarSide } from "react-icons/fa";
 import { GiSurferVan } from "react-icons/gi";
-
+import { useState } from 'react';
 
 const Fleece = [
     {
         name: 'Pickup Truck',
-        vin:12345678903,
+        vin: 12345678903,
         role: 'Library',
         imageUrl: FaTruckPickup,
         href: '#',
     },
     {
         name: 'Car',
-        vin:12345678903,
+        vin: 12345678903,
         role: 'International Office',
-        imageUrl:FaCarSide,
+        imageUrl: FaCarSide,
         href: '#',
     },
     {
         name: 'Shuttle',
         vin: 12345678903,
         role: 'University Police Department',
-        imageUrl:FaShuttleVan,
+        imageUrl: FaShuttleVan,
         href: '#',
     },
     {
         name: 'Van',
-        vin:12345678903,
+        vin: 12345678903,
         role: 'Career Services',
-        imageUrl:GiSurferVan,
+        imageUrl: GiSurferVan,
         href: '#',
     },
     {
         name: 'Car',
-        vin:12345678903,
+        vin: 12345678903,
         role: 'Alumni Services',
-        imageUrl:FaCarSide,
+        imageUrl: FaCarSide,
         href: '#',
     },
     {
         name: 'Pickup Truck',
-        vin:12345678903,
+        vin: 12345678903,
         role: 'Reclycling Center',
-        imageUrl:FaTruckPickup,
+        imageUrl: FaTruckPickup,
         href: '#',
     },
     {
         name: 'Van',
-        vin:12345678903,
+        vin: 12345678903,
         role: 'International Office',
-        imageUrl:GiSurferVan,
+        imageUrl: GiSurferVan,
         href: '#',
     },
 ]
 
 export default function Vehicle() {
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState('');
+
     const handleAddVehicleClick = () => {
-        navigate('/add-vehicles'); // Navigate to the "Add Vehicles" page
-      };
+        navigate('/add-vehicles');
+    };
+
+    // Filter vehicles based on search term
+    const filteredVehicles = Fleece.filter(vehicle =>
+        vehicle.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        vehicle.role.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div className='min-h-screen'>
             <Navigation />
-            <main className='lg:pl-[23%] lg:pr-[4%] mt-[2%] '>
+            <main className='lg:pl-[23%] lg:pr-[4%] mt-[2%]'>
                 <div className="relative rounded-full shadow-sm mb-4">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <MagnifyingGlassIcon
@@ -80,18 +89,20 @@ export default function Vehicle() {
                         id="search"
                         className="block w-full rounded-full border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
                         placeholder="Search vehicles..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
                 <div className='mb-6'>
                     <button
                         type="button"
-                        className="absolute right-[100px] rounded-md bg-green-100 px-3.5 py-2.5 text-base font-semibold text-green-800 shadow-sm hover:bg-green-100"
-                        onClick={handleAddVehicleClick} 
+                        className="absolute right-[100px] rounded-md bg-green-100 px-3.5 py-2.5 text-base font-semibold text-green-800 shadow-sm hover:bg-green-200"
+                        onClick={handleAddVehicleClick}
                     >
                         <div className='flex flex-row gap-2'>
                             <div className='flex flex-row'>
                                 <TruckIcon className='w-6 h-6 -mr-[2px]' />
-                                <PlusCircleIcon className='w-[15px] h-[15px] mt-[2px]' /> 
+                                <PlusCircleIcon className='w-[15px] h-[15px] mt-[2px]' />
                             </div>
                             <span>
                                 Add Vehicles
@@ -100,7 +111,7 @@ export default function Vehicle() {
                     </button>
                 </div>
                 <ul role="list" className="divide-y divide-gray-100 mt-16">
-                    {Fleece.map((vehicle) => (
+                    {filteredVehicles.map((vehicle) => (
                         <li key={vehicle.vin} className="flex justify-between gap-x-6 py-5">
                             <div className="flex min-w-0 gap-x-4">
                                 <vehicle.imageUrl className="size-12 flex-none" />
