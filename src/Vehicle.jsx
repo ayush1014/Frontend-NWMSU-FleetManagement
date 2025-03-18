@@ -4,7 +4,7 @@ import Navigation from './Navigation'
 import { useNavigate } from 'react-router-dom';
 import { FaTruckPickup, FaShuttleVan, FaCarSide } from "react-icons/fa";
 import { GiSurferVan } from "react-icons/gi";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Fleece = [
     {
