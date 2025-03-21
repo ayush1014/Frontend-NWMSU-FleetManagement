@@ -1,26 +1,38 @@
 import nwmsu_img_1 from './assets/northwestmissouri.jpg';
 import nwmsu_logo from './assets/nwmsu-logo.svg';
 import { React, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { replace, useNavigate } from 'react-router-dom';
+import api from './Config/axios';
+import { useUser } from './AppContext/userContext';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const { login } = useUser();
 
-    const handleSubmit = () => {
-        console.log('User Email: ', email);
-        console.log('User Password: ', password);
-        try{
-            if(email == 'abcd@nwmissouri.edu'){
-                if(password == 'abcd'){
-                    navigate('/home')
-                }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log("Following APi")
+        try {
+            const response = await api.post('/login', {
+                email,
+                password
+            });
+
+            if (response.status == 200) {
+                const data = response.data.user;
+                login(data)
+                navigate('/home', {replace: true}); 
+            } else {
+                console.error('Failed to log in');
+                alert('Invalid credentials');
             }
-        }catch(error){
-            console.log('Wrong Creds')
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('Login failed due to technical issues');
         }
-    }
+    };
 
 
     return (
@@ -41,8 +53,7 @@ export default function Login() {
 
                         <div className="mt-10">
                             <div>
-                                {/* <form method="POST" className="space-y-6" onSubmit={()=>handleSubmit()}> */}
-                                <form className="space-y-6" onSubmit={()=>handleSubmit()}>
+                                <form className="space-y-6" onSubmit={handleSubmit}>
                                     <div>
                                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                             Email address

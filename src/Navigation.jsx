@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Dialog,
     DialogBackdrop,
@@ -27,6 +27,7 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import Home from './Home'
 import nwmsu_logo from './assets/nwmsu-logo.svg';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from './AppContext/userContext'
 
 const navigation = [
     { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
@@ -38,7 +39,7 @@ const navigation = [
 ]
 const userNavigation = [
     { name: 'Your profile', href: '#' },
-    { name: 'Sign out', href: '/' },
+    { name: 'Sign out', action: 'logout', href: '/' },
 ]
 
 function classNames(...classes) {
@@ -48,6 +49,16 @@ function classNames(...classes) {
 export default function Navigation() {
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const { user, logout } = useUser();
+
+    const handleUserNavClick = (item) => {
+        if (item.action === 'logout'){
+            logout();
+            navigate(item.href);
+        }else {
+            navigate(item.href);
+        }
+    };
 
     return (
         <>
@@ -79,7 +90,7 @@ export default function Navigation() {
                                             alt="Your Company"
                                             src={nwmsu_logo}
                                             className="h-8 w-auto cursor-pointer"
-                                            onClick={()=>navigate('/home')}
+                                            onClick={() => navigate('/home')}
                                         />
                                     </div>
                                     <nav className="flex flex-1 flex-col">
@@ -198,7 +209,7 @@ export default function Navigation() {
                                             />
                                             <span className="hidden lg:flex lg:items-center">
                                                 <span aria-hidden="true" className="ml-4 text-sm/6 font-semibold text-gray-900">
-                                                    Tom Cook
+                                                    {user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
                                                 </span>
                                                 <ChevronDownIcon aria-hidden="true" className="ml-2 size-5 text-gray-400" />
                                             </span>
@@ -208,7 +219,7 @@ export default function Navigation() {
                                             className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                                         >
                                             {userNavigation.map((item) => (
-                                                <MenuItem key={item.name}>
+                                                <MenuItem key={item.name} onClick={()=> handleUserNavClick(item)}>
                                                     <a
                                                         href={item.href}
                                                         className="block px-3 py-1 text-sm/6 text-gray-900 data-[focus]:bg-gray-50 data-[focus]:outline-none"

@@ -4,6 +4,9 @@ import { HiDocumentReport } from "react-icons/hi";
 import { FcSettings } from "react-icons/fc";
 import Navigation from './Navigation';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useState, useEffect } from 'react'
+import { useUser } from './AppContext/userContext'
 
 const Content = [
     {
@@ -11,7 +14,7 @@ const Content = [
         title: 'Add/Edit Users',
         role: 'Admin',
         imageUrl: UserCircleIcon,
-        href:'/Users'
+        href: '/Users'
     },
     {
         name: 'Vehicle Records',
@@ -25,33 +28,51 @@ const Content = [
         title: 'Update/ Edit fleece refueling ',
         role: 'Admin',
         imageUrl: FaGasPump,
-        href:'#'
+        href: '#'
     },
     {
         name: 'Maintainence Events',
         title: 'Fleece Maintainence update/edit',
         role: 'Admin',
         imageUrl: WrenchScrewdriverIcon,
-        href:'#'
+        href: '#'
     },
     {
         name: 'Reports',
         title: 'Generate, Update & Report Analytics',
         role: 'Admin',
         imageUrl: HiDocumentReport,
-        href:'#'
+        href: '#'
     },
     {
         name: 'Settings',
         title: 'Update Password, User permissions & more',
         role: 'Admin',
         imageUrl: FcSettings,
-        href:'#'
+        href: '#'
     },
 ]
 
 export default function Home() {
     const navigate = useNavigate();
+    const { user } = useUser();
+
+    useEffect(()=>{
+        try{
+            const data = sessionStorage.getItem('userData');
+            const userData = JSON.parse(data)
+
+            if(userData){
+                
+            }else {
+                console.log('Internal Server Error, Error fetching user information')
+            }
+
+        }catch(error){
+            console.log('error fetching data from the session storage: ', error)
+        }
+    })
+
     return (
         <div className='min-h-screen bg-gray-200'>
             <Navigation />
@@ -61,7 +82,7 @@ export default function Home() {
                         <li
                             key={grid.email}
                             className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow"
-                            onClick={()=>navigate(grid.href)}
+                            onClick={() => navigate(grid.href)}
                         >
                             <div className="flex flex-1 flex-col p-8">
                                 <div className="mx-auto size-32 shrink-0 rounded-full">
