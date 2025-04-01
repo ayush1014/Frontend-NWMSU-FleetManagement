@@ -28,7 +28,7 @@ import Home from './Home'
 import nwmsu_logo from './assets/nwmsu-logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from './AppContext/userContext'
-
+ 
 const navigation = [
     { name: 'Dashboard', href: '/home', icon: HomeIcon, current: location.pathname ==='/home' },
     // { name: 'Users', href: '/Users', icon: UsersIcon, current: false },
@@ -42,17 +42,17 @@ const userNavigation = [
     { name: 'Your profile', href: '/user-profile' },
     { name: 'Sign out', action: 'logout', href: '/' },
 ]
-
+ 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
-
+ 
 export default function Navigation() {
     const navigate = useNavigate();
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const { user, logout } = useUser();
-
+ 
     const handleUserNavClick = (item) => {
         if (item.action === 'logout'){
             logout();
@@ -61,7 +61,7 @@ export default function Navigation() {
             navigate(item.href);
         }
     };
-
+ 
     return (
         <>
             <div className='bg-gray-200'>
@@ -71,7 +71,7 @@ export default function Navigation() {
                             transition
                             className="fixed inset-0 bg-green-900/80 transition-opacity duration-300 ease-linear data-[closed]:opacity-0"
                         />
-
+ 
                         <div className="fixed inset-0 flex">
                             <DialogPanel
                                 transition
@@ -132,7 +132,7 @@ export default function Navigation() {
                             </DialogPanel>
                         </div>
                     </Dialog>
-
+ 
                     {/* Static sidebar for desktop */}
                     <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
                         {/* Sidebar component*/}
@@ -179,27 +179,27 @@ export default function Navigation() {
                             </nav>
                         </div>
                     </div>
-
+ 
                     <div className="lg:pl-72">
                         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
                             <button type="button" onClick={() => setSidebarOpen(true)} className="-m-2.5 p-2.5 text-gray-700 lg:hidden">
                                 <span className="sr-only">Open sidebar</span>
                                 <Bars3Icon aria-hidden="true" className="size-6" />
                             </button>
-
+ 
                             {/* Separator */}
                             <div aria-hidden="true" className="h-6 w-px bg-gray-900/10 lg:hidden" />
-
+ 
                             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                                 <div className="flex items-center gap-x-4 lg:gap-x-6">
                                     <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
                                         <span className="sr-only">View notifications</span>
                                         <BellIcon aria-hidden="true" className="size-6" />
                                     </button>
-
+ 
                                     {/* Separator */}
                                     <div aria-hidden="true" className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" />
-
+ 
                                     {/* Profile dropdown */}
                                     <Menu as="div" className="relative">
                                         <MenuButton className="-m-1.5 flex items-center p-1.5">
@@ -235,7 +235,7 @@ export default function Navigation() {
                                 </div>
                             </div>
                         </div>
-
+ 
                         {/* <main className="py-[6%]">
                             <div className="px-4 sm:px-6 lg:px-8">{<Home />}</div>
                         </main> */}
