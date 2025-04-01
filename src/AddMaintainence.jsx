@@ -1,0 +1,244 @@
+import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
+import { ChevronDownIcon } from '@heroicons/react/16/solid'
+import Navigation from './Navigation'
+import { useState } from 'react';
+import "react-datepicker/dist/react-datepicker.css";
+import api from './Config/axios'
+import { Datepicker } from "flowbite-react";
+import { useUser } from './AppContext/userContext';
+
+export default function AddMaintainence() {
+    const [selectedOption, setSelectedOption] = useState('General');
+    const [permission, setPermission] = useState('General')
+    const [permissionButton, setPermissionButton] = useState(false)
+    const [permissionOption, setPermissionOption] = useState('')
+    const [NWVehicleNo, setNWVehicleNo] = useState('');
+    const [currentMileage, setCurrentMileage] = useState('');
+    const [maintainenceDescription, setMaintainenceDescription] = useState('');
+    const [maintainenceCost, setMaintainenceCost] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+    const [date, setDate] = useState(new Date());
+    const {User} = useUser();
+
+    const handleAddMaintainenceSubmit = async (event) => {
+        event.preventDefault();
+        const userDataString = localStorage.getItem('userData');
+        const userData = userDataString ? JSON.parse(userDataString) : null;
+        const userName = userData.email;
+        const formData = new FormData();
+        formData.append('NWVehicleNo', NWVehicleNo);
+        formData.append('currentMileage', currentMileage);
+        formData.append('maintainenceDescription', maintainenceDescription);
+        formData.append('maintainenceCost', maintainenceCost);
+        formData.append('receiptImage', selectedFile);
+        formData.append('date', date.toISOString().split('T')[0]); 
+        formData.append('maintainenceBy', userName);
+
+        console.log(formData);
+    
+        try {
+            const response = await api.post('/addMaintainence', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log('Maintainence Added Successfully', response);
+        } catch (error) {
+            console.error('Technical error while submitting the add Maintainence form:', error);
+        }
+    };
+    
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreviewUrl(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const triggerFileSelect = () => {
+        document.getElementById('file-input').click();
+    };
+
+    const handleRemovePhoto = () => {
+        setSelectedFile(null);
+        setImagePreviewUrl(null);
+        document.getElementById('file-input').value = null;
+    };
+
+    const handleMaintainenceDate = (date) => {
+        setDate(date);
+      }
+    
+
+    return (
+        <div className='min-h-screen bg-gray-100'>
+            <Navigation />
+            <main className='lg:pl-[22%] lg:pr-[5%] mt-[1%]'>
+                <div className="divide-y divide-gray-900/10">
+                    <div className="grid grid-cols-1 gap-x-8 gap-y-8 py-10 md:grid-cols-3">
+                        <div className="px-4 sm:px-0">
+                            <h2 className="text-base/7 font-semibold text-gray-900">Maintainence Information</h2>
+                            <p className="mt-1 text-sm/6 text-gray-600">Use the correct NW Vehicle ID of the vehicle to send correct Maintainence events on the specific NW Vehiclel.</p>
+                        </div>
+
+                        <form className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2" onSubmit={handleAddMaintainenceSubmit}>
+                            <div className="px-4 py-6 sm:p-8">
+                                <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                                    <div className="col-span-2 lg:col-span-3">
+                                        <label htmlFor="NWVehicleNo" className="block text-sm/6 font-medium text-gray-900">
+                                            NW Vehicle No
+                                        </label>
+                                        <div className="mt-2">
+                                            <input
+                                                id="NWVehicleNo"
+                                                name="NWVehicleNo"
+                                                type="text"
+                                                autoComplete="given-name"
+                                                placeholder='Bobby'
+                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-900 sm:text-sm/6"
+                                                onChange={(e) => setNWVehicleNo(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-span-2 lg:col-span-3">
+                                        <label htmlFor="currentMileage" className="block text-sm/6 font-medium text-gray-900">
+                                            Current Mileage
+                                        </label>
+                                        <div className="mt-2">
+                                            <input
+                                                id="currentMileage"
+                                                name="currentMileage"
+                                                type="text"
+                                                autoComplete="family-name"
+                                                placeholder='Bearcat'
+                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+                                                onChange={(e) => setCurrentMileage(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-span-3 lg:col-span-full">
+                                        <label htmlFor="Main" className="block text-sm/6 font-medium text-gray-900">
+                                            Maintainence Description
+                                        </label>
+                                        <div className="mt-2">
+                                            <div className="flex items-center rounded-md bg-white outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-green-600 ">
+                                                <textarea
+                                                    id="maintainenceDescription"
+                                                    name="maintainenceDescription"
+                                                    type="text"
+                                                    rows={2}
+                                                    placeholder="bearcat@nwmissouri.edu"
+                                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+                                                    onChange={(e) => setMaintainenceDescription(e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="sm:col-span-3">
+                                        <label htmlFor="maintainenceCost" className="block text-sm/6 font-medium text-gray-900">
+                                            Maintainence Cost
+                                        </label>
+                                        <div className="mt-2">
+                                            <div className="flex items-center rounded-md bg-white outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-green-600 ">
+                                                <input
+                                                    id="maintainenceCost"
+                                                    name="maintainenceCost"
+                                                    type="text"
+                                                    placeholder="bearcat@nwmissouri.edu"
+                                                    className="border-hidden block min-w-0 grow text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6 inline-block bg-white-100 dark:bg-white/10"
+                                                    onChange={(e) => setMaintainenceCost(e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-span-3 lg:col-span-2">
+                                        <label htmlFor="vehicle-purchase-date" className="block text-sm/6 font-medium text-gray-900">
+                                            Maintainence Date
+                                        </label>
+                                        <div className="mt-2">
+                                            <Datepicker
+                                                id='vehicle-purchase-date'
+                                                name='vehicle-purchase-date'
+                                                type='vehicle-purchase-date'
+                                                onChange={handleMaintainenceDate}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className='col-span-full'>
+                                        <label htmlFor="photo" className="block text-sm/6 font-medium text-gray-900">
+                                            Photo
+                                        </label>
+                                        <div className="mt-2 flex items-center gap-x-3">
+                                            {imagePreviewUrl ? (
+                                                <img src={imagePreviewUrl} alt="Profile" className="size-24 rounded-full object-cover object-center" />
+                                            ) : (
+                                                <UserCircleIcon aria-hidden="true" className="size-12 text-gray-300" />
+                                            )}
+                                            <button
+                                                type="button"
+                                                onClick={triggerFileSelect}
+                                                className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                            >
+                                                Change
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={handleRemovePhoto}
+                                                className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                            >
+                                                Remove
+                                            </button>
+                                            <input
+                                                type="file"
+                                                id="file-input"
+                                                style={{ display: 'none' }}
+                                                onChange={handleFileChange}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* <div className="col-span-full">
+                                        <label htmlFor="about" className="block text-sm/6 font-medium text-gray-900">
+                                            Notes
+                                        </label>
+                                        <div className="mt-2">
+                                            <textarea
+                                                id="about"
+                                                name="about"
+                                                rows={3}
+                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+                                                defaultValue={''}
+                                            />
+                                        </div>
+                                        <p className="mt-3 text-sm/6 text-gray-600">Add notes about this user, it can only be seen by all admins.</p>
+                                    </div> */}
+                                </div>
+                            </div>
+                            <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+                                <button type="button" className="text-sm/6 font-semibold text-gray-900">
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    )
+}

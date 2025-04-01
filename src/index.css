@@ -1,8 +1,13 @@
-.html{
+.html {
   height: 100vh;
   background-color: white;
 }
 
-.body{
+.body {
   height: 100vh;
+}
+
+aside {
+  height: 100vh;
+  overflow-y: auto;
 }
