@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Dialog,
     DialogBackdrop,
@@ -26,19 +26,21 @@ import { FaGasPump } from 'react-icons/fa';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import Home from './Home'
 import nwmsu_logo from './assets/nwmsu-logo.svg';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useUser } from './AppContext/userContext'
 
 const navigation = [
-    { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
-    { name: 'Users', href: '/Users', icon: UsersIcon, current: false },
-    { name: 'Vehicles', href: '/Vehicles', icon: TruckIcon, current: false },
-    { name: 'Refueling', href: '#', icon: FaGasPump, current: false },
-    { name: 'Maintainence', href: '#', icon: WrenchScrewdriverIcon, current: false },
-    { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+    { name: 'Dashboard', href: '/home', icon: HomeIcon, current: location.pathname ==='/home' },
+    // { name: 'Users', href: '/Users', icon: UsersIcon, current: false },
+    { name: 'Users', href: '/user-temp', icon: UsersIcon, current: location.pathname === '/user-temp' },
+    { name: 'Vehicles', href: '/Vehicles', icon: TruckIcon, current: location.pathname === '/Vehicles' },
+    { name: 'Refueling', href: '/refueling', icon: FaGasPump, current: location.pathname === '/refueling' },
+    { name: 'Maintainence', href: '/maintenance', icon: WrenchScrewdriverIcon, current: location.pathname === '/maintenance' },
+    { name: 'Reports', href: '#', icon: ChartPieIcon, current: location.pathname === '#' },
 ]
 const userNavigation = [
-    { name: 'Your profile', href: '#' },
-    { name: 'Sign out', href: '/' },
+    { name: 'Your profile', href: '/user-profile' },
+    { name: 'Sign out', action: 'logout', href: '/' },
 ]
 
 function classNames(...classes) {
@@ -47,7 +49,18 @@ function classNames(...classes) {
 
 export default function Navigation() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const { user, logout } = useUser();
+
+    const handleUserNavClick = (item) => {
+        if (item.action === 'logout'){
+            logout();
+            navigate(item.href);
+        }else {
+            navigate(item.href);
+        }
+    };
 
     return (
         <>
@@ -79,7 +92,7 @@ export default function Navigation() {
                                             alt="Your Company"
                                             src={nwmsu_logo}
                                             className="h-8 w-auto cursor-pointer"
-                                            onClick={()=>navigate('/home')}
+                                            onClick={() => navigate('/home')}
                                         />
                                     </div>
                                     <nav className="flex flex-1 flex-col">
@@ -193,12 +206,12 @@ export default function Navigation() {
                                             <span className="sr-only">Open user menu</span>
                                             <img
                                                 alt=""
-                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                className="size-8 rounded-full bg-gray-50"
+                                                src = {user.profile_pic}
+                                                className="size-8 rounded-full bg-gray-50 object-cover object-center"
                                             />
                                             <span className="hidden lg:flex lg:items-center">
                                                 <span aria-hidden="true" className="ml-4 text-sm/6 font-semibold text-gray-900">
-                                                    Tom Cook
+                                                    {user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
                                                 </span>
                                                 <ChevronDownIcon aria-hidden="true" className="ml-2 size-5 text-gray-400" />
                                             </span>
@@ -208,7 +221,7 @@ export default function Navigation() {
                                             className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                                         >
                                             {userNavigation.map((item) => (
-                                                <MenuItem key={item.name}>
+                                                <MenuItem key={item.name} onClick={()=> handleUserNavClick(item)}>
                                                     <a
                                                         href={item.href}
                                                         className="block px-3 py-1 text-sm/6 text-gray-900 data-[focus]:bg-gray-50 data-[focus]:outline-none"
