@@ -14,7 +14,7 @@ const Content = [
         title: 'Add/Edit Users',
         role: 'Admin',
         imageUrl: UserCircleIcon,
-        href: '/Users'
+        href: '/user-temp'
     },
     {
         name: 'Vehicle Records',
@@ -28,14 +28,14 @@ const Content = [
         title: 'Update/ Edit fleece refueling ',
         role: 'Admin',
         imageUrl: FaGasPump,
-        href: '#'
+        href: '/refueling'
     },
     {
         name: 'Maintainence Events',
         title: 'Fleece Maintainence update/edit',
         role: 'Admin',
         imageUrl: WrenchScrewdriverIcon,
-        href: '#'
+        href: '/maintenance'
     },
     {
         name: 'Reports',
