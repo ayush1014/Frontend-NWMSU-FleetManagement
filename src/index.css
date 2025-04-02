@@ -11,3 +11,17 @@ aside {
   height: 100vh;
   overflow-y: auto;
 }
+
+.hover-action-div {
+  cursor: pointer;
+}
+
+.download-link-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease-in-out;
+  margin-left: 1rem;
+}
+
+.hover-action-div:hover .download-link-arrow {
+  transform: translateX(10px);
+}
