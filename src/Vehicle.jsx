@@ -7,6 +7,7 @@ import { GiSurferVan } from "react-icons/gi";
 import { useState, useEffect } from 'react';
 import api from './Config/axios';
 import { HR } from 'flowbite-react';
+import noPreview from './assets/noPreview.png'
 
 
 
@@ -199,7 +200,7 @@ export default function Vehicle() {
                             <div className="group overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
                                 <img
                                     alt={`Vehicle: ${vehicle.make} ${vehicle.model}`}
-                                    src={vehicle.vehiclePic || '/path/to/default/image'}
+                                    src={vehicle.vehiclePic || noPreview}
                                     className="pointer-events-none aspect-[10/7] object-cover group-hover:opacity-75"
                                 />
                                 <button type="button" className="absolute inset-0 focus:outline-none">
@@ -259,7 +260,7 @@ export default function Vehicle() {
                             <div className="group overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
                                 <img
                                     alt={`Vehicle: ${vehicle.make} ${vehicle.model}`}
-                                    src={vehicle.vehiclePic || '/path/to/default/image'}
+                                    src={vehicle.vehiclePic || noPreview}
                                     className="pointer-events-none aspect-[10/7] object-cover group-hover:opacity-75"
                                 />
                                 <button type="button" className="absolute inset-0 focus:outline-none">

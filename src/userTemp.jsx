@@ -16,6 +16,8 @@ import { ChevronLeftIcon, EnvelopeIcon, FunnelIcon, MagnifyingGlassIcon, PhoneIc
 import Navigation from './Navigation'
 import api from './Config/axios'
 import { useNavigate } from 'react-router-dom'
+import noImg from './assets/noImg.png'
+import bearcat from './assets/bearcat.webp'
 
 const user = {
     name: 'Tom Cook',
@@ -163,37 +165,16 @@ export default function UserTemp() {
             <div className="flex h-full lg:pl-72">
                 {/* Static sidebar for desktop */}
                 <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-                    <div className="lg:hidden">
-                        <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-1.5">
-                            <div>
-                                <img
-                                    alt="Your Company"
-                                    src="https://cdnsm5-ss11.sharpschool.com/UserFiles/Servers/Server_125464/Image/055.png"
-                                    className="h-8 w-auto"
-                                />
-                            </div>
-                            <div>
-                                <button
-                                    type="button"
-                                    onClick={() => setSidebarOpen(true)}
-                                    className="-mr-3 inline-flex size-12 items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-600"
-                                >
-                                    <span className="sr-only">Open sidebar</span>
-                                    <Bars3Icon aria-hidden="true" className="size-6" />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+
                     <div className="relative z-0 flex flex-1 overflow-hidden">
                         <main className="relative z-0 flex-1 overflow-y-auto focus:outline-none xl:order-last">
                             {/* Breadcrumb */}
-                            <nav aria-label="Breadcrumb" className="flex items-start px-4 py-3 sm:px-6 lg:px-8 xl:hidden">
-                                <a href="#" className="inline-flex items-center space-x-3 text-sm font-medium text-gray-900">
+                            {selectedUser ? (<nav aria-label="Breadcrumb" className="flex items-start px-4 py-3 sm:px-6 lg:px-8 xl:hidden">
+                                <a href="#" onClick={() => setSelectedEmail(null)} className="inline-flex items-center space-x-3 text-sm font-medium text-gray-900">
                                     <ChevronLeftIcon aria-hidden="true" className="-ml-2 size-5 text-gray-400" />
                                     <span>User Directory</span>
                                 </a>
-                            </nav>
-
+                            </nav>) : (<></>)}
                             {selectedUser ? (<article>
                                 {/* Profile header */}
                                 <div>
@@ -205,7 +186,7 @@ export default function UserTemp() {
                                             <div className="flex">
                                                 <img
                                                     alt=""
-                                                    src={selectedUser.profile_pic}
+                                                    src={selectedUser.profile_pic || bearcat}
                                                     className="size-24 object-cover object-center rounded-full ring-4 ring-white sm:size-32"
                                                 />
                                             </div>
@@ -303,7 +284,90 @@ export default function UserTemp() {
                                         ))}
                                     </div>
                                 </div> */}
-                            </article>) : (<></>)}
+                            </article>) : (<div className='lg:hidden'>
+                                <div className="px-6 pb-4 pt-6">
+                                    <h2 className="text-lg font-medium text-gray-900">User Directory</h2>
+                                    <p className="mt-1 text-sm text-gray-600">Search directory of {people.length} users</p>
+                                    <form action="#" className="mt-6 flex gap-x-4">
+                                        <div className="grid min-w-0 flex-1 grid-cols-1">
+                                            <input
+                                                name="search"
+                                                type="search"
+                                                placeholder="Search"
+                                                className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-pink-500 sm:text-sm/6"
+                                            />
+                                            <MagnifyingGlassIcon
+                                                aria-hidden="true"
+                                                className="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-gray-400"
+                                            />
+
+                                        </div>
+                                        <button
+                                            type="submit"
+                                            className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                        >
+                                            <FunnelIcon aria-hidden="true" className="size-5" />
+                                            <span className="sr-only">Search</span>
+                                        </button>
+
+                                    </form>
+                                    <div className='mb-[20%] mt-6'>
+                                        <button
+                                            type="button"
+                                            className="absolute left-[10%] rounded-md bg-green-100 px-3.5 py-2.5 text-base font-semibold text-green-800 shadow-sm hover:bg-green-100"
+                                            onClick={handleAddUsersClick}
+                                        >
+                                            <div className='flex flex-row gap-2'><UserPlusIcon className='w-6 h-6' /> <span>Add Users</span></div>
+                                        </button>
+                                    </div>
+                                </div>
+                                {/* Directory list */}
+                                <nav aria-label="Directory" className="min-h-0 flex-1 overflow-hidden overflow-y-auto">
+                                    {people.map((person) => (
+                                        <div key={person.email} className="relative">
+                                            <div className="sticky top-0 border-b border-t border-gray-200 bg-gray-50 text-sm font-medium text-gray-500">
+                                            </div>
+                                            <ul role="list" className="relative divide-y divide-gray-200">
+                                                <li key={person.email}>
+                                                    <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 hover:bg-gray-50">
+                                                        <div className="shrink-0">
+                                                            <img alt="" src={person.profile_pic || bearcat} className="size-10 rounded-full object-cover object-center" />
+                                                        </div>
+                                                        <div className="min-w-0 flex-1">
+                                                            <a onClick={() => handleSelectEmail(person.email)} className="focus:outline-none">
+                                                                {/* Extend touch target to entire panel */}
+                                                                <span aria-hidden="true" className="absolute inset-0" />
+                                                                <p className="text-sm font-medium text-gray-900">{person.firstName} {person.lastName}</p>
+                                                                <span className={`inline-flex mt-1 items-center rounded-full px-2 py-0.5 text-xs font-medium ${person.role === 'Admin' ? 'text-green-700 bg-green-50 ring-green-600/20 max-w-[25%] md:max-w-[30%] lg:max-w-[40%]  [1366px]:max-w-[100%]' : 'text-red-700 bg-red-50 ring-red-600/20 max-w-[30%] md:max-w-[35%] lg:max-w-[45%]'}  ring-1 ring-inset `}>
+                                                                    {person.role}
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                        <button onClick={(event) => { toggleDropdown(person.email, event) }} className="p-2 z-10 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                            <EllipsisVerticalIcon className="h-5 w-5 text-gray-400" />
+                                                        </button>
+                                                        {openDropdown === person.email && (
+                                                            <div ref={dropdownRef} className="absolute z-0 right-0 w-48 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                                                                <div className="py-1">
+                                                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => console.log('Edit')}>
+                                                                        <PencilIcon className="size-5 inline mr-3 text-gray-400" />
+                                                                        Edit
+                                                                    </a>
+                                                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => console.log('Remove')}>
+                                                                        <TrashIcon className="size-5 inline mr-3 text-gray-400" />
+                                                                        Remove
+                                                                    </a>
+                                                                </div>
+                                                            </div>)}
+                                                    </div>
+
+
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </nav>
+                            </div>)}
                         </main>
                         <aside className="hidden w-96 shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
                             <div className="px-6 pb-4 pt-6">
@@ -352,7 +416,7 @@ export default function UserTemp() {
                                             <li key={person.email}>
                                                 <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 hover:bg-gray-50">
                                                     <div className="shrink-0">
-                                                        <img alt="" src={person.profile_pic} className="size-10 rounded-full object-cover object-center" />
+                                                        <img alt="" src={person.profile_pic || bearcat} className="size-10 rounded-full object-cover object-center" />
                                                     </div>
                                                     <div className="min-w-0 flex-1">
                                                         <a onClick={() => handleSelectEmail(person.email)} className="focus:outline-none">

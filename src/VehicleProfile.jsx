@@ -17,7 +17,6 @@ import {
 import {
     Bars3Icon,
     CalendarDaysIcon,
-    CreditCardIcon,
     EllipsisVerticalIcon,
     FaceFrownIcon,
     FaceSmileIcon,
@@ -27,9 +26,11 @@ import {
     PaperClipIcon,
     UserCircleIcon,
     XMarkIcon as XMarkIconMini,
+    KeyIcon
 } from '@heroicons/react/20/solid'
 import { BellIcon, XMarkIcon as XMarkIconOutline } from '@heroicons/react/24/outline'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { FaGasPump } from 'react-icons/fa'
 import api from './Config/axios';
 import Navigation from './Navigation';
 
@@ -122,6 +123,7 @@ export default function VehicleProfile() {
     const [maintenenceCost, setMaintenanceCost] = useState('')
     const [refuelingCost, setRefuelingCost] = useState('')
     const [curYear, setCurYear] = useState('')
+    const [activity, setActivity] = useState([])
     const navigate = useNavigate();
 
 
@@ -164,7 +166,7 @@ export default function VehicleProfile() {
 
     useEffect(() => {
         console.log('Vehicle Data: ', vehicle)
-    }, [])
+    }, [vehicle])
 
 
 
@@ -201,7 +203,7 @@ export default function VehicleProfile() {
         <>
             <Navigation />
             <main className='lg:pl-[18%]'>
-                <header className="relative isolate pt-16">
+                <header className="relative isolate pt-2">
                     <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
                         <div className="absolute left-16 top-full -mt-16 transform-gpu opacity-50 blur-3xl xl:left-1/2 xl:-ml-80">
                             <div
@@ -215,63 +217,20 @@ export default function VehicleProfile() {
                         <div className="absolute inset-x-0 bottom-0 h-px bg-gray-900/5" />
                     </div>
 
-                    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+                    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
                         <div className="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none">
-                            <div className="flex items-center gap-x-6">
+                            <div className="flex items-center gap-x-6 pl-12">
                                 <img
                                     alt=""
-                                    src="https://tailwindcss.com/plus-assets/img/logos/48x48/tuple.svg"
-                                    className="size-16 flex-none rounded-full ring-1 ring-gray-900/10"
+                                    src={vehicle.vehiclePic}
+                                    className="h-[8%] w-[30%] object-center object-cover flex-none rounded-md ring-1 ring-gray-900/10"
                                 />
                                 <h1>
                                     <div className="text-sm/6 text-gray-500">
-                                        Invoice <span className="text-gray-700">#00011</span>
+                                        NW ID: <span className="text-gray-700">{vehicle.NWVehicleNo}</span>
                                     </div>
-                                    <div className="mt-1 text-base font-semibold text-gray-900">Tuple, Inc</div>
+                                    <div className="mt-1 text-xl font-semibold text-gray-900"> <span className='text-green-900 text-bold text-2xl'>{vehicle.make} {vehicle.model}</span> <span className='text-green-600 text-bold text-4xl'>{vehicle.modelYear}</span></div>
                                 </h1>
-                            </div>
-                            <div className="flex items-center gap-x-4 sm:gap-x-6">
-                                <button type="button" className="hidden text-sm/6 font-semibold text-gray-900 sm:block">
-                                    Copy URL
-                                </button>
-                                <a href="#" className="hidden text-sm/6 font-semibold text-gray-900 sm:block">
-                                    Edit
-                                </a>
-                                <a
-                                    href="#"
-                                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                >
-                                    Send
-                                </a>
-
-                                <Menu as="div" className="relative sm:hidden">
-                                    <MenuButton className="-m-3 block p-3">
-                                        <span className="sr-only">More</span>
-                                        <EllipsisVerticalIcon aria-hidden="true" className="size-5 text-gray-500" />
-                                    </MenuButton>
-
-                                    <MenuItems
-                                        transition
-                                        className="absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                                    >
-                                        <MenuItem>
-                                            <button
-                                                type="button"
-                                                className="block w-full px-3 py-1 text-left text-sm/6 text-gray-900 data-[focus]:bg-gray-50 data-[focus]:outline-none"
-                                            >
-                                                Copy URL
-                                            </button>
-                                        </MenuItem>
-                                        <MenuItem>
-                                            <a
-                                                href="#"
-                                                className="block px-3 py-1 text-sm/6 text-gray-900 data-[focus]:bg-gray-50 data-[focus]:outline-none"
-                                            >
-                                                Edit
-                                            </a>
-                                        </MenuItem>
-                                    </MenuItems>
-                                </Menu>
                             </div>
                         </div>
                     </div>
@@ -281,7 +240,7 @@ export default function VehicleProfile() {
                     <div className="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                         <div className="lg:col-start-3 lg:row-end-1">
                             <h2 className="sr-only">Summary</h2>
-                            <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
+                            <div className="rounded-lg bg-white shadow-lg ring-1 ring-gray-900/5">
                                 <dl className="flex flex-wrap">
                                     <div className="flex-auto pl-6 pt-6">
                                         <dt className="text-sm/6 font-semibold text-gray-900">Total Amount spent in <span className='text-green-600 text-base font-bold'>{curYear}</span></dt>
@@ -304,13 +263,24 @@ export default function VehicleProfile() {
                                         Total Amount spent in Maintenence: <span className='text-green-600 font-semibold'>${maintenenceCost}</span>
                                     </span>
                                 </div>
-                                <div className="mt-6 border-t border-gray-900/5 px-6 py-6">
-                                    <a onClick={() => handleDownload(NWVehicleNo)} className="text-sm/6 font-semibold text-gray-900">
-                                        Download Receipts for {curYear}<span aria-hidden="true">&rarr;</span>
+                                {vehicle.Refuelings > [0] || vehicle.Maintainences > [0] ? (<div className="mt-6 border-t border-gray-900/5 px-6 py-6 hover-action-div">
+                                    <a onClick={() => handleDownload(NWVehicleNo)} className="text-sm font-semibold text-gray-900">
+                                        Download Receipts for {curYear}
+                                        <span
+                                            className='download-link-arrow'
+                                            aria-hidden="true"
+                                        >&rarr;</span>
                                     </a>
                                 </div>
+                                ) : (<div className="px-6 py-4"></div>)}
                             </div>
-                            <h2 className="text-lg font-semibold text-gray-900 mt-12">Activity</h2>
+                            {activity > [0] ? (
+                                <h2 className="text-lg font-semibold text-gray-900 mt-12">
+                                    Activity
+                                </h2>) :
+                                (<h2 className="text-sm font-semibold text-gray-900 mt-12">
+                                    No Refueling & Maintenence recorded on <span className='text-green-900 text-bold text-xl'>{vehicle.make} {vehicle.model}</span>
+                                </h2>)}
                             <ul role="list" className="mt-6 space-y-6">
                                 {activity.map((item, idx) => (
                                     <li key={idx} className="relative flex gap-x-4">
@@ -323,13 +293,13 @@ export default function VehicleProfile() {
                                         <img
                                             alt=""
                                             src={item.User?.profile_pic}
-                                            className="relative mt-3 h-12 w-12 flex-none rounded-full bg-gray-50"
+                                            className="relative mt-3 h-12 w-12 flex-none rounded-full bg-gray-50 object-cover object-center"
                                         />
                                         <div className="flex-auto rounded-md p-3 ring-gray-200">
                                             <div className="flex justify-between gap-x-4">
                                                 <div className="py-0.5 text-xs text-gray-500">
                                                     <span className="font-medium text-gray-900">{item.User?.firstName} {item.User?.lastName}</span>{' '}
-                                                    {item.maintainenceDescription ? 'performed maintenance' : 'added fuel'}
+                                                    {item.maintainenceDescription ? `performed maintenance (${item.maintainenceDescription })`  : 'added fuel'}
                                                 </div>
                                                 <time dateTime={item.date} className="flex-none py-0.5 text-xs text-gray-500">
                                                     {new Date(item.date).toLocaleDateString()}
@@ -345,125 +315,225 @@ export default function VehicleProfile() {
                         </div>
                         {/* Invoice */}
                         <div className="-mx-4 px-4 py-8 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16">
-                            <h2 className="text-base font-semibold text-gray-900">Invoice</h2>
-                            <dl className="mt-6 grid grid-cols-1 text-sm/6 sm:grid-cols-2">
-                                <div className="sm:pr-4">
-                                    <dt className="inline text-gray-500">Issued on</dt>{' '}
-                                    <dd className="inline text-gray-700">
-                                        <time dateTime="2023-23-01">January 23, 2023</time>
-                                    </dd>
+                            <section aria-labelledby="applicant-information-title">
+                                <div className="bg-white sm:rounded-lg">
+                                    <div className="">
+                                        <h2 id="applicant-information-title" className="text-lg/6 font-medium text-gray-900">
+                                            Vehicle Information
+                                        </h2>
+                                        <p className="mt-1 max-w-2xl text-sm text-gray-500">Vehicle Details and department information</p>
+                                    </div>
+                                    <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
+                                        <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">NW Vehicle ID</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.NWVehicleNo}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">VIN</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.VIN}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">License Plate</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.licensePlate}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">Make</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.make}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">Model</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.model}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">Year</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.modelYear}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">Description</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.vehDescription}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">Type</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.vehType}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">Department</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.vehicleDepartment}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">Starting Mileage</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.startingMileage}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">Current Mileage</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.currentMileage}</dd>
+                                            </div>
+                                        </dl>
+                                    </div>
                                 </div>
-                                <div className="mt-2 sm:mt-0 sm:pl-4">
-                                    <dt className="inline text-gray-500">Due on</dt>{' '}
-                                    <dd className="inline text-gray-700">
-                                        <time dateTime="2023-31-01">January 31, 2023</time>
-                                    </dd>
-                                </div>
-                                <div className="mt-6 border-t border-gray-900/5 pt-6 sm:pr-4">
-                                    <dt className="font-semibold text-gray-900">From</dt>
-                                    <dd className="mt-2 text-gray-500">
-                                        <span className="font-medium text-gray-900">Acme, Inc.</span>
-                                        <br />
-                                        7363 Cynthia Pass
-                                        <br />
-                                        Toronto, ON N3Y 4H8
-                                    </dd>
-                                </div>
-                                <div className="mt-8 sm:mt-6 sm:border-t sm:border-gray-900/5 sm:pl-4 sm:pt-6">
-                                    <dt className="font-semibold text-gray-900">To</dt>
-                                    <dd className="mt-2 text-gray-500">
-                                        <span className="font-medium text-gray-900">Tuple, Inc</span>
-                                        <br />
-                                        886 Walter Street
-                                        <br />
-                                        New York, NY 12345
-                                    </dd>
-                                </div>
-                            </dl>
-                            <table className="mt-16 w-full whitespace-nowrap text-left text-sm/6">
-                                <colgroup>
-                                    <col className="w-full" />
-                                    <col />
-                                    <col />
-                                    <col />
-                                </colgroup>
-                                <thead className="border-b border-gray-200 text-gray-900">
-                                    <tr>
-                                        <th scope="col" className="px-0 py-3 font-semibold">
-                                            Projects
-                                        </th>
-                                        <th scope="col" className="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell">
-                                            Hours
-                                        </th>
-                                        <th scope="col" className="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell">
-                                            Rate
-                                        </th>
-                                        <th scope="col" className="py-3 pl-8 pr-0 text-right font-semibold">
-                                            Price
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {invoice.items.map((item) => (
-                                        <tr key={item.id} className="border-b border-gray-100">
-                                            <td className="max-w-0 px-0 py-5 align-top">
-                                                <div className="truncate font-medium text-gray-900">{item.title}</div>
-                                                <div className="truncate text-gray-500">{item.description}</div>
-                                            </td>
-                                            <td className="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">
-                                                {item.hours}
-                                            </td>
-                                            <td className="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">
-                                                {item.rate}
-                                            </td>
-                                            <td className="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700">{item.price}</td>
-                                        </tr>
+                            </section>
+                            {vehicle.Refuelings > [0] ? (<div className="relative flex justify-center">
+                                <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900">Refueling Recents Updates</span>
+                            </div>) : (<div className="relative flex justify-center">
+                                <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900">No Refueling & Maintenence Updates</span>
+                            </div>)}
+                            <ul
+                                role="list"
+                                className="mt-5 grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0 md:grid-cols-2 md:divide-y-0 md:gap-1"
+                            >
+                                {vehicle.Refuelings
+                                    .sort((a, b) => new Date(b.date) - new Date(a.date))
+                                    .slice(0, 4)
+                                    .map((refueling) => (
+                                        <li key={refueling.refuelingId} className="p-2">
+                                            <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
+                                                <dl className="flex flex-wrap">
+                                                    <div className="flex-auto pl-6 pt-6">
+                                                        <dt className="text-sm font-semibold text-gray-900">Amount</dt>
+                                                        <dd className="mt-1 text-base font-semibold text-gray-900">${refueling.fuelCost}</dd>
+                                                    </div>
+                                                    <div className="flex-none self-end px-6 pt-4">
+                                                        <dt className="sr-only">Status</dt>
+                                                        <dd className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                                            Paid
+                                                        </dd>
+                                                    </div>
+                                                    <div className="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Client</span>
+                                                            <div className="">
+                                                                <img
+                                                                    alt=""
+                                                                    src={refueling.User.profile_pic}
+                                                                    className="size-8 object-cover object-center rounded-full ring-4 ring-white"
+                                                                />
+                                                            </div>
+                                                        </dt>
+                                                        <dd className="text-sm font-medium mt-1 text-gray-900">{refueling.User.firstName} {refueling.User.lastName}</dd>
+                                                    </div>
+                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Due date</span>
+                                                            <CalendarDaysIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                        </dt>
+                                                        <dd className="text-sm text-gray-500">
+                                                            <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString()}</time>
+                                                        </dd>
+                                                    </div>
+                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Status</span>
+                                                            <KeyIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                        </dt>
+                                                        <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Current Miles</span> {refueling.currentMileage} Miles</dd>
+                                                    </div>
+                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Status</span>
+                                                            <FaGasPump aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                        </dt>
+                                                        <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Fuel Added</span> {refueling.fuelAdded} Gallons</dd>
+                                                    </div>
+                                                </dl>
+                                                <div className="mt-6 border-t border-gray-900/5 px-6 py-6 hover-action-div ">
+                                                    {refueling.receiptImage ? (
+                                                        <a
+                                                            href={refueling.receiptImage}
+                                                            download
+                                                            className="text-sm font-semibold text-gray-900"
+                                                        >
+                                                            Download receipt <span className="download-link-arrow" aria-hidden="true">&rarr;</span>
+                                                        </a>
+                                                    ) : (
+                                                        <p className="text-sm font-semibold text-gray-500">No receipt available</p>
+                                                    )}
+                                                </div>
+
+                                            </div>
+                                        </li>
                                     ))}
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th scope="row" className="px-0 pb-0 pt-6 font-normal text-gray-700 sm:hidden">
-                                            Subtotal
-                                        </th>
-                                        <th
-                                            scope="row"
-                                            colSpan={3}
-                                            className="hidden px-0 pb-0 pt-6 text-right font-normal text-gray-700 sm:table-cell"
-                                        >
-                                            Subtotal
-                                        </th>
-                                        <td className="pb-0 pl-8 pr-0 pt-6 text-right tabular-nums text-gray-900">{invoice.subTotal}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" className="pt-4 font-normal text-gray-700 sm:hidden">
-                                            Tax
-                                        </th>
-                                        <th
-                                            scope="row"
-                                            colSpan={3}
-                                            className="hidden pt-4 text-right font-normal text-gray-700 sm:table-cell"
-                                        >
-                                            Tax
-                                        </th>
-                                        <td className="pb-0 pl-8 pr-0 pt-4 text-right tabular-nums text-gray-900">{invoice.tax}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" className="pt-4 font-semibold text-gray-900 sm:hidden">
-                                            Total
-                                        </th>
-                                        <th
-                                            scope="row"
-                                            colSpan={3}
-                                            className="hidden pt-4 text-right font-semibold text-gray-900 sm:table-cell"
-                                        >
-                                            Total
-                                        </th>
-                                        <td className="pb-0 pl-8 pr-0 pt-4 text-right font-semibold tabular-nums text-gray-900">
-                                            {invoice.total}
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                            </ul>
+
+                            {vehicle.Maintainences > [0] ? (<div className="relative flex justify-center">
+                                <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900">Maintenence Recents Updates</span>
+                            </div>) : (" ")}
+                            <ul
+                                role="list"
+                                className="mt-5 grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0 md:grid-cols-2 md:divide-y-0 md:gap-4"
+                            >
+                                {vehicle.Maintainences
+                                    .sort((a, b) => new Date(b.date) - new Date(a.date))
+                                    .slice(0, 4)
+                                    .map((maintenence) => (
+                                        <li key={maintenence.maintainenceId} className="p-4">
+                                            <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
+                                                <dl className="flex flex-wrap">
+                                                    <div className="flex-auto pl-6 pt-6">
+                                                        <dt className="text-sm font-semibold text-gray-900">Amount</dt>
+                                                        <dd className="mt-1 text-base font-semibold text-gray-900">${maintenence.maintainenceCost}</dd>
+                                                    </div>
+                                                    <div className="flex-none self-end px-6 pt-4">
+                                                        <dt className="sr-only">Status</dt>
+                                                        <dd className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                                            Paid
+                                                        </dd>
+                                                    </div>
+                                                    <div className="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Client</span>
+                                                            <div className="">
+                                                                <img
+                                                                    alt=""
+                                                                    src={maintenence.User.profile_pic}
+                                                                    className="size-8 object-cover object-center rounded-full ring-4 ring-white"
+                                                                />
+                                                            </div>
+                                                        </dt>
+                                                        <dd className="text-sm font-medium mt-1 text-gray-900">{maintenence.User.firstName} {maintenence.User.lastName}</dd>
+                                                    </div>
+                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Due date</span>
+                                                            <CalendarDaysIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                        </dt>
+                                                        <dd className="text-sm text-gray-500">
+                                                            <time dateTime={maintenence.date}>{new Date(maintenence.date).toLocaleDateString()}</time>
+                                                        </dd>
+                                                    </div>
+                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Status</span>
+                                                            <KeyIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                        </dt>
+                                                        <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Current Miles</span> {maintenence.currentMileage} Miles</dd>
+                                                    </div>
+                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Status</span>
+                                                            <FaGasPump aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                        </dt>
+                                                        <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Fuel Added</span> {maintenence.fuelAdded} Gallons</dd>
+                                                    </div>
+                                                </dl>
+                                                <div className="mt-6 border-t border-gray-900/5 px-6 py-6">
+                                                    {maintenence.receiptImage ? (
+                                                        <a
+                                                            href={maintenence.receiptImage}
+                                                            download
+                                                            className="text-sm font-semibold text-gray-900 hover-action-div"
+                                                        >
+                                                            Download receipt <span className="download-link-arrow" aria-hidden="true">&rarr;</span>
+                                                        </a>
+                                                    ) : (
+                                                        <p className="text-sm font-semibold text-gray-500">No receipt available</p>
+                                                    )}
+                                                </div>
+
+                                            </div>
+                                        </li>
+                                    ))}
+                            </ul>
                         </div>
 
 
