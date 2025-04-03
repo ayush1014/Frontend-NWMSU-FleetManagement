@@ -74,7 +74,9 @@ export default function AddVehicles() {
   const [licensePlate, setLicensePlate] = useState('');
 
   const handleAddVehicle = async () => {
-
+    const userDataString = localStorage.getItem('userData');
+    const userData = userDataString ? JSON.parse(userDataString) : null;
+    const userName = userData.email;
     const vehicleForm = new FormData();
     vehicleForm.append('NWVehicleNo', NWVehicleNo);
     vehicleForm.append('VIN', VIN);
@@ -91,6 +93,7 @@ export default function AddVehicles() {
     vehicleForm.append('color', color);
     vehicleForm.append('vehicleDepartment', vehicleDepartment);
     vehicleForm.append('licensePlate', licensePlate);
+    vehicleForm.append('addBy', userName);
 
     try {
       const response = await api.post('/addVehicle', vehicleForm, {
