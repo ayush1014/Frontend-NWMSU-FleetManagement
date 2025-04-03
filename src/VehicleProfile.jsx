@@ -182,6 +182,8 @@ export default function VehicleProfile() {
                 responseType: 'blob'
             });
 
+            console.log('Reciept Response', response)
+
 
             const fileURL = window.URL.createObjectURL(new Blob([response.data]));
             const fileLink = document.createElement('a');

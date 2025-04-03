@@ -13,6 +13,8 @@ export default function AddUsers() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [department, setDepartment] = useState('');
+    const [title, setTitle] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
@@ -40,6 +42,8 @@ export default function AddUsers() {
         formData.append('lastName', lastName);
         formData.append('email', email);
         formData.append('role', permission);
+        formData.append('department', department);
+        formData.append('title', title)
         formData.append('profile_pic', selectedFile);
 
         try {
@@ -143,90 +147,25 @@ export default function AddUsers() {
                                             </div>
                                         </div>
                                     </div>
-
-                                    {/* <div className="sm:col-span-3">
-                                        <label htmlFor="country" className="block text-sm/6 font-medium text-gray-900">
-                                            Country
+                                    <div className="sm:col-span-3">
+                                        <label htmlFor="department" className="block text-sm/6 font-medium text-gray-900">
+                                            User Department
                                         </label>
-                                        <div className="mt-2 grid grid-cols-1">
-                                            <select
-                                                id="country"
-                                                name="country"
-                                                autoComplete="country-name"
-                                                className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
-                                            >
-                                                <option>United States</option>
-                                                <option>Canada</option>
-                                                <option>Mexico</option>
-                                            </select>
-                                            <ChevronDownIcon
-                                                aria-hidden="true"
-                                                className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
-                                            />
+                                        <div className="mt-2">
+                                            <div className="flex items-center rounded-md bg-white outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-green-600 ">
+                                                <input
+                                                    id="department"
+                                                    name="department"
+                                                    type="text"
+                                                    placeholder="Facility Services"
+                                                    className="border-hidden block min-w-0 grow text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6 inline-block bg-white-100 dark:bg-white/10"
+                                                    onChange={(e) => setDepartment(e.target.value)}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="col-span-full">
-                                        <label htmlFor="street-address" className="block text-sm/6 font-medium text-gray-900">
-                                            Street address
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                id="street-address"
-                                                name="street-address"
-                                                type="text"
-                                                autoComplete="street-address"
-                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="sm:col-span-2 sm:col-start-1">
-                                        <label htmlFor="city" className="block text-sm/6 font-medium text-gray-900">
-                                            City
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                id="city"
-                                                name="city"
-                                                type="text"
-                                                autoComplete="address-level2"
-                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="sm:col-span-2">
-                                        <label htmlFor="region" className="block text-sm/6 font-medium text-gray-900">
-                                            State / Province
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                id="region"
-                                                name="region"
-                                                type="text"
-                                                autoComplete="address-level1"
-                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="sm:col-span-2">
-                                        <label htmlFor="postal-code" className="block text-sm/6 font-medium text-gray-900">
-                                            ZIP / Postal code
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                id="postal-code"
-                                                name="postal-code"
-                                                type="text"
-                                                autoComplete="postal-code"
-                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                    </div> */}
-
-                                    <div className='col-span-full'>
+                                    <div className='sm:col-span-3'>
                                         <label htmlFor="photo" className="block text-sm/6 font-medium text-gray-900">
                                             Photo
                                         </label>
@@ -259,7 +198,25 @@ export default function AddUsers() {
                                         </div>
                                     </div>
 
-                                    <div className="col-span-full">
+                                    <div className="sm:col-span-3">
+                                        <label htmlFor="title" className="block text-sm/6 font-medium text-gray-900">
+                                            User Title
+                                        </label>
+                                        <div className="mt-2">
+                                            <div className="flex items-center rounded-md bg-white outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-green-600 ">
+                                                <input
+                                                    id="title"
+                                                    name="title"
+                                                    type="text"
+                                                    placeholder="Director Of Facility Services"
+                                                    className="border-hidden block min-w-0 grow text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6 inline-block bg-white-100 dark:bg-white/10"
+                                                    onChange={(e) => setTitle(e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* <div className="col-span-full">
                                         <label htmlFor="about" className="block text-sm/6 font-medium text-gray-900">
                                             Notes
                                         </label>
@@ -273,7 +230,7 @@ export default function AddUsers() {
                                             />
                                         </div>
                                         <p className="mt-3 text-sm/6 text-gray-600">Add notes about this user, it can only be seen by all admins.</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="max-w-2xl space-y-10 md:col-span-2 mt-10">
                                     <fieldset>
