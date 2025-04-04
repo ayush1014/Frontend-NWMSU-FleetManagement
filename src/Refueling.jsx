@@ -32,7 +32,6 @@ export default function Refueling() {
     const handleAddRefuelingClick = () => {
         navigate('/add-refueling');
     };
-
     return (
         <>
             <Navigation />

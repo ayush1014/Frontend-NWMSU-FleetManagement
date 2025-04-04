@@ -18,6 +18,7 @@ import Refueling from './Refueling';
 import Maintenance from './Maintainence';
 import VehicleRefueling from './VehicleRefueling';
 import VehicleMaintenence from './VehicleMaintenence';
+import EditUser from './EditUser';
 
 
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/add-users" element={<ProtectedRoute><AddUsers /></ProtectedRoute>} />
           <Route path="/user-profile" element={<ProtectedRoute><UserProfile/></ProtectedRoute>}/>
           <Route path="/user-temp" element={<ProtectedRoute><UserTemp/></ProtectedRoute>}/>
+          <Route path="/edit-user/:user_email" element={<ProtectedRoute><EditUser/></ProtectedRoute>}/>
           <Route path="/vehicle-profile/:NWVehicleNo" element={<ProtectedRoute><VehicleProfile/></ProtectedRoute>}/>
           <Route path='/add-refueling' element={<ProtectedRoute><AddRefueling/></ProtectedRoute>}/>
           <Route path='/add-maintainence' element={<ProtectedRoute><AddMaintainence/></ProtectedRoute>}/>

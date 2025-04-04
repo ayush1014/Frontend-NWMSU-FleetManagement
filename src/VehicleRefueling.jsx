@@ -41,9 +41,9 @@ export default function VehicleRefueling() {
         };
 
         fetchRefuelings();
-        console.log(refuelings)
     }, [NWVehicleNo]);
 
+    console.log('refuelings', refuelings)
     return (
         <>
             <div className="min-h-full">
@@ -234,7 +234,7 @@ export default function VehicleRefueling() {
                                         {refuelings
                                             .slice()
                                             .sort((a, b) => new Date(b.date) - new Date(a.date))
-                                            .slice(0,15)
+                                            .slice(0, 15)
                                             .map((refueling, index) => (
                                                 <li key={refueling.refuelingId}>
                                                     <div className="relative pb-8">
@@ -255,7 +255,7 @@ export default function VehicleRefueling() {
                                                                     </p>
                                                                 </div>
                                                                 <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                                                                    <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString()}</time>
+                                                                    <time dateTime={refueling.createdAt}>{new Date(refueling.createdAt).toLocaleDateString()}</time>
                                                                 </div>
                                                             </div>
                                                         </div>
