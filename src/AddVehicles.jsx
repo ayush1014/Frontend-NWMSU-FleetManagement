@@ -232,7 +232,7 @@ export default function AddVehicles() {
                     >
                       <option value="Null">Select the vehicle weight options</option>
                       <option value="<= 8500 lbs ">&lt;= 8500 lbs</option>
-                      <option value="Not Exempt">&gt; 8500 lbs</option>
+                      <option value=">8500 lbs">&gt; 8500 lbs</option>
                     </select>
                   </div>
                 </div>
@@ -288,7 +288,7 @@ export default function AddVehicles() {
                   </label>
                   <div className='mt-2 w-full'>
                     <DatePicker
-                      selected={new Date(modelYear, 0)} // Create a new Date object using the selected year
+                      selected={new Date(modelYear, 0)} 
                       onChange={handleYearChange}
                       showYearPicker
                       dateFormat="yyyy"
@@ -358,21 +358,6 @@ export default function AddVehicles() {
                     />
                   </div>
                 </div>
-
-                {/* <div className="sm:col-span-2">
-                  <label htmlFor="exempt" className="block text-sm/6 font-medium text-gray-900">
-                    Exempt Status
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="exempt"
-                      name="exempt"
-                      type="text"
-                      autoComplete="exempt"
-                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
-                    />
-                  </div>
-                </div> */}
                 <div className="col-span-3 lg:col-span-2">
                   <label htmlFor="exempt" className="block text-sm font-medium text-gray-900">
                     Exempt Status

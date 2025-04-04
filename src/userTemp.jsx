@@ -223,31 +223,6 @@ export default function UserTemp() {
                                     </div>
                                 </div>
 
-                                {/* Tabs */}
-                                {/* <div className="mt-6 sm:mt-2 2xl:mt-5">
-                                    <div className="border-b border-gray-200">
-                                        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-                                            <nav aria-label="Tabs" className="-mb-px flex space-x-8">
-                                                {tabs.map((tab) => (
-                                                    <a
-                                                        key={tab.name}
-                                                        href={tab.href}
-                                                        aria-current={tab.current ? 'page' : undefined}
-                                                        className={classNames(
-                                                            tab.current
-                                                                ? 'border-pink-500 text-gray-900'
-                                                                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                                                            'whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium',
-                                                        )}
-                                                    >
-                                                        {tab.name}
-                                                    </a>
-                                                ))}
-                                            </nav>
-                                        </div>
-                                    </div>
-                                </div> */}
-
                                 {/* Description list */}
                                 <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
                                     <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
@@ -474,7 +449,7 @@ export default function UserTemp() {
                                                 name="search"
                                                 type="search"
                                                 placeholder="Search"
-                                                className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-pink-500 sm:text-sm/6"
+                                                className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-500 sm:text-sm/6"
                                             />
                                             <MagnifyingGlassIcon
                                                 aria-hidden="true"
@@ -511,7 +486,7 @@ export default function UserTemp() {
                                                 </div>
                                                 <ul role="list" className="relative divide-y divide-gray-200">
                                                     <li key={person.email}>
-                                                        <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 hover:bg-gray-50">
+                                                        <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-500 hover:bg-gray-50">
                                                             <div className="shrink-0">
                                                                 <img alt="" src={person.profile_pic || bearcat} className="size-10 rounded-full object-cover object-center" />
                                                             </div>
@@ -520,18 +495,18 @@ export default function UserTemp() {
                                                                     {/* Extend touch target to entire panel */}
                                                                     <span aria-hidden="true" className="absolute inset-0" />
                                                                     <p className="text-sm font-medium text-gray-900">{person.firstName} {person.lastName}</p>
-                                                                    <span className={`inline-flex mt-1 items-center rounded-full px-2 py-0.5 text-xs font-medium ${person.role === 'Admin' ? 'text-green-700 bg-green-50 ring-green-600/20 max-w-[25%] md:max-w-[30%] lg:max-w-[40%]  [1366px]:max-w-[100%]' : 'text-red-700 bg-red-50 ring-red-600/20 max-w-[30%] md:max-w-[35%] lg:max-w-[45%]'}  ring-1 ring-inset `}>
+                                                                    <span className={`inline-flex mt-1 items-center rounded-full px-2 py-0.5 text-xs font-medium ${person.role === 'Admin' ? 'text-green-700 bg-green-50 ring-green-600/20 max-w-[25%] md:max-w-[30%] lg:max-w-[40%]  [1366px]:max-w-[100%]' : 'text-green-700 bg-green-50 ring-green-600/20 max-w-[30%] md:max-w-[35%] lg:max-w-[45%]'}  ring-1 ring-inset `}>
                                                                         {person.role}
                                                                     </span>
                                                                 </a>
                                                             </div>
-                                                            <button onClick={(event) => { toggleDropdown(person.email, event) }} className="p-2 z-10 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                            <button onClick={(event) => { toggleDropdown(person.email, event) }} className="p-2 z-10 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                                                 <EllipsisVerticalIcon className="h-5 w-5 text-gray-400" />
                                                             </button>
                                                             {openDropdown === person.email && (
                                                                 <div ref={dropdownRef} className="absolute z-0 right-0 w-48 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                                                                     <div className="py-1">
-                                                                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => console.log('Edit')}>
+                                                                        <a href={`/edit-user/${person.email}`} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => navigate(`/edit-user/${person.email}`)}>
                                                                             <PencilIcon className="size-5 inline mr-3 text-gray-400" />
                                                                             Edit
                                                                         </a>
@@ -562,7 +537,7 @@ export default function UserTemp() {
                                             name="search"
                                             type="search"
                                             placeholder="Search"
-                                            className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-pink-500 sm:text-sm/6"
+                                            className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-500 sm:text-sm/6"
                                         />
                                         <MagnifyingGlassIcon
                                             aria-hidden="true"
@@ -597,7 +572,7 @@ export default function UserTemp() {
                                         </div>
                                         <ul role="list" className="relative divide-y divide-gray-200">
                                             <li key={person.email}>
-                                                <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 hover:bg-gray-50">
+                                                <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-500 hover:bg-gray-50">
                                                     <div className="shrink-0">
                                                         <img alt="" src={person.profile_pic || bearcat} className="size-10 rounded-full object-cover object-center" />
                                                     </div>
@@ -606,18 +581,18 @@ export default function UserTemp() {
                                                             {/* Extend touch target to entire panel */}
                                                             <span aria-hidden="true" className="absolute inset-0" />
                                                             <p className="text-sm font-medium text-gray-900">{person.firstName} {person.lastName}</p>
-                                                            <span className={`inline-flex mt-1 items-center rounded-full px-2 py-0.5 text-xs font-medium ${person.role === 'Admin' ? 'text-green-700 bg-green-50 ring-green-600/20 max-w-[25%] md:max-w-[30%] lg:max-w-[40%]  [1366px]:max-w-[100%]' : 'text-red-700 bg-red-50 ring-red-600/20 max-w-[30%] md:max-w-[35%] lg:max-w-[45%]'}  ring-1 ring-inset `}>
+                                                            <span className={`inline-flex mt-1 items-center rounded-full px-2 py-0.5 text-xs font-medium ${person.role === 'Admin' ? 'text-green-700 bg-green-50 ring-green-600/20 max-w-[25%] md:max-w-[30%] lg:max-w-[40%]  [1366px]:max-w-[100%]' : 'text-green-700 bg-green-50 ring-green-600/20 max-w-[30%] md:max-w-[35%] lg:max-w-[45%]'}  ring-1 ring-inset `}>
                                                                 {person.role}
                                                             </span>
                                                         </a>
                                                     </div>
-                                                    <button onClick={(event) => { toggleDropdown(person.email, event) }} className="p-2 z-10 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    <button onClick={(event) => { toggleDropdown(person.email, event) }} className="p-2 z-10 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                                         <EllipsisVerticalIcon className="h-5 w-5 text-gray-400" />
                                                     </button>
                                                     {openDropdown === person.email && (
                                                         <div ref={dropdownRef} className="absolute z-0 right-0 w-48 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                                                             <div className="py-1">
-                                                                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => console.log('Edit')}>
+                                                                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => navigate(`/edit-user/${person.email}`)}>
                                                                     <PencilIcon className="size-5 inline mr-3 text-gray-400" />
                                                                     Edit
                                                                 </a>

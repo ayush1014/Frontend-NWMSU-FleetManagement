@@ -301,7 +301,7 @@ export default function VehicleProfile() {
                                             <div className="flex justify-between gap-x-4">
                                                 <div className="py-0.5 text-xs text-gray-500">
                                                     <span className="font-medium text-gray-900">{item.User?.firstName} {item.User?.lastName}</span>{' '}
-                                                    {item.maintainenceDescription ? `performed maintenance (${item.maintainenceDescription })`  : 'added fuel'}
+                                                    {item.maintainenceDescription ? `performed maintenance (${item.maintainenceDescription})` : 'added fuel'}
                                                 </div>
                                                 <time dateTime={item.date} className="flex-none py-0.5 text-xs text-gray-500">
                                                     {new Date(item.date).toLocaleDateString()}
@@ -362,6 +362,17 @@ export default function VehicleProfile() {
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Department</dt>
                                                 <dd className="mt-1 text-sm text-gray-900">{vehicle.vehicleDepartment}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">Weight</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.weight}</dd>
+                                            </div>
+                                            <div className="sm:col-span-1">
+                                                <dt className="text-sm font-medium text-gray-500">Purchase Date</dt>
+                                                {/* <dd className="mt-1 text-sm text-gray-900">{vehicle.purchaseDate}</dd> */}
+                                                <dd className="text-sm whitespace-nowrap text-gray-900">
+                                                    <time dateTime={vehicle.purchaseDate}>{new Date(vehicle.purchaseDate).toLocaleDateString()}</time>
+                                                </dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Starting Mileage</dt>
