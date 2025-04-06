@@ -47,7 +47,7 @@ export default function Maintenance() {
                                                     <img
                                                         alt=""
                                                         src={maintenance.Vehicle.vehiclePic}
-                                                        className="size-12 rounded-full group-hover:opacity-75"
+                                                        className="size-16 rounded-full object-contain object-center group-hover:opacity-75"
                                                     />
                                                 </div>
                                                 <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
@@ -111,7 +111,7 @@ export default function Maintenance() {
                                                     <img
                                                         alt=""
                                                         src={maintenance.Vehicle.vehiclePic}
-                                                        className="size-12 rounded-full group-hover:opacity-75"
+                                                        className="size-16 rounded-full object-contain object-center group-hover:opacity-75"
                                                     />
                                                 </div>
                                                 <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">

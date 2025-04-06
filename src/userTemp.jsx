@@ -224,7 +224,7 @@ export default function UserTemp() {
                                 </div>
 
                                 {/* Description list */}
-                                <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
+                                <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8 ">
                                     <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                                         {Object.keys(profile.fields).map((field) => (
                                             <div key={field} className="sm:col-span-1">
@@ -527,7 +527,7 @@ export default function UserTemp() {
                                 </aside>
                             </div>)}
                         </main>
-                        <aside className="hidden w-96 h-full shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
+                        <aside className="hidden w-96 min-h-fit shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
                             <div className="px-6 pb-4 pt-6">
                                 <h2 className="text-lg font-medium text-gray-900">User Directory</h2>
                                 <p className="mt-1 text-sm text-gray-600">Search directory of {people.length} users</p>
