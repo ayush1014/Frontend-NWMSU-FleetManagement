@@ -6,12 +6,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import api from './Config/axios'
 import { Datepicker } from "flowbite-react";
 import { useUser } from './AppContext/userContext';
+import { OrbitProgress } from 'react-loading-indicators';
+import SavedNotification from './SavedNotification';
 
 export default function AddRefueling() {
-    const [selectedOption, setSelectedOption] = useState('General');
-    const [permission, setPermission] = useState('General')
-    const [permissionButton, setPermissionButton] = useState(false)
-    const [permissionOption, setPermissionOption] = useState('')
     const [NWVehicleNo, setNWVehicleNo] = useState('');
     const [currentMileage, setCurrentMileage] = useState('');
     const [fuelAdded, setFuelAdded] = useState('');
@@ -20,8 +18,12 @@ export default function AddRefueling() {
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [date, setDate] = useState(new Date());
     const {User} = useUser();
+    const [isLoading, setIsLoading] = useState(false);
+    const [noti, setNoti] = useState(false)
+    const [data, setData] = useState([])
 
     const handleAddRefuelingSubmit = async (event) => {
+        setIsLoading(true)
         event.preventDefault();
         const userDataString = localStorage.getItem('userData');
         const userData = userDataString ? JSON.parse(userDataString) : null;
@@ -34,6 +36,7 @@ export default function AddRefueling() {
         formData.append('receiptImage', selectedFile);
         formData.append('date', date.toISOString().split('T')[0]); 
         formData.append('refueledBy', userName);
+        
 
         console.log(formData);
     
@@ -44,7 +47,17 @@ export default function AddRefueling() {
                 }
             });
             console.log('Refueling Added Successfully', response);
+            setNWVehicleNo('');
+            setCurrentMileage('');
+            setFuelAdded('');
+            setFuelCost('');
+            setSelectedFile(null);
+            setImagePreviewUrl(null);
+            setData(response.data);
+            setIsLoading(false)
+            setNoti(true);
         } catch (error) {
+            setIsLoading(false)
             console.error('Technical error while submitting the add refueling form:', error);
         }
     };
@@ -81,7 +94,13 @@ export default function AddRefueling() {
         <div className='min-h-screen bg-gray-100'>
             <Navigation />
             <main className='lg:pl-[22%] lg:pr-[5%] mt-[1%]'>
+            {isLoading ? (
+                    <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+                        <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
+                    </div>
+                ) : (
                 <div className="divide-y divide-gray-900/10">
+                    {noti ? (<div><SavedNotification data={data} type="Refueling" /></div>) : (<></>)}
                     <div className="grid grid-cols-1 gap-x-8 gap-y-8 py-10 md:grid-cols-3">
                         <div className="px-4 sm:px-0">
                             <h2 className="text-base/7 font-semibold text-gray-900">Refueling Information</h2>
@@ -236,7 +255,7 @@ export default function AddRefueling() {
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>)}
             </main>
         </div>
     )

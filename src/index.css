@@ -26,3 +26,126 @@ aside {
 .hover-action-div:hover .download-link-arrow {
   transform: translateX(10px);
 }
+
+
+.scroll_color {
+  ::-webkit-scrollbar {
+    width: 3px;
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: darkgreen;
+    border-radius: 10px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+
+
+  scrollbar-width: thin;
+  scrollbar-color: green transparent;
+}
+
+/* Base styles for the layout */
+.layout {
+  display: flex;
+  height: 92vh;
+  overflow: hidden;
+  overflow-y: auto;
+
+  ::-webkit-scrollbar {
+    width: 3px;
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: darkgreen;
+    border-radius: 10px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+
+
+  scrollbar-width: thin;
+  scrollbar-color: green transparent;
+}
+
+.sidebar {
+  width: 300px;
+  overflow-y: auto;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+
+
+  ::-webkit-scrollbar {
+    width: 3px;
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: darkgreen;
+    border-radius: 10px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+
+
+  scrollbar-width: thin;
+  scrollbar-color: green transparent;
+}
+
+
+.main-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+
+.sidebar {
+  padding: 10px;
+}
+
+.main-content {
+  padding: 20px;
+  background: #fff;
+}
+
+
+.scrollable-element::-webkit-scrollbar {
+  display: none;
+}
+
+
+.scrollable-element {
+  scrollbar-width: none;
+}
+
+
+.scrollable-element {
+  -ms-overflow-style: none;
+}
+
+.user-directory-event {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollable-element {
+    scrollbar-width: none;
+  }
+
+}

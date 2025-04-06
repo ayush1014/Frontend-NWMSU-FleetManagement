@@ -33,6 +33,7 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { FaGasPump } from 'react-icons/fa'
 import api from './Config/axios';
 import Navigation from './Navigation';
+import { OrbitProgress } from 'react-loading-indicators';
 
 const navigation = [
     { name: 'Home', href: '#' },
@@ -116,7 +117,7 @@ const activity = [
 export default function VehicleProfile() {
     const [vehicle, setVehicle] = useState(null);
     const [selected, setSelected] = useState(moods[5])
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [totalCost, setTotalCost] = useState(0);
     // const [activity, setActivity] = useState([]);
     const { NWVehicleNo } = useParams();
@@ -129,6 +130,7 @@ export default function VehicleProfile() {
 
     useEffect(() => {
         const fetchVehicleProfile = async () => {
+            setLoading(true)
             try {
                 const response = await api.get(`/vehicle-profile/${NWVehicleNo}`);
                 const data = response.data;
@@ -170,7 +172,9 @@ export default function VehicleProfile() {
 
 
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+        <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
+    </div>;
     if (!vehicle) return <p>No vehicle data found.</p>;
 
     const handleDownload = async (NWVehicleNo) => {

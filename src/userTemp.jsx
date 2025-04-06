@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom'
 import noImg from './assets/noImg.png'
 import bearcat from './assets/bearcat.webp'
 import { FaGasPump } from 'react-icons/fa'
+import { OrbitProgress } from 'react-loading-indicators'
 
 const user = {
     name: 'Tom Cook',
@@ -75,16 +76,20 @@ export default function UserTemp() {
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
     const [activity, setActivity] = useState([])
+    const [isLoading, setIsLoading] = useState(false);
 
 
     useEffect(() => {
+        setIsLoading(true)
         const fetchUsers = async () => {
             try {
                 const response = await api.get('/showUsers');
                 console.log(response.data);
                 setPeople(response.data);
+                setIsLoading(false)
             } catch (error) {
                 console.log('Error fetching users:', error);
+                setIsLoading(false)
             }
         };
 
@@ -167,12 +172,19 @@ export default function UserTemp() {
 
     return (
         <>
+            {isLoading ? (
+                <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+                    <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
+                </div>
+            ) : (
+                <div>
+                </div>
+            )}
             <Navigation />
-            <div className="flex h-full lg:pl-72">
+            <div className="flex h-full lg:pl-72" >
                 {/* Static sidebar for desktop */}
-                <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-
-                    <div className="relative z-0 flex flex-1 overflow-hidden">
+                <div className="layout flex min-w-0 flex-1 flex-col overflow-hidden ">
+                    <div className="relative z-0 flex flex-1 overflow-hidden ">
                         <main className="relative z-0 flex-1 overflow-y-auto focus:outline-none xl:order-last">
                             {/* Breadcrumb */}
                             {selectedUser ? (<nav aria-label="Breadcrumb" className="flex items-start px-4 py-3 sm:px-6 lg:px-8 xl:hidden">
@@ -439,9 +451,9 @@ export default function UserTemp() {
                                         </ul>
                                     </div>
                                 </div>
-                            </article>) : (<div className='lg:hidden'>
+                            </article>) : (<div className='lg:hidden user-directory-event'>
                                 <div className="px-6 pb-4 pt-6">
-                                    <h2 className="text-lg font-medium text-gray-900">User Directory</h2>
+                                    <h2 className="text-lg font-medium text-gray-900 ">User Directory</h2>
                                     <p className="mt-1 text-sm text-gray-600">Search directory of {people.length} users</p>
                                     <form action="#" className="mt-6 flex gap-x-4">
                                         <div className="grid min-w-0 flex-1 grid-cols-1">
@@ -478,15 +490,15 @@ export default function UserTemp() {
                                 </div>
 
                                 {/* Directory list */}
-                                <aside className='lg:hidden'>
+                                <aside className='lg:hidden '>
                                     <nav aria-label="Directory" className="min-h-0 flex-1 overflow-hidden overflow-y-auto ">
                                         {people.map((person) => (
                                             <div key={person.email} className="relative">
                                                 <div className="sticky top-0 border-b border-t border-gray-200 bg-gray-50 text-sm font-medium text-gray-500">
                                                 </div>
-                                                <ul role="list" className="relative divide-y divide-gray-200">
+                                                <ul role="list" className="relative divide-y divide-gray-200 ">
                                                     <li key={person.email}>
-                                                        <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-500 hover:bg-gray-50">
+                                                        <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-green-500 hover:bg-gray-50 ">
                                                             <div className="shrink-0">
                                                                 <img alt="" src={person.profile_pic || bearcat} className="size-10 rounded-full object-cover object-center" />
                                                             </div>
@@ -527,7 +539,7 @@ export default function UserTemp() {
                                 </aside>
                             </div>)}
                         </main>
-                        <aside className="hidden w-96 min-h-fit shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
+                        <aside className="hidden w-96 min-h-fit shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col pb-24 sidebar">
                             <div className="px-6 pb-4 pt-6">
                                 <h2 className="text-lg font-medium text-gray-900">User Directory</h2>
                                 <p className="mt-1 text-sm text-gray-600">Search directory of {people.length} users</p>
