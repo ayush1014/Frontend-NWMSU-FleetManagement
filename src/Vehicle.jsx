@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import api from './Config/axios';
 import { HR } from 'flowbite-react';
 import noPreview from './assets/noPreview.png'
-
+import { OrbitProgress } from 'react-loading-indicators'
 
 
 const departmentOptions = [
@@ -95,6 +95,7 @@ export default function Vehicle() {
     const [recentVehicles, setRecentVehicles] = useState([]);
     const [selectedDepartments, setSelectedDepartments] = useState('All');
     const [filterSelected, setFilterSelected] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const handleAddVehicleClick = () => {
@@ -103,11 +104,14 @@ export default function Vehicle() {
 
     useEffect(() => {
         const fetchVehicles = async () => {
+            setIsLoading(true)
             try {
                 const response = await api.get('/vehicles');
                 setVehicles(response.data);
+                setIsLoading(false)
             } catch (error) {
                 console.error('Error fetching vehicles:', error);
+                setIsLoading(false)
             }
         };
 
@@ -152,8 +156,16 @@ export default function Vehicle() {
     return (
 
         <div className='min-h-screen'>
+            {isLoading ? (
+                <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+                    <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
+                </div>
+            ) : (
+                <div>
+                </div>
+            )}
             <Navigation />
-            <main className='lg:pl-[23%] lg:pr-[4%] mt-[2%] '>
+            <main className='lg:pl-[23%] lg:pr-[4%] mt-[2%]'>
                 <div className="relative rounded-full shadow-sm mb-4">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <MagnifyingGlassIcon
@@ -233,7 +245,7 @@ export default function Vehicle() {
                     <span className="inline-flex cursor-pointer items-center rounded-md bg-green-50 mt-4 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20" onClick={handleDepartmentFilterClick}>
                         Filter by Department
                     </span>
-                    {filterSelected ? (<div className="mt-6 flex flex-wrap justify-start gap-4"> {/* Adjusted for wrapping */}
+                    {filterSelected ? (<div className="mt-6 flex flex-wrap justify-start gap-4"> 
                         {departmentOptions.map((departmentMethod) => (
                             <div key={departmentMethod.id} className="flex items-center">
                                 <input
