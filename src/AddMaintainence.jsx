@@ -8,6 +8,7 @@ import { Datepicker } from "flowbite-react";
 import { useUser } from './AppContext/userContext';
 import { OrbitProgress } from 'react-loading-indicators';
 import SavedNotification from './SavedNotification';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddMaintainence() {
     const [NWVehicleNo, setNWVehicleNo] = useState('');
@@ -20,6 +21,7 @@ export default function AddMaintainence() {
     const [isLoading, setIsLoading] = useState(false);
     const [noti, setNoti] = useState(false)
     const [data, setData] = useState([])
+    const navigate = useNavigate();
 
     const handleAddMaintainenceSubmit = async (event) => {
         setIsLoading(true)
@@ -248,7 +250,7 @@ export default function AddMaintainence() {
                                     </div>
                                 </div>
                                 <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-                                    <button type="button" className="text-sm/6 font-semibold text-gray-900">
+                                    <button onClick={()=>navigate('/maintenance')} type="button" className="text-sm/6 font-semibold text-gray-900">
                                         Cancel
                                     </button>
                                     <button

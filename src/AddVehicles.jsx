@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import api from './Config/axios';
 import { OrbitProgress } from 'react-loading-indicators';
 import SavedNotification from './SavedNotification';
+import { useNavigate } from 'react-router-dom';
 
 const vehicleMakes = [
   'Ford', 'Chevrolet', 'Toyota', 'Honda', 'Nissan', 'Jeep', 'Hyundai', 'Kia',
@@ -77,6 +78,7 @@ export default function AddVehicles() {
   const [isLoading, setIsLoading] = useState(false);
   const [noti, setNoti] = useState(false)
   const [data, setData] = useState([])
+  const navigate = useNavigate();
 
   const handleAddVehicle = async () => {
     const userDataString = localStorage.getItem('userData');
@@ -544,7 +546,7 @@ export default function AddVehicles() {
             </div>
 
             <div className="mt-6 pb-6 flex items-center justify-end gap-x-[5%] md:gap-x-[35%] lg:gap-x-[23%] ">
-              <button type="button" className="text-sm/6 font-semibold text-gray-900 mt-4">
+              <button onClick={()=>navigate('/Vehicles')} type="button" className="text-sm/6 font-semibold text-gray-900 mt-4">
                 Cancel
               </button>
               <div className='mb-6'>
