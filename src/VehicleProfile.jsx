@@ -312,7 +312,7 @@ export default function VehicleProfile() {
                                                     {item.maintainenceDescription ? `performed maintenance (${item.maintainenceDescription})` : 'added fuel'}
                                                 </div>
                                                 <time dateTime={item.date} className="flex-none py-0.5 text-xs text-gray-500">
-                                                    {new Date(item.date).toLocaleDateString()}
+                                                    {new Date(item.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}
                                                 </time>
                                             </div>
                                             <p className="text-sm text-gray-500">
@@ -439,7 +439,7 @@ export default function VehicleProfile() {
                                                             <CalendarDaysIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
                                                         </dt>
                                                         <dd className="text-sm text-gray-500">
-                                                            <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString()}</time>
+                                                            <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>
                                                         </dd>
                                                     </div>
                                                     <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
@@ -519,7 +519,7 @@ export default function VehicleProfile() {
                                                             <CalendarDaysIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
                                                         </dt>
                                                         <dd className="text-sm text-gray-500">
-                                                            <time dateTime={maintenence.date}>{new Date(maintenence.date).toLocaleDateString()}</time>
+                                                            <time dateTime={maintenence.date}>{new Date(maintenence.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>
                                                         </dd>
                                                     </div>
                                                     <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
@@ -561,10 +561,10 @@ export default function VehicleProfile() {
                     </div>
                 </div>
             </main>
-            {downloadProgress?(<div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+            {downloadProgress ? (<div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
                 <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
                 <div className='font-semibold'>Downloading Reciepts for {vehicle.make} {vehicle.model}...</div>
-            </div>):(<div></div>)}
+            </div>) : (<div></div>)}
         </>
     )
 }

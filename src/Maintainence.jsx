@@ -104,7 +104,7 @@ export default function Maintenance() {
                                                                     </p>
                                                                     <p className="mt-2 flex gap-1 items-center text-sm text-gray-500">
                                                                         <WrenchScrewdriverIcon aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
-                                                                        Maintenance on <time dateTime={maintenance.date}>{new Date(maintenance.date).toLocaleDateString()}</time>
+                                                                        Maintenance on <time dateTime={maintenance.date}>{new Date(maintenance.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -167,7 +167,7 @@ export default function Maintenance() {
                                                                 </p>
                                                                 <p className="mt-2 flex gap-1 items-center text-sm text-gray-500">
                                                                     <WrenchScrewdriverIcon aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
-                                                                    Maintenance on <time dateTime={maintenance.date}>{new Date(maintenance.date).toLocaleDateString()}</time>
+                                                                    Maintenance on <time dateTime={maintenance.date}>{new Date(maintenance.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>
                                                                 </p>
                                                             </div>
                                                         </div>

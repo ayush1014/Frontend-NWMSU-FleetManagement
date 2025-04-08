@@ -107,7 +107,7 @@ export default function Refueling() {
                                                                         </p>
                                                                         <p className="mt-2 flex gap-1 items-center text-sm text-gray-500">
                                                                             <FaGasPump aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
-                                                                            Refueled on <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString()}</time>
+                                                                            Refueled on <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -170,7 +170,7 @@ export default function Refueling() {
                                                                     </p>
                                                                     <p className="mt-2 flex gap-1 items-center text-sm text-gray-500">
                                                                         <FaGasPump aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
-                                                                        Refueled on <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString()}</time>
+                                                                        Refueled on <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>
                                                                     </p>
                                                                 </div>
                                                             </div>
