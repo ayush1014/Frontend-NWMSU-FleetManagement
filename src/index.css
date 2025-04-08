@@ -50,7 +50,6 @@ aside {
   scrollbar-color: green transparent;
 }
 
-/* Base styles for the layout */
 .layout {
   display: flex;
   height: 92vh;
