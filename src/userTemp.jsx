@@ -507,7 +507,7 @@ export default function UserTemp() {
                                                                     {/* Extend touch target to entire panel */}
                                                                     <span aria-hidden="true" className="absolute inset-0" />
                                                                     <p className="text-sm font-medium text-gray-900">{person.firstName} {person.lastName}</p>
-                                                                    <span className={`inline-flex mt-1 items-center rounded-full px-2 py-0.5 text-xs font-medium ${person.role === 'Admin' ? 'text-green-700 bg-green-50 ring-green-600/20 max-w-[25%] md:max-w-[30%] lg:max-w-[40%]  [1366px]:max-w-[100%]' : 'text-green-700 bg-green-50 ring-green-600/20 max-w-[30%] md:max-w-[35%] lg:max-w-[45%]'}  ring-1 ring-inset `}>
+                                                                    <span className={`inline-flex mt-1 items-center rounded-full px-2 py-0.5 text-xs font-medium ${person.role === 'Admin' ? 'text-green-700 bg-green-50 ring-green-600/20 max-w-[25%] md:max-w-[30%] lg:max-w-[40%]  [1366px]:max-w-[100%]' : 'text-red-700 bg-red-50 ring-red-600/20 max-w-[30%] md:max-w-[35%] lg:max-w-[45%]'}  ring-1 ring-inset `}>
                                                                         {person.role}
                                                                     </span>
                                                                 </a>
@@ -593,7 +593,7 @@ export default function UserTemp() {
                                                             {/* Extend touch target to entire panel */}
                                                             <span aria-hidden="true" className="absolute inset-0" />
                                                             <p className="text-sm font-medium text-gray-900">{person.firstName} {person.lastName}</p>
-                                                            <span className={`inline-flex mt-1 items-center rounded-full px-2 py-0.5 text-xs font-medium ${person.role === 'Admin' ? 'text-green-700 bg-green-50 ring-green-600/20 max-w-[25%] md:max-w-[30%] lg:max-w-[40%]  [1366px]:max-w-[100%]' : 'text-green-700 bg-green-50 ring-green-600/20 max-w-[30%] md:max-w-[35%] lg:max-w-[45%]'}  ring-1 ring-inset `}>
+                                                            <span className={`inline-flex mt-1 items-center rounded-full px-2 py-0.5 text-xs font-medium ${person.role === 'Admin' ? 'text-green-700 bg-green-50 ring-green-600/20 max-w-[25%] md:max-w-[30%] lg:max-w-[40%]  [1366px]:max-w-[100%]' : 'text-red-700 bg-red-50 ring-red-600/20 max-w-[30%] md:max-w-[35%] lg:max-w-[45%]'}  ring-1 ring-inset `}>
                                                                 {person.role}
                                                             </span>
                                                         </a>
