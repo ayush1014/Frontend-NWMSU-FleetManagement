@@ -235,10 +235,6 @@ export default function Navigation() {
                                 </div>
                             </div>
                         </div>
- 
-                        {/* <main className="py-[6%]">
-                            <div className="px-4 sm:px-6 lg:px-8">{<Home />}</div>
-                        </main> */}
                     </div>
                 </div>
             </div>
