@@ -125,6 +125,7 @@ export default function VehicleProfile() {
     const [refuelingCost, setRefuelingCost] = useState('')
     const [curYear, setCurYear] = useState('')
     const [activity, setActivity] = useState([])
+    const [downloadProgress, setDownloadProgress] = useState(false);
     const navigate = useNavigate();
 
 
@@ -178,6 +179,7 @@ export default function VehicleProfile() {
     if (!vehicle) return <p>No vehicle data found.</p>;
 
     const handleDownload = async (NWVehicleNo) => {
+        setDownloadProgress(true)
         const vehicleId = NWVehicleNo;
         console.log('VehicleId: ', vehicleId)
 
@@ -199,9 +201,11 @@ export default function VehicleProfile() {
 
             fileLink.parentNode.removeChild(fileLink);
             window.URL.revokeObjectURL(fileURL);
+            setDownloadProgress(false)
         } catch (error) {
             console.error('Error downloading the file:', error);
             alert('Failed to download file.');
+            setDownloadProgress(false)
         }
     };
 
@@ -557,6 +561,10 @@ export default function VehicleProfile() {
                     </div>
                 </div>
             </main>
+            {downloadProgress?(<div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+                <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
+                <div className='font-semibold'>Downloading Reciepts for {vehicle.make} {vehicle.model}...</div>
+            </div>):(<div></div>)}
         </>
     )
 }
