@@ -5,6 +5,7 @@ import { useState } from 'react';
 import api from './Config/axios'
 import { OrbitProgress } from 'react-loading-indicators';
 import SavedNotification from './SavedNotification';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddUsers() {
     const [selectedOption, setSelectedOption] = useState('General');
@@ -21,6 +22,7 @@ export default function AddUsers() {
     const [isLoading, setIsLoading] = useState(false);
     const [noti, setNoti] = useState(false)
     const [data, setData] = useState([])
+    const navigate = useNavigate();
 
 
     const handleCheckboxChange = (event) => {
@@ -355,7 +357,7 @@ export default function AddUsers() {
                                     </div>
                                 </div>
                                 <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-                                    <button type="button" className="text-sm/6 font-semibold text-gray-900">
+                                    <button onClick={()=>navigate('/user-temp')} type="button" className="text-sm/6 font-semibold text-gray-900">
                                         Cancel
                                     </button>
                                     <button
