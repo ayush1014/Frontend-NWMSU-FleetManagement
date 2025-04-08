@@ -1,24 +1,3 @@
-import {
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-    Popover,
-    PopoverBackdrop,
-    PopoverButton,
-    PopoverPanel,
-} from '@headlessui/react'
-import {
-    ArrowLongLeftIcon,
-    CheckIcon,
-    HandThumbUpIcon,
-    HomeIcon,
-    MagnifyingGlassIcon,
-    PaperClipIcon,
-    QuestionMarkCircleIcon,
-    UserIcon,
-} from '@heroicons/react/20/solid'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Navigation from './Navigation'
 import api from './Config/axios';
 import { useParams } from 'react-router-dom';
@@ -169,7 +148,10 @@ export default function VehicleRefueling() {
                                                         <CalendarDaysIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
                                                     </dt>
                                                     <dd className="text-sm text-gray-500">
-                                                        <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString()}</time>
+                                                        <time dateTime={refueling.createdAt}>
+                                                            {new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}
+                                                        </time>
+
                                                     </dd>
                                                 </div>
                                                 <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
@@ -240,8 +222,10 @@ export default function VehicleRefueling() {
                                                                         <span className="font-medium text-gray-900"> {refueling.fuelAdded} gallons for ${refueling.fuelCost}</span>
                                                                     </p>
                                                                 </div>
-                                                                <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                                                                    <time dateTime={refueling.createdAt}>{new Date(refueling.createdAt).toLocaleDateString()}</time>
+                                                                <div className='text-sm text-gray-500'>
+                                                                    <time dateTime={refueling.createdAt}>
+                                                                        {new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}
+                                                                    </time>
                                                                 </div>
                                                             </div>
                                                         </div>
