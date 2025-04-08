@@ -106,7 +106,7 @@ export default function Refueling() {
                                                                             </span>
                                                                         </p>
                                                                         <p className="mt-2 flex gap-1 items-center text-sm text-gray-500">
-                                                                            <CheckCircleIcon aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
+                                                                            <FaGasPump aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
                                                                             Refueled on <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString()}</time>
                                                                         </p>
                                                                     </div>
@@ -169,7 +169,7 @@ export default function Refueling() {
                                                                         </span>
                                                                     </p>
                                                                     <p className="mt-2 flex gap-1 items-center text-sm text-gray-500">
-                                                                        <CheckCircleIcon aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
+                                                                        <FaGasPump aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
                                                                         Refueled on <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString()}</time>
                                                                     </p>
                                                                 </div>
@@ -196,66 +196,3 @@ export default function Refueling() {
         </>
     );
 }
-
-{/* <nav
-                            aria-label="Pagination"
-                            className="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0"
-                        >
-                            <div className="-mt-px flex w-0 flex-1">
-                                <a
-                                    href="#"
-                                    className="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-200 hover:text-gray-700"
-                                >
-                                    <ArrowLongLeftIcon aria-hidden="true" className="mr-3 size-5 text-gray-400" />
-                                    Previous
-                                </a>
-                            </div>
-                            <div className="hidden md:-mt-px md:flex">
-                                <a
-                                    href="#"
-                                    className="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-200 hover:text-gray-700"
-                                >
-                                    1
-                                </a>
-                                <a
-                                    href="#"
-                                    aria-current="page"
-                                    className="inline-flex items-center border-t-2 border-purple-500 px-4 pt-4 text-sm font-medium text-purple-600"
-                                >
-                                    2
-                                </a>
-                                <a
-                                    href="#"
-                                    className="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-200 hover:text-gray-700"
-                                >
-                                    3
-                                </a>
-                                <a
-                                    href="#"
-                                    className="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-200 hover:text-gray-700"
-                                >
-                                    4
-                                </a>
-                                <a
-                                    href="#"
-                                    className="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-200 hover:text-gray-700"
-                                >
-                                    5
-                                </a>
-                                <a
-                                    href="#"
-                                    className="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-200 hover:text-gray-700"
-                                >
-                                    6
-                                </a>
-                            </div>
-                            <div className="-mt-px flex w-0 flex-1 justify-end">
-                                <a
-                                    href="#"
-                                    className="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-200 hover:text-gray-700"
-                                >
-                                    Next
-                                    <ArrowLongRightIcon aria-hidden="true" className="ml-3 size-5 text-gray-400" />
-                                </a>
-                            </div>
-                        </nav> */}

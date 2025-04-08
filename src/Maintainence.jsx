@@ -103,7 +103,7 @@ export default function Maintenance() {
                                                                         </span>
                                                                     </p>
                                                                     <p className="mt-2 flex gap-1 items-center text-sm text-gray-500">
-                                                                        <CheckCircleIcon aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
+                                                                        <WrenchScrewdriverIcon aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
                                                                         Maintenance on <time dateTime={maintenance.date}>{new Date(maintenance.date).toLocaleDateString()}</time>
                                                                     </p>
                                                                 </div>
@@ -166,7 +166,7 @@ export default function Maintenance() {
                                                                     </span>
                                                                 </p>
                                                                 <p className="mt-2 flex gap-1 items-center text-sm text-gray-500">
-                                                                    <CheckCircleIcon aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
+                                                                    <WrenchScrewdriverIcon aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
                                                                     Maintenance on <time dateTime={maintenance.date}>{new Date(maintenance.date).toLocaleDateString()}</time>
                                                                 </p>
                                                             </div>
