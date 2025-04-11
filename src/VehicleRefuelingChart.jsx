@@ -6,10 +6,11 @@ import {
     ArcElement,
     Tooltip,
     Legend,
+    PieController
 } from 'chart.js';
 import { ExclamationTriangleIcon, TruckIcon } from '@heroicons/react/20/solid';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, PieController);
 
 const VehicleRefuelingPieChart = () => {
     const [chartData, setChartData] = useState({});

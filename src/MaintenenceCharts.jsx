@@ -11,18 +11,21 @@ import {
     Title,
     Tooltip,
     Legend,
-} from 'chart.js';
-
-ChartJS.register(
+    LineController, 
+  } from 'chart.js';
+  
+  ChartJS.register(
     CategoryScale,
     LinearScale,
     BarElement,
     LineElement,
+    LineController,
     PointElement,
     Title,
     Tooltip,
     Legend
-);
+  );
+  
 
 
 const MaintenanceChart = () => {
