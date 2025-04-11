@@ -36,7 +36,7 @@ const navigation = [
     { name: 'Vehicles', href: '/Vehicles', icon: TruckIcon, current: location.pathname === '/Vehicles' },
     { name: 'Refueling', href: '/refueling', icon: FaGasPump, current: location.pathname === '/refueling' },
     { name: 'Maintainence', href: '/maintenance', icon: WrenchScrewdriverIcon, current: location.pathname === '/maintenance' },
-    { name: 'Reports', href: '#', icon: ChartPieIcon, current: location.pathname === '#' },
+    { name: 'Reports', href: '/reports', icon: ChartPieIcon, current: location.pathname === '/reports' },
 ]
 const userNavigation = [
     { name: 'Your profile', href: '/user-profile' },

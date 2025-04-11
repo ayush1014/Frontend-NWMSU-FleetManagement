@@ -23,6 +23,7 @@ export default function Refueling() {
             try {
                 const response = await api.get('/showRefueling');
                 setRefuelings(response.data);
+                console.log('refueling data: ',response.data)
                 setIsLoading(false);
             } catch (error) {
                 console.error('Failed to fetch refuelings:', error);
