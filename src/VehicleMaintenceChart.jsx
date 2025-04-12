@@ -9,7 +9,7 @@ import {
     PieController
 } from 'chart.js';
 
-import { ExclamationTriangleIcon, TruckIcon } from '@heroicons/react/20/solid'
+import { ExclamationTriangleIcon, TruckIcon, WrenchScrewdriverIcon } from '@heroicons/react/20/solid'
 ChartJS.register(ArcElement, Tooltip, Legend, PieController);
 
 const VehicleMaintenancePieChart = () => {
@@ -173,7 +173,7 @@ const VehicleMaintenancePieChart = () => {
             ) : (
                 <div className='flex-col justify-center items-center'>
                     <div className="flex justify-center items-center h-full text-green-500">
-                        <TruckIcon className="w-24 h-24 md:w-[85%] md:h-[70%]" />
+                        <WrenchScrewdriverIcon className="w-24 h-24 md:w-[65%] md:h-[65%] py-16" />
                     </div>
                         <div className="flex gap-2 justify-center items-center text-yellow-600">
                             <ExclamationTriangleIcon className='w-12 h-12 mt-4' />
