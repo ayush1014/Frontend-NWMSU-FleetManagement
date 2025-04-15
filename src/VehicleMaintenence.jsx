@@ -169,7 +169,7 @@ export default function VehicleMaintenence() {
                                                         <CalendarDaysIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
                                                     </dt>
                                                     <dd className="text-sm text-gray-500">
-                                                        <time dateTime={maintenence.date}>{new Date(maintenence.date).toLocaleDateString()}</time>
+                                                        <time dateTime={maintenence.date}>{new Date(maintenence.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>
                                                     </dd>
                                                 </div>
                                                 <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
@@ -241,7 +241,10 @@ export default function VehicleMaintenence() {
                                                                     </p>
                                                                 </div>
                                                                 <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                                                                    <time dateTime={maintenence.date}>{new Date(maintenence.date).toLocaleDateString()}</time>
+                                                                    <time dateTime={maintenence.date}>
+                                                                        {new Date(maintenence.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}
+                                                                    </time>
+
                                                                 </div>
                                                             </div>
                                                         </div>

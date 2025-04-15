@@ -6,12 +6,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import api from './Config/axios'
 import { Datepicker } from "flowbite-react";
 import { useUser } from './AppContext/userContext';
+import { OrbitProgress } from 'react-loading-indicators';
+import SavedNotification from './SavedNotification';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddRefueling() {
-    const [selectedOption, setSelectedOption] = useState('General');
-    const [permission, setPermission] = useState('General')
-    const [permissionButton, setPermissionButton] = useState(false)
-    const [permissionOption, setPermissionOption] = useState('')
     const [NWVehicleNo, setNWVehicleNo] = useState('');
     const [currentMileage, setCurrentMileage] = useState('');
     const [fuelAdded, setFuelAdded] = useState('');
@@ -20,8 +19,13 @@ export default function AddRefueling() {
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [date, setDate] = useState(new Date());
     const {User} = useUser();
+    const [isLoading, setIsLoading] = useState(false);
+    const [noti, setNoti] = useState(false)
+    const [data, setData] = useState([])
+    const navigate = useNavigate()
 
     const handleAddRefuelingSubmit = async (event) => {
+        setIsLoading(true)
         event.preventDefault();
         const userDataString = localStorage.getItem('userData');
         const userData = userDataString ? JSON.parse(userDataString) : null;
@@ -34,6 +38,7 @@ export default function AddRefueling() {
         formData.append('receiptImage', selectedFile);
         formData.append('date', date.toISOString().split('T')[0]); 
         formData.append('refueledBy', userName);
+        
 
         console.log(formData);
     
@@ -44,7 +49,17 @@ export default function AddRefueling() {
                 }
             });
             console.log('Refueling Added Successfully', response);
+            setNWVehicleNo('');
+            setCurrentMileage('');
+            setFuelAdded('');
+            setFuelCost('');
+            setSelectedFile(null);
+            setImagePreviewUrl(null);
+            setData(response.data);
+            setIsLoading(false)
+            setNoti(true);
         } catch (error) {
+            setIsLoading(false)
             console.error('Technical error while submitting the add refueling form:', error);
         }
     };
@@ -81,7 +96,13 @@ export default function AddRefueling() {
         <div className='min-h-screen bg-gray-100'>
             <Navigation />
             <main className='lg:pl-[22%] lg:pr-[5%] mt-[1%]'>
+            {isLoading ? (
+                    <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+                        <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
+                    </div>
+                ) : (
                 <div className="divide-y divide-gray-900/10">
+                    {noti ? (<div><SavedNotification data={data} type="Refueling" /></div>) : (<></>)}
                     <div className="grid grid-cols-1 gap-x-8 gap-y-8 py-10 md:grid-cols-3">
                         <div className="px-4 sm:px-0">
                             <h2 className="text-base/7 font-semibold text-gray-900">Refueling Information</h2>
@@ -205,26 +226,10 @@ export default function AddRefueling() {
                                             />
                                         </div>
                                     </div>
-
-                                    {/* <div className="col-span-full">
-                                        <label htmlFor="about" className="block text-sm/6 font-medium text-gray-900">
-                                            Notes
-                                        </label>
-                                        <div className="mt-2">
-                                            <textarea
-                                                id="about"
-                                                name="about"
-                                                rows={3}
-                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
-                                                defaultValue={''}
-                                            />
-                                        </div>
-                                        <p className="mt-3 text-sm/6 text-gray-600">Add notes about this user, it can only be seen by all admins.</p>
-                                    </div> */}
                                 </div>
                             </div>
                             <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-                                <button type="button" className="text-sm/6 font-semibold text-gray-900">
+                                <button onClick={()=>navigate('/refueling')} type="button" className="text-sm/6 font-semibold text-gray-900">
                                     Cancel
                                 </button>
                                 <button
@@ -236,7 +241,7 @@ export default function AddRefueling() {
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>)}
             </main>
         </div>
     )

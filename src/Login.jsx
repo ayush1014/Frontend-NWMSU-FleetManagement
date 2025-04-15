@@ -4,39 +4,70 @@ import { React, useState, useEffect } from 'react';
 import { replace, useNavigate } from 'react-router-dom';
 import api from './Config/axios';
 import { useUser } from './AppContext/userContext';
+import { XCircleIcon } from '@heroicons/react/20/solid'
+import { OrbitProgress } from 'react-loading-indicators'
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const { login } = useUser();
+    const [failedLogin, setFailedLogin] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Following APi")
+        setIsLoading(true)
         try {
             const response = await api.post('/login', {
                 email,
                 password
             });
-
             if (response.status == 200) {
                 const data = response.data.user;
                 login(data)
-                navigate('/home', {replace: true}); 
+                navigate('/home', { replace: true });
+                setIsLoading(false)
             } else {
-                console.error('Failed to log in');
-                alert('Invalid credentials');
+                setFailedLogin(true);
+                setIsLoading(false)
             }
         } catch (error) {
             console.error('Login error:', error);
-            alert('Login failed due to technical issues');
+            setFailedLogin(true);
+            setIsLoading(false)
         }
     };
 
 
     return (
         <>
+            {isLoading ? (
+                <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+                    <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
+                </div>
+            ) : (
+                <div>
+                </div>
+            )}
+
+            {failedLogin ? (<div className="rounded-md bg-red-50 p-4">
+                <div className="flex">
+                    <div className="shrink-0">
+                        <XCircleIcon aria-hidden="true" className="size-5 text-red-400" />
+                    </div>
+                    <div className="ml-3">
+                        <h3 className="text-sm font-medium text-red-800">Wrong login credentials</h3>
+                        <div className="mt-2 text-sm text-red-700">
+                            <ul role="list" className="list-disc space-y-1 pl-5">
+                                <li>Please check your email</li>
+                                <li>Make sure you are entering correct password</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>) : (<div></div>)}
             <div className="flex flex-1">
                 <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
                     <div className="mx-auto w-full max-w-sm lg:w-96">

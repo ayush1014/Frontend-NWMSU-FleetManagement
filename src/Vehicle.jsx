@@ -7,7 +7,8 @@ import { GiSurferVan } from "react-icons/gi";
 import { useState, useEffect } from 'react';
 import api from './Config/axios';
 import { HR } from 'flowbite-react';
-
+import noPreview from './assets/noPreview.png'
+import { OrbitProgress } from 'react-loading-indicators'
 
 
 const departmentOptions = [
@@ -94,6 +95,7 @@ export default function Vehicle() {
     const [recentVehicles, setRecentVehicles] = useState([]);
     const [selectedDepartments, setSelectedDepartments] = useState('All');
     const [filterSelected, setFilterSelected] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const handleAddVehicleClick = () => {
@@ -102,11 +104,14 @@ export default function Vehicle() {
 
     useEffect(() => {
         const fetchVehicles = async () => {
+            setIsLoading(true)
             try {
                 const response = await api.get('/vehicles');
                 setVehicles(response.data);
+                setIsLoading(false)
             } catch (error) {
                 console.error('Error fetching vehicles:', error);
+                setIsLoading(false)
             }
         };
 
@@ -115,11 +120,14 @@ export default function Vehicle() {
 
     useEffect(() => {
         const fetchRecentVehicles = async () => {
+            setIsLoading(true)
             try {
                 const response = await api.get('/recentVehicles');
                 setRecentVehicles(response.data);
+                setIsLoading(false)
             } catch (error) {
                 console.error('Error Fetching Recent Vehicles: ', error);
+                setIsLoading(false)
             }
         }
 
@@ -152,7 +160,7 @@ export default function Vehicle() {
 
         <div className='min-h-screen'>
             <Navigation />
-            <main className='lg:pl-[23%] lg:pr-[4%] mt-[2%] '>
+            <main className='lg:pl-[23%] lg:pr-[4%] mt-[2%]'>
                 <div className="relative rounded-full shadow-sm mb-4">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <MagnifyingGlassIcon
@@ -193,13 +201,18 @@ export default function Vehicle() {
                         <span className="bg-white px-3 text-base font-semibold text-gray-900">Recently Added Vehicle</span>
                     </div>
                 </div>
-                <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-2 pt-8">
+
+                {isLoading ? (
+                    <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+                        <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
+                    </div>
+                ) : (<ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-2 pt-8">
                     {recentVehicles.map((vehicle) => (
                         <li key={vehicle.id} className="relative">
                             <div className="group overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
                                 <img
                                     alt={`Vehicle: ${vehicle.make} ${vehicle.model}`}
-                                    src={vehicle.vehiclePic || '/path/to/default/image'}
+                                    src={vehicle.vehiclePic || noPreview}
                                     className="pointer-events-none aspect-[10/7] object-cover group-hover:opacity-75"
                                 />
                                 <button type="button" className="absolute inset-0 focus:outline-none">
@@ -215,7 +228,7 @@ export default function Vehicle() {
 
                         </li>
                     ))}
-                </ul>
+                </ul>)}
 
                 <div className="relative mt-8">
                     <div aria-hidden="true" className="absolute inset-0 flex items-center">
@@ -226,13 +239,13 @@ export default function Vehicle() {
                     </div>
                 </div>
 
-                <fieldset>
+               <fieldset>
                     <legend className="text-sm/6 font-semibold text-gray-900">Filters</legend>
                     <p className="mt-1 text-sm/6 text-gray-600">Select any filter to filter by department</p>
                     <span className="inline-flex cursor-pointer items-center rounded-md bg-green-50 mt-4 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20" onClick={handleDepartmentFilterClick}>
                         Filter by Department
                     </span>
-                    {filterSelected ? (<div className="mt-6 flex flex-wrap justify-start gap-4"> {/* Adjusted for wrapping */}
+                    {filterSelected ? (<div className="mt-6 flex flex-wrap justify-start gap-4">
                         {departmentOptions.map((departmentMethod) => (
                             <div key={departmentMethod.id} className="flex items-center">
                                 <input
@@ -253,13 +266,17 @@ export default function Vehicle() {
                 </fieldset>
 
 
-                <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-2 pt-8">
+                {isLoading ? (
+                    <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
+                        <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
+                    </div>
+                ) : (<ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-2 pt-8">
                     {filteredVehicles.map((vehicle) => (
                         <li key={vehicle.id} className="relative">
                             <div className="group overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
                                 <img
                                     alt={`Vehicle: ${vehicle.make} ${vehicle.model}`}
-                                    src={vehicle.vehiclePic || '/path/to/default/image'}
+                                    src={vehicle.vehiclePic || noPreview}
                                     className="pointer-events-none aspect-[10/7] object-cover group-hover:opacity-75"
                                 />
                                 <button type="button" className="absolute inset-0 focus:outline-none">
@@ -275,7 +292,7 @@ export default function Vehicle() {
 
                         </li>
                     ))}
-                </ul>
+                </ul>)}
 
                 <HR />
             </main>
