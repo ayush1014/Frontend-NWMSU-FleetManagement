@@ -428,8 +428,41 @@ export default function AddVehicles() {
                         className="block w-full overflow-hidden rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm"
                         defaultValue="Null"
                         onChange={(e) => setVehicleDepartment(e.target.value)}
-                      >
-                        <option value="Null">Select the exempt status</option>
+                      > 
+                        <option value="Null">Select the department</option>
+                        <option value="Admissions - Recruiters">Admissions - Recruiters</option>
+                        <option value="Ag Transportation">Ag Transportation</option>
+                        <option value="Alternative Crops">Alternative Crops</option>
+                        <option value="Athletic Grounds">Athletic Grounds</option>
+                        <option value="Athletics">Athletics</option>
+                        <option value="Auxiliary Services">Auxiliary Services</option>
+                        <option value="Biology">Biology</option>
+                        <option value="Campus Dining">Campus Dining</option>
+                        <option value="Campus Rec">Campus Rec</option>
+                        <option value="Campus Safety">Campus Safety</option>
+                        <option value="Capital Programs">Capital Programs</option>
+                        <option value="Central Plant">Central Plant</option>
+                        <option value="Central Receiving">Central Receiving</option>
+                        <option value="Communication & Mass Media">Communication & Mass Media</option>
+                        <option value="Computer Services">Computer Services</option>
+                        <option value="Custodial">Custodial</option>
+                        <option value="Facilities Services">Facilities Services</option>
+                        <option value="Farm">Farm</option>
+                        <option value="Health & Safety">Health & Safety</option>
+                        <option value="Humanities & Social Sciences">Humanities & Social Sciences</option>
+                        <option value="Landscape Services">Landscape Services</option>
+                        <option value="Mail Room">Mail Room</option>
+                        <option value="Maintenance">Maintenance</option>
+                        <option value="Radio Station">Radio Station</option>
+                        <option value="Recycling">Recycling</option>
+                        <option value="Residential Life">Residential Life</option>
+                        <option value="Streets & Parking Lots">Streets & Parking Lots</option>
+                        <option value="Sustainability">Sustainability</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Trash">Trash</option>
+                        <option value="Wellness Services">Wellness Services</option>
+
+                        {/* <option value="Null">Select the exempt status</option>
                         <option value="Admissions">Admissions</option>
                         <option value="Agricultural Learning Center">Agricultural Learning Center</option>
                         <option value="Assessment Office">Assessment Office</option>
@@ -503,7 +536,8 @@ export default function AddVehicles() {
                         <option value="Tower yearbook">Tower yearbook</option>
                         <option value="University Archives">University Archives</option>
                         <option value="University Police Department">University Police Department</option>
-                        <option value="University Marketing & Communication">University Marketing & Communication</option>
+                        <option value="University Marketing & Communication">University Marketing & Communication</option> */}
+                        
                       </select>
                     </div>
                   </div>
