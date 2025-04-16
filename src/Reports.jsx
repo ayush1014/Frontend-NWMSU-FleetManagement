@@ -1,15 +1,18 @@
 import MaintenanceChart from "./MaintenenceCharts";
 import Navigation from "./Navigation";
 import RefuelingChart from "./RefuelingCharts";
-import VehicleMaintenancePieChart from "./VehicleMaintenceChart";
-import VehicleRefuelingPieChart from "./VehicleRefuelingChart";
+import VehicleInfoReportTable from "./VehicleInfoReportTable";
+import VehicleMaintenanceChart from "./VehicleMaintenceChart";
+import MaintenanceReportTable from "./VehicleMaintenceReport";
+import VehicleRefuelingChart from "./VehicleRefuelingChart";
+import RefuelingReportTable from "./VehicleRefuelingReport";
 import VehicleReport from "./VehicleReport";
 
 export default function Reports() {
     return (
         <>
             <Navigation />
-            <div className="bg-white lg:pl-[22%] py-24 sm:py-32">
+            <div className="bg-white lg:pl-[25%] lg:pr-4 py-24 sm:py-12">
                 <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
                     <h2 className="text-base/7 font-semibold text-green-600">Reports</h2>
                     <p className="mt-2 max-w-lg text-pretty text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
@@ -48,7 +51,7 @@ export default function Reports() {
                         <div className="relative lg:col-span-3">
                             <div className="absolute inset-px rounded-lg bg-white lg:rounded-bl-[2rem]" />
                             <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-bl-[calc(2rem+1px)]">
-                                <div className="pl-6 pt-6 pr-2"><VehicleRefuelingPieChart /></div>
+                                <div className="pl-6 pt-6 pr-2"><VehicleRefuelingChart /></div>
                                 <div className="p-10 pt-8">
                                     <h3 className="text-sm/4 font-semibold text-green-600">Vehicle Refueling Report</h3>
                                     <p className="mt-2 text-base font-medium tracking-tight text-gray-950"><span className="text-lg font-semibold text-green-600">Refueling</span> done on NW Vehicle per month in selected <span className="text-lg font-semibold text-green-600">(FY)</span></p>
@@ -62,7 +65,7 @@ export default function Reports() {
                         <div className="relative lg:col-span-3">
                             <div className="absolute inset-px rounded-lg bg-white max-lg:rounded-b-[2rem] lg:rounded-br-[2rem]" />
                             <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-br-[calc(2rem+1px)]">
-                                <div className="pl-6 pt-6 pr-2"><VehicleMaintenancePieChart /></div>
+                                <div className="pl-6 pt-6 pr-2"><VehicleMaintenanceChart /></div>
                                 <div className="p-10 pt-8">
                                     <h3 className="text-sm/4 font-semibold text-green-600">Vehicle Maintenance Report</h3>
                                     <p className="mt-2 text-base font-medium tracking-tight text-gray-950"><span className="text-lg font-semibold text-green-600">Maintenance</span> done on NW Vehicle per month in selected <span className="text-lg font-semibold text-green-600">(FY)</span></p>
@@ -77,8 +80,52 @@ export default function Reports() {
                 </div>
                 <div className="mt-24">
                     <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+                        <div>
+                            <p className="mt-2 ml-12 max-w-lg text-pretty text-1xl font-semibold tracking-tight text-gray-950 sm:text-2xl">
+                                Overall Reports for <span className="text-green-700 text-2xl sm:text-3xl">Vehicles </span>
+                            </p>
+                        </div>
                         <div className="px-4 py-5 sm:px-6">
                             <VehicleReport />
+                        </div>
+                    </div>
+                    <div className="px-4 py-5 sm:p-6"></div>
+                </div>
+                <div className="mt-6">
+                    <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+                        <div>
+                            <p className="mt-2 ml-12 max-w-lg text-pretty text-1xl font-semibold tracking-tight text-gray-950 sm:text-2xl">
+                                Vehicle Refueling <span className="text-green-700 text-2xl sm:text-3xl">Report </span>
+                            </p>
+                        </div>
+                        <div className="px-4 py-5 sm:px-6">
+                            <RefuelingReportTable />
+                        </div>
+                    </div>
+                    <div className="px-4 py-5 sm:p-6"></div>
+                </div>
+                <div className="mt-6">
+                    <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+                        <div>
+                            <p className="mt-2 ml-12 max-w-lg text-pretty text-1xl font-semibold tracking-tight text-gray-950 sm:text-2xl">
+                                Vehicle Maintenance <span className="text-green-700 text-2xl sm:text-3xl">Report </span>
+                            </p>
+                        </div>
+                        <div className="px-4 py-5 sm:px-6">
+                            <MaintenanceReportTable />
+                        </div>
+                    </div>
+                    <div className="px-4 py-5 sm:p-6"></div>
+                </div>
+                <div className="mt-6">
+                    <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+                        <div>
+                            <p className="mt-2 ml-12 max-w-lg text-pretty text-1xl font-semibold tracking-tight text-gray-950 sm:text-2xl">
+                                Vehicle <span className="text-green-700 text-2xl sm:text-3xl">Report </span>
+                            </p>
+                        </div>
+                        <div className="px-4 py-5 sm:px-6">
+                            <VehicleInfoReportTable />
                         </div>
                     </div>
                     <div className="px-4 py-5 sm:p-6"></div>

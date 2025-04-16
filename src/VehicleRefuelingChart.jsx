@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import api from './Config/axios';
-import { Pie } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-    PieController
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  Tooltip,
+  Legend,
+  Title,
 } from 'chart.js';
+
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend, Title);
+
 import { ExclamationTriangleIcon, TruckIcon } from '@heroicons/react/20/solid';
 import { FaGasPump } from 'react-icons/fa';
 
-ChartJS.register(ArcElement, Tooltip, Legend, PieController);
-
-const VehicleRefuelingPieChart = () => {
+const VehicleRefuelingChart = () => {
     const [chartData, setChartData] = useState({});
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [availableYears, setAvailableYears] = useState([]);
@@ -61,7 +65,7 @@ const VehicleRefuelingPieChart = () => {
                 return;
             }
             
-            // Format & show chart
+
             const formattedData = data.map(d => {
                 const [year, month] = d.month.split('-');
                 const date = new Date(year, month - 1);
@@ -91,13 +95,28 @@ const VehicleRefuelingPieChart = () => {
 
             setChartData({
                 labels,
-                datasets: [{
-                    label: 'Refueling Cost ($)',
-                    data: dataValues,
-                    backgroundColor: shuffledColors,
-                    borderColor: '#fff',
-                    borderWidth: 1
-                }],
+                datasets: [
+                    {
+                      type: 'bar',
+                      label: 'Refueling Cost ($)',
+                      data: metadata.map(m => m.total),
+                      backgroundColor: shuffledColors,
+                      borderColor: shuffledColors,
+                      borderWidth: 1
+                    },
+                    {
+                      type: 'line',
+                      label: 'Refueling Count',
+                      data: metadata.map(m => m.count),
+                      borderColor: shuffledColors,
+                      backgroundColor: shuffledColors,
+                      fill: false,
+                      tension: 0.3,
+                      pointRadius: 5,
+                      pointHoverRadius: 7
+                    }
+                  ],
+
                 metadata
             });
 
@@ -114,35 +133,34 @@ const VehicleRefuelingPieChart = () => {
     const options = {
         responsive: true,
         plugins: {
-            legend: {
-                position: 'right',
-                labels: { font: { size: 14 } }
-            },
-            tooltip: {
-                callbacks: {
-                    label: function (context) {
-                        const index = context.dataIndex;
-                        const label = chartData.labels?.[index] || '';
-                        const value = chartData.metadata?.[index]?.total || 0;
-                        const count = chartData.metadata?.[index]?.count || 0;
-                        return ` ${label}: $${value.toFixed(2)} | ${count} refill(s)`;
-                    }
-                },
-                backgroundColor: '#333',
-                titleColor: '#fff',
-                bodyColor: '#fff',
-                padding: 10,
-                bodyFont: { size: 14 },
-                titleFont: { size: 16, weight: 'bold' }
-            },
-            title: {
-                display: true,
-                text: 'Refueling Distribution by Month',
-                font: { size: 18, weight: 'bold' },
-                padding: 20
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const index = context.dataIndex;
+                const value = chartData.metadata?.[index]?.total || 0;
+                const count = chartData.metadata?.[index]?.count || 0;
+                return ` $${value.toFixed(2)} | ${count} refill(s)`;
+              }
             }
+          },
+          title: {
+            display: true,
+            text: 'Refueling Cost by Month',
+            font: { size: 18 }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Fuel Cost ($)' }
+          },
+          x: {
+            title: { display: true, text: 'Month' }
+          }
         }
-    };
+      };
+      
 
     return (
         <div>
@@ -184,7 +202,7 @@ const VehicleRefuelingPieChart = () => {
             </div>
 
             {fetched && chartData.labels ? (
-                <Pie data={chartData} options={options} height={300} />
+                <Line data={chartData} options={options} height={300} />
             ) : (
                 <div className='flex-col justify-center items-center'>
                     <div className="flex justify-center items-center h-full text-green-500">
@@ -200,4 +218,4 @@ const VehicleRefuelingPieChart = () => {
     );
 };
 
-export default VehicleRefuelingPieChart;
+export default VehicleRefuelingChart;
