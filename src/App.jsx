@@ -20,6 +20,9 @@ import VehicleMaintenence from './VehicleMaintenence';
 import EditUser from './EditUser';
 import Reports from './Reports';
 import RefuelingChart from './RefuelingCharts';
+import EditVehicles from './VehicleEdit';
+import EditRefueling from './EditRefueling';
+import EditMaintainence from './EditMaintenance';
 
 
 function App() {
@@ -42,8 +45,10 @@ function App() {
           <Route path='/vehicleRefueling/:NWVehicleNo' element={<ProtectedRoute><VehicleRefueling/></ProtectedRoute>}/>
           <Route path='/vehicleMaintence/:NWVehicleNo' element={<ProtectedRoute><VehicleMaintenence/></ProtectedRoute>}/>
           <Route path='/reports' element={<ProtectedRoute><Reports/></ProtectedRoute>}/>
-
           <Route path='/refueling-chart' element={<ProtectedRoute><RefuelingChart/></ProtectedRoute>}/>
+          <Route path='/edit-vehicle/:NWVehicleNo' element={<ProtectedRoute><EditVehicles/></ProtectedRoute>}/>
+          <Route path='/edit-refueling/:refuelingId' element={<ProtectedRoute><EditRefueling/></ProtectedRoute>}/>
+          <Route path='/edit-maintenance/:maintenanceId' element={<ProtectedRoute><EditMaintainence/></ProtectedRoute>}/>
       </Routes>
 
     </Router>

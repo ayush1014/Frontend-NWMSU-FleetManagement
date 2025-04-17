@@ -1,5 +1,5 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { EllipsisVerticalIcon, MagnifyingGlassIcon, PlusCircleIcon, TruckIcon } from '@heroicons/react/20/solid'
+import { EllipsisVerticalIcon, MagnifyingGlassIcon, PlusCircleIcon, TruckIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid'
 import Navigation from './Navigation'
 import { useNavigate } from 'react-router-dom';
 import { FaTruckPickup, FaShuttleVan, FaCarSide } from "react-icons/fa";
@@ -12,38 +12,38 @@ import { OrbitProgress } from 'react-loading-indicators'
 
 
 const departmentOptions = [
-    {id: 'All', title: 'All'},
-    {id: 'Admissions - Recruiters', title: 'Admissions - Recruiters'},
-    {id: 'Ag Transportation', title: 'Ag Transportation'},
-    {id: 'Alternative Crops', title: 'Alternative Crops'},
-    {id: 'Athletic Grounds', title: 'Athletic Grounds'},
-    {id: 'Athletics', title: 'Athletics'},
-    {id: 'Auxiliary Services', title: 'Auxiliary Services'},
-    {id: 'Biology', title: 'Biology'},
-    {id: 'Campus Dining', title: 'Campus Dining'},
-    {id: 'Campus Rec', title: 'Campus Rec'},
-    {id: 'Campus Safety', title: 'Campus Safety'},
-    {id: 'Capital Programs', title: 'Capital Programs'},
-    {id: 'Central Plant', title: 'Central Plant'},
-    {id: 'Central Receiving', title: 'Central Receiving'},
-    {id: 'Communication & Mass Media', title: 'Communication & Mass Media'},
-    {id: 'Computer Services', title: 'Computer Services'},
-    {id: 'Custodial', title: 'Custodial'},
-    {id: 'Facilities Services', title: 'Facilities Services'},
-    {id: 'Farm', title: 'Farm'},
-    {id: 'Health & Safety', title: 'Health & Safety'},
-    {id: 'Humanities & Social Sciences', title: 'Humanities & Social Sciences'},
-    {id: 'Landscape Services', title: 'Landscape Services'},
-    {id: 'Mail Room', title: 'Mail Room'},
-    {id: 'Maintenance', title: 'Maintenance'},
-    {id: 'Radio Station', title: 'Radio Station'},
-    {id: 'Recycling', title: 'Recycling'},
-    {id: 'Residential Life', title: 'Residential Life'},
-    {id: 'Streets & Parking Lots', title: 'Streets & Parking Lots'},
-    {id: 'Sustainability', title: 'Sustainability'},
-    {id: 'Transportation', title: 'Transportation'},
-    {id: 'Trash', title: 'Trash'},
-    {id: 'Wellness Services', title: 'Wellness Services'}
+    { id: 'All', title: 'All' },
+    { id: 'Admissions - Recruiters', title: 'Admissions - Recruiters' },
+    { id: 'Ag Transportation', title: 'Ag Transportation' },
+    { id: 'Alternative Crops', title: 'Alternative Crops' },
+    { id: 'Athletic Grounds', title: 'Athletic Grounds' },
+    { id: 'Athletics', title: 'Athletics' },
+    { id: 'Auxiliary Services', title: 'Auxiliary Services' },
+    { id: 'Biology', title: 'Biology' },
+    { id: 'Campus Dining', title: 'Campus Dining' },
+    { id: 'Campus Rec', title: 'Campus Rec' },
+    { id: 'Campus Safety', title: 'Campus Safety' },
+    { id: 'Capital Programs', title: 'Capital Programs' },
+    { id: 'Central Plant', title: 'Central Plant' },
+    { id: 'Central Receiving', title: 'Central Receiving' },
+    { id: 'Communication & Mass Media', title: 'Communication & Mass Media' },
+    { id: 'Computer Services', title: 'Computer Services' },
+    { id: 'Custodial', title: 'Custodial' },
+    { id: 'Facilities Services', title: 'Facilities Services' },
+    { id: 'Farm', title: 'Farm' },
+    { id: 'Health & Safety', title: 'Health & Safety' },
+    { id: 'Humanities & Social Sciences', title: 'Humanities & Social Sciences' },
+    { id: 'Landscape Services', title: 'Landscape Services' },
+    { id: 'Mail Room', title: 'Mail Room' },
+    { id: 'Maintenance', title: 'Maintenance' },
+    { id: 'Radio Station', title: 'Radio Station' },
+    { id: 'Recycling', title: 'Recycling' },
+    { id: 'Residential Life', title: 'Residential Life' },
+    { id: 'Streets & Parking Lots', title: 'Streets & Parking Lots' },
+    { id: 'Sustainability', title: 'Sustainability' },
+    { id: 'Transportation', title: 'Transportation' },
+    { id: 'Trash', title: 'Trash' },
+    { id: 'Wellness Services', title: 'Wellness Services' }
 
 ];
 
@@ -244,8 +244,46 @@ export default function Vehicle() {
                     </div>
                 ) : (<ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-2 pt-8">
                     {recentVehicles.map((vehicle) => (
-                        <li key={vehicle.id} className="relative">
-                            <div className="group overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
+                        <li key={vehicle.NWVehicleNo} className="relative">
+                            <div className="group relative overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-green-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
+
+                                {/* Three-dot Menu */}
+                                <Menu as="div" className="absolute top-2 right-2 z-10 text-left">
+                                    <MenuButton
+                                        className="inline-flex justify-center w-8 h-8 items-center bg-white bg-opacity-70 rounded-full shadow hover:bg-opacity-100 focus:outline-none"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <EllipsisVerticalIcon className="h-5 w-5 text-gray-700" />
+                                    </MenuButton>
+                                    <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+                                        <div className="py-1">
+                                            <MenuItem as="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    console.log('vehicle id: ', vehicle.NWVehicleNo)
+                                                    navigate(`/edit-vehicle/${vehicle.NWVehicleNo}`);
+                                                }}
+                                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 data-[active]:bg-gray-100"
+                                            >
+                                                <PencilIcon className="mr-2 h-4 w-4 text-gray-500" />
+                                                Edit
+                                            </MenuItem>
+                                            <MenuItem as="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    console.log('Delete vehicle', vehicle.NWVehicleNo);
+                                                }}
+                                                className="flex items-center w-full px-4 py-2 text-sm text-red-600 data-[active]:bg-gray-100"
+                                            >
+                                                <TrashIcon className="mr-2 h-4 w-4 text-red-500" />
+                                                Delete
+                                            </MenuItem>
+                                        </div>
+                                    </MenuItems>
+                                </Menu>
+
+
+                                {/* Vehicle Image */}
                                 <img
                                     alt={`Vehicle: ${vehicle.make} ${vehicle.model}`}
                                     src={vehicle.vehiclePic || noPreview}
@@ -255,14 +293,15 @@ export default function Vehicle() {
                                     <span className="sr-only">View details for {vehicle.make} {vehicle.model}</span>
                                 </button>
                             </div>
+
+                            {/* Card Details */}
                             <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-[10px] font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
                                 {vehicle.vehDescription}
                             </span>
                             <p className="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">{vehicle.make} {vehicle.model}</p>
                             <p className="pointer-events-none block text-sm font-medium text-gray-500">{vehicle.vehicleDepartment}</p>
-                            <p className="pointer-events-none block text-sm font-medium text-gray-500"></p>
-
                         </li>
+
                     ))}
                 </ul>)}
 
@@ -275,7 +314,7 @@ export default function Vehicle() {
                     </div>
                 </div>
 
-               <fieldset>
+                <fieldset>
                     <legend className="text-sm/6 font-semibold text-gray-900">Filters</legend>
                     <p className="mt-1 text-sm/6 text-gray-600">Select any filter to filter by department</p>
                     <span className="inline-flex cursor-pointer items-center rounded-md bg-green-50 mt-4 px-2 py-1 text-sm font-medium text-green-700 ring-1 ring-inset ring-green-600/20" onClick={handleDepartmentFilterClick}>
@@ -308,8 +347,46 @@ export default function Vehicle() {
                     </div>
                 ) : (<ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-2 pt-8">
                     {filteredVehicles.map((vehicle) => (
-                        <li key={vehicle.id} className="relative">
-                            <div className="group overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
+                        <li key={vehicle.NWVehicleNo} className="relative">
+                            <div className="group relative overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-green-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
+
+                                {/* Three-dot Menu */}
+                                <Menu as="div" className="absolute top-2 right-2 z-10 text-left">
+                                    <MenuButton
+                                        className="inline-flex justify-center w-8 h-8 items-center bg-white bg-opacity-70 rounded-full shadow hover:bg-opacity-100 focus:outline-none"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <EllipsisVerticalIcon className="h-5 w-5 text-gray-700" />
+                                    </MenuButton>
+                                    <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+                                        <div className="py-1">
+                                            <MenuItem as="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    console.log('vehicle id: ', vehicle.NWVehicleNo)
+                                                    navigate(`/edit-vehicle/${vehicle.NWVehicleNo}`);
+                                                }}
+                                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 data-[active]:bg-gray-100"
+                                            >
+                                                <PencilIcon className="mr-2 h-4 w-4 text-gray-500" />
+                                                Edit
+                                            </MenuItem>
+                                            <MenuItem as="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    console.log('Delete vehicle', vehicle.NWVehicleNo);
+                                                }}
+                                                className="flex items-center w-full px-4 py-2 text-sm text-red-600 data-[active]:bg-gray-100"
+                                            >
+                                                <TrashIcon className="mr-2 h-4 w-4 text-red-500" />
+                                                Delete
+                                            </MenuItem>
+                                        </div>
+                                    </MenuItems>
+                                </Menu>
+
+
+                                {/* Vehicle Image */}
                                 <img
                                     alt={`Vehicle: ${vehicle.make} ${vehicle.model}`}
                                     src={vehicle.vehiclePic || noPreview}
@@ -319,13 +396,13 @@ export default function Vehicle() {
                                     <span className="sr-only">View details for {vehicle.make} {vehicle.model}</span>
                                 </button>
                             </div>
+
+                            {/* Card Details */}
                             <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-[10px] font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
                                 {vehicle.vehDescription}
                             </span>
                             <p className="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">{vehicle.make} {vehicle.model}</p>
                             <p className="pointer-events-none block text-sm font-medium text-gray-500">{vehicle.vehicleDepartment}</p>
-                            <p className="pointer-events-none block text-sm font-medium text-gray-500"></p>
-
                         </li>
                     ))}
                 </ul>)}
