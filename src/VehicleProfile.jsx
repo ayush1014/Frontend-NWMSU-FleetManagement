@@ -29,7 +29,7 @@ import {
     KeyIcon
 } from '@heroicons/react/20/solid'
 import { BellIcon, XMarkIcon as XMarkIconOutline } from '@heroicons/react/24/outline'
-import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { CheckCircleIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/solid'
 import { FaGasPump } from 'react-icons/fa'
 import api from './Config/axios';
 import Navigation from './Navigation';
@@ -471,9 +471,9 @@ export default function VehicleProfile() {
                                                     <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
                                                         <dt className="flex-none">
                                                             <span className="sr-only">Status</span>
-                                                            <FaGasPump aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                            <WrenchScrewdriverIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
                                                         </dt>
-                                                        <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Fuel Added</span> {maintenence.fuelAdded} Gallons</dd>
+                                                        <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Description</span> {maintenence.maintainenceDescription} </dd>
                                                     </div>
                                                 </dl>
                                                 <div className="mt-6 border-t border-gray-900/5 px-6 py-6">
