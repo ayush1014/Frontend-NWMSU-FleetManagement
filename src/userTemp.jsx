@@ -21,54 +21,6 @@ import bearcat from './assets/bearcat.webp'
 import { FaGasPump } from 'react-icons/fa'
 import { OrbitProgress } from 'react-loading-indicators'
 
-const user = {
-    name: 'Tom Cook',
-    imageUrl:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
-
-const tabs = [
-    { name: 'Profile', href: '#', current: true },
-    { name: 'Calendar', href: '#', current: false },
-    { name: 'Recognition', href: '#', current: false },
-]
-
-
-const team = [
-    {
-        name: 'Leslie Alexander',
-        handle: 'lesliealexander',
-        role: 'Co-Founder / CEO',
-        imageUrl:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        name: 'Michael Foster',
-        handle: 'michaelfoster',
-        role: 'Co-Founder / CTO',
-        imageUrl:
-            'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        name: 'Dries Vincent',
-        handle: 'driesvincent',
-        role: 'Business Relations',
-        imageUrl:
-            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        name: 'Lindsay Walton',
-        handle: 'lindsaywalton',
-        role: 'Front-end Developer',
-        imageUrl:
-            'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-]
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
-
 export default function UserTemp() {
     const [people, setPeople] = useState([]);
     const [selectedEmail, setSelectedEmail] = useState();
@@ -518,10 +470,17 @@ export default function UserTemp() {
                                                             {openDropdown === person.email && (
                                                                 <div ref={dropdownRef} className="absolute z-0 right-0 w-48 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                                                                     <div className="py-1">
-                                                                        <a href={`/edit-user/${person.email}`} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => navigate(`/edit-user/${person.email}`)}>
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                console.log('Navigating to edit-user:', person.email);
+                                                                                navigate(`/edit-user/${person.email}`);
+                                                                            }}
+                                                                            className="w-full z-[999] text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                        >
                                                                             <PencilIcon className="size-5 inline mr-3 text-gray-400" />
                                                                             Edit
-                                                                        </a>
+                                                                        </button>
+
                                                                         <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => console.log('Remove')}>
                                                                             <TrashIcon className="size-5 inline mr-3 text-gray-400" />
                                                                             Remove
@@ -603,11 +562,16 @@ export default function UserTemp() {
                                                     </button>
                                                     {openDropdown === person.email && (
                                                         <div ref={dropdownRef} className="absolute z-0 right-0 w-48 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-                                                            <div className="py-1">
-                                                                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => navigate(`/edit-user/${person.email}`)}>
+                                                            <div className="py-1 z-[100]">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        navigate(`/edit-user/${person.email}`);
+                                                                    }}
+                                                                    className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                >
                                                                     <PencilIcon className="size-5 inline mr-3 text-gray-400" />
                                                                     Edit
-                                                                </a>
+                                                                </button>
                                                                 <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => console.log('Remove')}>
                                                                     <TrashIcon className="size-5 inline mr-3 text-gray-400" />
                                                                     Remove
