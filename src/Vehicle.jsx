@@ -196,7 +196,7 @@ export default function Vehicle() {
 
         <div className='min-h-screen'>
             <Navigation />
-            <main className='lg:pl-[25%] lg:pr-[4%] mt-[2%]'>
+            <main className='lg:pl-[20%] lg:pr-[4%] mt-[2%]'>
                 <div className="relative rounded-full shadow-sm mb-4">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <MagnifyingGlassIcon

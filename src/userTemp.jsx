@@ -133,7 +133,7 @@ export default function UserTemp() {
                 </div>
             )}
             <Navigation />
-            <div className="flex h-full lg:pl-72" >
+            <div className="flex h-full lg:pl-[18%]" >
                 {/* Static sidebar for desktop */}
                 <div className="layout flex min-w-0 flex-1 flex-col overflow-hidden ">
                     <div className="relative z-0 flex flex-1 overflow-hidden ">
