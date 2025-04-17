@@ -12,8 +12,8 @@ export default function Reports() {
     return (
         <>
             <Navigation />
-            <div className="bg-white lg:pl-[25%] lg:pr-4 py-24 sm:py-12">
-                <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+            <div className="bg-white lg:pl-[25%] lg:pr-[4%] py-24 sm:py-12">
+                <div className="mx-auto max-w-2xl lg:max-w-7xl">
                     <h2 className="text-base/7 font-semibold text-green-600">Reports</h2>
                     <p className="mt-2 max-w-lg text-pretty text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
                         Reports for Vehicles

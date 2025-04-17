@@ -28,40 +28,53 @@ import Home from './Home'
 import nwmsu_logo from './assets/nwmsu-logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from './AppContext/userContext'
- 
-const navigation = [
-    { name: 'Dashboard', href: '/home', icon: HomeIcon, current: location.pathname ==='/home' },
-    // { name: 'Users', href: '/Users', icon: UsersIcon, current: false },
-    { name: 'Users', href: '/user-temp', icon: UsersIcon, current: location.pathname === '/user-temp' },
-    { name: 'Vehicles', href: '/Vehicles', icon: TruckIcon, current: location.pathname === '/Vehicles' },
-    { name: 'Refueling', href: '/refueling', icon: FaGasPump, current: location.pathname === '/refueling' },
-    { name: 'Maintainence', href: '/maintenance', icon: WrenchScrewdriverIcon, current: location.pathname === '/maintenance' },
-    { name: 'Reports', href: '/reports', icon: ChartPieIcon, current: location.pathname === '/reports' },
-]
-const userNavigation = [
-    { name: 'Your profile', href: '/user-profile' },
-    { name: 'Sign out', action: 'logout', href: '/' },
-]
- 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
- 
+
 export default function Navigation() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const { user, logout } = useUser();
- 
+
+    const navigation = [
+        { name: 'Dashboard', href: '/home', icon: HomeIcon, current: location.pathname ==='/home' },
+        { name: 'Users', href: '/user-temp', icon: UsersIcon, current: location.pathname === '/user-temp' },
+        { name: 'Vehicles', href: '/Vehicles', icon: TruckIcon, current: location.pathname === '/Vehicles' },
+        { name: 'Refueling', href: '/refueling', icon: FaGasPump, current: location.pathname === '/refueling' },
+        { name: 'Maintainence', href: '/maintenance', icon: WrenchScrewdriverIcon, current: location.pathname === '/maintenance' },
+        { name: 'Reports', href: '/reports', icon: ChartPieIcon, current: location.pathname === '/reports' },
+    ];
+
+    const userNavigation = [
+        { name: 'Your profile', href: '/user-profile' },
+        { name: 'Sign out', action: 'logout', href: '/' },
+    ];
+
     const handleUserNavClick = (item) => {
         if (item.action === 'logout'){
             logout();
             navigate(item.href);
-        }else {
+        } else {
             navigate(item.href);
         }
     };
- 
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth === 1024 && window.innerHeight === 1366) {
+                setSidebarOpen(false);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    function classNames(...classes) {
+        return classes.filter(Boolean).join(' ');
+    }
+
     return (
         <>
             <div className='bg-gray-200'>
@@ -71,7 +84,7 @@ export default function Navigation() {
                             transition
                             className="fixed inset-0 bg-green-900/80 transition-opacity duration-300 ease-linear data-[closed]:opacity-0"
                         />
- 
+
                         <div className="fixed inset-0 flex">
                             <DialogPanel
                                 transition
@@ -85,7 +98,6 @@ export default function Navigation() {
                                         </button>
                                     </div>
                                 </TransitionChild>
-                                {/* Sidebar component*/}
                                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-green-900 px-6 pb-4 ring-1 ring-white/10">
                                     <div className="flex h-16 shrink-0 items-center">
                                         <img

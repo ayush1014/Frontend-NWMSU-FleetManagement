@@ -76,7 +76,7 @@ export default function Home() {
     return (
         <div className='min-h-screen bg-gray-200'>
             <Navigation />
-            <main className='lg:pl-[25%] lg:pr-[5%] mt-[6%]'>
+            <main className='lg:pl-[25%] lg:pr-[4%] mt-[6%]'>
                 <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 mt-10 cursor-pointer">
                     {Content.map((grid) => (
                         <li

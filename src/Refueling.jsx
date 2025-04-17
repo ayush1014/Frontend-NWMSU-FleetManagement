@@ -42,7 +42,7 @@ export default function Refueling() {
         <>
             <Navigation />
             <div className="min-h-full">
-                <main className="pb-16 pt-8 lg:pl-[22%] lg:pr-[5%] mt-[1%]">
+                <main className="pb-16 pt-8 lg:pl-[25%] lg:pr-[4%] mt-[1%]">
                     {isLoading ? (
                         <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
                             <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
