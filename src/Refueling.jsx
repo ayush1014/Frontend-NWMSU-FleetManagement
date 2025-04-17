@@ -12,6 +12,7 @@ import api from './Config/axios';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { FaGasPump } from 'react-icons/fa'
 import { OrbitProgress } from 'react-loading-indicators'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 
 export default function Refueling() {
     const [refuelings, setRefuelings] = useState([]);
@@ -23,7 +24,7 @@ export default function Refueling() {
             try {
                 const response = await api.get('/showRefueling');
                 setRefuelings(response.data);
-                console.log('refueling data: ',response.data)
+                console.log('refueling data: ', response.data)
                 setIsLoading(false);
             } catch (error) {
                 console.error('Failed to fetch refuelings:', error);
@@ -72,63 +73,111 @@ export default function Refueling() {
                                 </div>
 
                                 <ul role="list" className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
-                                    {refuelings.slice(0, 4).map((refueling) => (
-                                        <li key={refueling.refuelingId} >
-                                            <div className="group block" onClick={() => navigate(`/vehicleRefueling/${refueling.NWVehicleNo}`)}>
-                                                <div className="flex items-center px-4 py-5 sm:px-0 sm:py-6 cursor-pointer">
-                                                    <div className="flex min-w-0 flex-1 items-center">
-                                                        <div className="shrink-0">
-                                                            <img
-                                                                alt=""
-                                                                src={refueling.Vehicle.vehiclePic}
-                                                                className="size-16 object-contain object-center rounded-full group-hover:opacity-75"
-                                                            />
-                                                        </div>
-                                                        <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
-                                                            <div>
-                                                                <p className="truncate text-sm font-medium text-green-800">
-                                                                    {refueling.NWVehicleNo}
-                                                                </p>
-                                                                <p className="mt-2 flex items-center text-sm text-gray-500">
-                                                                    <span className="truncate">
-                                                                        Refueled by - {refueling.User.firstName} {refueling.User.lastName}
-                                                                    </span>
-                                                                </p>
+                                    {[...refuelings]
+                                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                                        .slice(0, 4)
+                                        .map((refueling) => (
+                                            <li key={refueling.refuelingId} >
+                                                <div className="group block" onClick={() => navigate(`/vehicleRefueling/${refueling.NWVehicleNo}`)}>
+                                                    <div className="flex items-center px-4 py-5 sm:px-0 sm:py-6 cursor-pointer">
+                                                        <div className="flex min-w-0 flex-1 items-center">
+                                                            <div className="shrink-0">
+                                                                <img
+                                                                    alt=""
+                                                                    src={refueling.Vehicle.vehiclePic}
+                                                                    className="size-16 object-contain object-center rounded-full group-hover:opacity-75"
+                                                                />
                                                             </div>
-                                                            <div className="hidden md:block">
+                                                            <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                                                                 <div>
-                                                                    <div className="">
-                                                                        <p className="flex gap-2 text-sm text-gray-900">
-                                                                            <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                                                                {refueling.Vehicle.modelYear} {refueling.Vehicle.make} {refueling.Vehicle.model}
-                                                                            </span>
-                                                                            <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                                                                                {refueling.Vehicle.vehicleDepartment}
-                                                                            </span>
-                                                                        </p>
-                                                                        <p className="mt-2 flex gap-1 items-center text-sm text-gray-500">
-                                                                            <FaGasPump aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
-                                                                            Refueled on <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>
-                                                                        </p>
-                                                                    </div>
+                                                                    <p className="truncate text-sm font-medium text-green-800">
+                                                                        {refueling.NWVehicleNo}
+                                                                    </p>
+                                                                    <p className="mt-2 flex items-center text-sm text-gray-500">
+                                                                        <span className="truncate">
+                                                                            Refueled by - {refueling.User.firstName} {refueling.User.lastName}
+                                                                        </span>
+                                                                    </p>
                                                                 </div>
+                                                                <div className="hidden md:block">
+                                                                    <div>
+                                                                        <div className="">
+                                                                            <p className="flex gap-2 text-sm text-gray-900">
+                                                                                <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                                                                    {refueling.Vehicle.modelYear} {refueling.Vehicle.make} {refueling.Vehicle.model}
+                                                                                </span>
+                                                                                <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                                                                                    {refueling.Vehicle.vehicleDepartment}
+                                                                                </span>
+                                                                            </p>
+                                                                            <p className="mt-2 flex gap-1 items-center text-sm text-gray-500">
+                                                                                <FaGasPump aria-hidden="true" className="mr-1.5 size-5 shrink-0 text-green-400" />
+                                                                                Refueled on <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
 
+                                                                </div>
                                                             </div>
+
                                                         </div>
 
+                                                        <div>
+                                                            <div className="relative z-10 ml-4">
+                                                                <Menu as="div" className="relative inline-block text-left">
+                                                                    <Menu.Button
+                                                                        onClick={(e) => e.stopPropagation()}
+                                                                        className="inline-flex w-8 h-8 items-center justify-center rounded-full bg-white shadow hover:bg-gray-100 focus:outline-none"
+                                                                    >
+                                                                        <svg className="h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12h.01M12 12h.01M18 12h.01" />
+                                                                        </svg>
+                                                                    </Menu.Button>
+                                                                    <Menu.Items className="absolute right-0 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                                        <div className="py-1">
+                                                                            <Menu.Item>
+                                                                                {({ active }) => (
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            navigate(`/edit-refueling/${refueling.refuelingId}`);
+                                                                                        }}
+                                                                                        className={`${active ? 'bg-gray-100' : ''
+                                                                                            } flex w-full items-center px-4 py-2 text-sm text-gray-700`}
+                                                                                    >
+                                                                                        Edit
+                                                                                    </button>
+                                                                                )}
+                                                                            </Menu.Item>
+                                                                            <Menu.Item>
+                                                                                {({ active }) => (
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            // Replace with your delete logic
+                                                                                            console.log('Delete refueling:', refueling.refuelingId);
+                                                                                        }}
+                                                                                        className={`${active ? 'bg-gray-100' : ''
+                                                                                            } flex w-full items-center px-4 py-2 text-sm text-red-600`}
+                                                                                    >
+                                                                                        Delete
+                                                                                    </button>
+                                                                                )}
+                                                                            </Menu.Item>
+                                                                        </div>
+                                                                    </Menu.Items>
+                                                                </Menu>
+                                                            </div>
+                                                        </div>
+                                                        {/* <ChevronRightIcon
+                                                                aria-hidden="true"
+                                                                className="size-5 text-gray-400 group-hover:text-gray-700"
+                                                            /> */}
                                                     </div>
 
-                                                    <div>
-                                                        <ChevronRightIcon
-                                                            aria-hidden="true"
-                                                            className="size-5 text-gray-400 group-hover:text-gray-700"
-                                                        />
-                                                    </div>
                                                 </div>
-
-                                            </div>
-                                        </li>
-                                    ))}
+                                            </li>
+                                        ))}
                                 </ul>
 
                                 <HR />
@@ -178,10 +227,57 @@ export default function Refueling() {
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <ChevronRightIcon
+                                                        <div>
+                                                            <div className="relative z-10 ml-4">
+                                                                <Menu as="div" className="relative inline-block text-left">
+                                                                    <Menu.Button
+                                                                        onClick={(e) => e.stopPropagation()}
+                                                                        className="inline-flex w-8 h-8 items-center justify-center rounded-full bg-white shadow hover:bg-gray-100 focus:outline-none"
+                                                                    >
+                                                                        <svg className="h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12h.01M12 12h.01M18 12h.01" />
+                                                                        </svg>
+                                                                    </Menu.Button>
+                                                                    <Menu.Items className="absolute right-0 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                                        <div className="py-1">
+                                                                            <Menu.Item>
+                                                                                {({ active }) => (
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            navigate(`/edit-refueling/${refueling.refuelingId}`);
+                                                                                        }}
+                                                                                        className={`${active ? 'bg-gray-100' : ''
+                                                                                            } flex w-full items-center px-4 py-2 text-sm text-gray-700`}
+                                                                                    >
+                                                                                        Edit
+                                                                                    </button>
+                                                                                )}
+                                                                            </Menu.Item>
+                                                                            <Menu.Item>
+                                                                                {({ active }) => (
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            // Replace with your delete logic
+                                                                                            console.log('Delete refueling:', refueling.refuelingId);
+                                                                                        }}
+                                                                                        className={`${active ? 'bg-gray-100' : ''
+                                                                                            } flex w-full items-center px-4 py-2 text-sm text-red-600`}
+                                                                                    >
+                                                                                        Delete
+                                                                                    </button>
+                                                                                )}
+                                                                            </Menu.Item>
+                                                                        </div>
+                                                                    </Menu.Items>
+                                                                </Menu>
+                                                            </div>
+                                                        </div>
+                                                        {/* <ChevronRightIcon
                                                             aria-hidden="true"
                                                             className="size-5 text-gray-400 group-hover:text-gray-700"
-                                                        />
+                                                        /> */}
                                                     </div>
                                                 </div>
                                             </div>
