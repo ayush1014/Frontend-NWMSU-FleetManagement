@@ -10,7 +10,7 @@ const months = [
     { label: 'Nov', value: 11 }, { label: 'Dec', value: 12 },
 ];
 
-export default function VehicleReportTable() {
+export default function VehicleReportTable({onLoad}) {
     const [selectedMonths, setSelectedMonths] = useState(months.map(m => m.value));
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [tableData, setTableData] = useState([]);
@@ -47,7 +47,9 @@ export default function VehicleReportTable() {
             }
         };
 
-        fetchReport();
+        fetchReport().then(() => {
+            onLoad?.();
+        });;
     }, [selectedYear, selectedMonths]);
 
 
