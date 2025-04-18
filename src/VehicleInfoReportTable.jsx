@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from './Config/axios';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { IoMdDownload } from "react-icons/io";
 
 
 export default function VehicleInfoReportTable() {
@@ -35,7 +36,7 @@ export default function VehicleInfoReportTable() {
 
   const handleDownloadExcel = async () => {
     try {
-      const response = await api.get('/vehicleInfo/info?all=true'); 
+      const response = await api.get('/vehicleInfo/info?all=true');
       const allVehicles = response.data.data || [];
 
       const rows = allVehicles.map((v) => ({
@@ -138,7 +139,14 @@ export default function VehicleInfoReportTable() {
           onClick={handleDownloadExcel}
           className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
         >
-          Download Report
+          <div className='flex gap-2'>
+            <div>
+              <IoMdDownload size={24} />
+            </div>
+            <div>
+              Download Report
+            </div>
+          </div>
         </button>
       </div>
 
