@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import api from './Config/axios';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { IoMdDownload } from "react-icons/io";
 
 
 const months = [
@@ -112,8 +113,8 @@ export default function MaintenanceReportTable() {
               key={value}
               onClick={() => toggleMonth(value)}
               className={`px-2 py-1 rounded border text-sm font-medium ${selectedMonths.includes(value)
-                  ? 'bg-green-600 text-white border-green-600'
-                  : 'bg-white border-gray-300 text-gray-700'
+                ? 'bg-green-600 text-white border-green-600'
+                : 'bg-white border-gray-300 text-gray-700'
                 }`}
             >
               {label}
@@ -209,7 +210,14 @@ export default function MaintenanceReportTable() {
           onClick={handleDownloadExcel}
           className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
         >
-          Download Report
+          <div className='flex gap-2'>
+            <div>
+              <IoMdDownload size={24} />
+            </div>
+            <div>
+              Download Report
+            </div>
+          </div>
         </button>
       </div>
 
