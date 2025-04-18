@@ -20,6 +20,7 @@ import noImg from './assets/noImg.png'
 import bearcat from './assets/bearcat.webp'
 import { FaGasPump } from 'react-icons/fa'
 import { OrbitProgress } from 'react-loading-indicators'
+import { useUser } from './AppContext/userContext'
 
 export default function UserTemp() {
     const [people, setPeople] = useState([]);
@@ -29,10 +30,14 @@ export default function UserTemp() {
     const navigate = useNavigate();
     const [activity, setActivity] = useState([])
     const [isLoading, setIsLoading] = useState(false);
+    const { user } = useUser();
+    const [role, setRole] = useState();
 
 
     useEffect(() => {
         setIsLoading(true)
+        user ? setRole(user.role) : null;
+        console.log(user.role);
         const fetchUsers = async () => {
             try {
                 const response = await api.get('/showUsers');
@@ -46,7 +51,7 @@ export default function UserTemp() {
         };
 
         fetchUsers();
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -464,9 +469,9 @@ export default function UserTemp() {
                                                                     </span>
                                                                 </a>
                                                             </div>
-                                                            <button onClick={(event) => { toggleDropdown(person.email, event) }} className="p-2 z-10 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                                            {role === 'Admin' ? (<button onClick={(event) => { toggleDropdown(person.email, event) }} className="p-2 z-10 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                                                 <EllipsisVerticalIcon className="h-5 w-5 text-gray-400" />
-                                                            </button>
+                                                            </button>) : <div></div>}
                                                             {openDropdown === person.email && (
                                                                 <div ref={dropdownRef} className="absolute z-0 right-0 w-48 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                                                                     <div className="py-1">
@@ -557,9 +562,9 @@ export default function UserTemp() {
                                                             </span>
                                                         </a>
                                                     </div>
-                                                    <button onClick={(event) => { toggleDropdown(person.email, event) }} className="p-2 z-10 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                                    {role === 'Admin' || user.email === person.email ? (<button onClick={(event) => { toggleDropdown(person.email, event) }} className="p-2 z-10 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                                         <EllipsisVerticalIcon className="h-5 w-5 text-gray-400" />
-                                                    </button>
+                                                    </button>) : <div></div>}
                                                     {openDropdown === person.email && (
                                                         <div ref={dropdownRef} className="absolute z-0 right-0 w-48 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                                                             <div className="py-1 z-[100]">

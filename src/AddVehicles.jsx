@@ -77,6 +77,7 @@ export default function AddVehicles() {
   const [licensePlate, setLicensePlate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [noti, setNoti] = useState(false)
+  const [notiError, setNotiError] = useState(false)
   const [data, setData] = useState([])
   const navigate = useNavigate();
 
@@ -135,8 +136,9 @@ export default function AddVehicles() {
       // document.location.reload();
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        alert('Vehicle already exists');
-        setIsLoading(false)
+        setIsLoading(false);
+        setNotiError(true);
+        setData({ error: 'NW Vehicle ID already exists. Please use a unique ID.' });
       } else {
         console.error('Technical error while submitting the add vehicle form:', error);
         alert('An error occurred');
@@ -195,6 +197,14 @@ export default function AddVehicles() {
         ) : (
           <form>
             {noti ? (<div><SavedNotification data={data} type="Vehicle" /></div>) : (<></>)}
+            {notiError && data?.error ? (
+              <div className="rounded-md bg-red-50 p-4 mb-4 border border-red-200">
+                <p className="text-sm text-red-800">{data.error}</p>
+              </div>
+            ) : noti ? (
+              <SavedNotification data={data} type="Vehicle" />
+            ) : null}
+
             <div className="space-y-12">
               <div className="border-b border-gray-900/10 pb-12">
                 <h2 className="text-base/7 font-semibold text-gray-900">Vehicle Information</h2>
@@ -428,7 +438,7 @@ export default function AddVehicles() {
                         className="block w-full overflow-hidden rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm"
                         defaultValue="Null"
                         onChange={(e) => setVehicleDepartment(e.target.value)}
-                      > 
+                      >
                         <option value="Null">Select the department</option>
                         <option value="Admissions - Recruiters">Admissions - Recruiters</option>
                         <option value="Ag Transportation">Ag Transportation</option>
@@ -537,7 +547,7 @@ export default function AddVehicles() {
                         <option value="University Archives">University Archives</option>
                         <option value="University Police Department">University Police Department</option>
                         <option value="University Marketing & Communication">University Marketing & Communication</option> */}
-                        
+
                       </select>
                     </div>
                   </div>
@@ -580,7 +590,7 @@ export default function AddVehicles() {
             </div>
 
             <div className="mt-6 pb-6 flex items-center justify-end gap-x-[5%] md:gap-x-[35%] lg:gap-x-[23%] ">
-              <button onClick={()=>navigate('/Vehicles')} type="button" className="text-sm/6 font-semibold text-gray-900 mt-4">
+              <button onClick={() => navigate('/Vehicles')} type="button" className="text-sm/6 font-semibold text-gray-900 mt-4">
                 Cancel
               </button>
               <div className='mb-6'>
