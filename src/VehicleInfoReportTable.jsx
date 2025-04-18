@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from './Config/axios';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
 
 export default function VehicleInfoReportTable() {
   const [vehicles, setVehicles] = useState([]);
@@ -29,6 +32,40 @@ export default function VehicleInfoReportTable() {
       setPage(newPage);
     }
   };
+
+  const handleDownloadExcel = async () => {
+    try {
+      const response = await api.get('/vehicleInfo/info?all=true'); 
+      const allVehicles = response.data.data || [];
+
+      const rows = allVehicles.map((v) => ({
+        'Vehicle No': v.NWVehicleNo,
+        'VIN': v.VIN,
+        'Model Year': v.modelYear,
+        'Make': v.make,
+        'Model': v.model,
+        'Weight': v.weight,
+        'Type': v.vehType,
+        'Department': v.vehicleDepartment,
+        'Color': v.color,
+        'License Plate': v.licensePlate,
+        'Exempt': v.isExempt,
+        'Purchase Date': new Date(v.purchaseDate).toLocaleDateString()
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Vehicle Info');
+
+      const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([buffer], { type: 'application/octet-stream' });
+      saveAs(blob, `All_Vehicle_Info.xlsx`);
+    } catch (error) {
+      console.error('Error downloading full vehicle report:', error);
+      alert('Failed to download vehicle report.');
+    }
+  };
+
 
   return (
     <div className="p-6">
@@ -96,6 +133,15 @@ export default function VehicleInfoReportTable() {
           Next
         </button>
       </div>
+      <div className="flex justify-end mt-6">
+        <button
+          onClick={handleDownloadExcel}
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
+        >
+          Download Report
+        </button>
+      </div>
+
     </div>
   );
 }

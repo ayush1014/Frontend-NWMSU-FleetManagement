@@ -1,6 +1,9 @@
 // VehicleReportTable.jsx
 import React, { useState, useEffect } from 'react';
 import api from './Config/axios';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
 
 const months = [
     { label: 'Jan', value: 1 },
@@ -10,7 +13,7 @@ const months = [
     { label: 'Nov', value: 11 }, { label: 'Dec', value: 12 },
 ];
 
-export default function VehicleReportTable({onLoad}) {
+export default function VehicleReportTable({ onLoad }) {
     const [selectedMonths, setSelectedMonths] = useState(months.map(m => m.value));
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [tableData, setTableData] = useState([]);
@@ -33,7 +36,7 @@ export default function VehicleReportTable({onLoad}) {
             try {
                 const result = await api.post('/vehicle/report', {
                     year: selectedYear,
-                    months: selectedMonths 
+                    months: selectedMonths
                 });
 
                 if (result?.data) {
@@ -43,7 +46,7 @@ export default function VehicleReportTable({onLoad}) {
                 }
             } catch (err) {
                 console.error('Error fetching report:', err);
-                setTableData([]); 
+                setTableData([]);
             }
         };
 
@@ -51,6 +54,36 @@ export default function VehicleReportTable({onLoad}) {
             onLoad?.();
         });;
     }, [selectedYear, selectedMonths]);
+
+    const handleDownload = () => {
+        const rows = [];
+
+        tableData.forEach(group => {
+            group.rows.forEach((row, idx) => {
+                rows.push({
+                    'Vehicle Type': idx === 0 ? group.type : '',
+                    'Description': row.description,
+                    '# Vehicles ≤ 8500 lbs': row.belowWeight,
+                    '# Vehicles > 8500 lbs': row.aboveWeight,
+                    'Miles Traveled': row.miles,
+                    'Gas/Diesel Usage': row.gas,
+                    'Alt Fuel Usage': row.alt,
+                    'Gas/Diesel Cost': row.gasCost,
+                    'Alt Fuel Cost': row.altCost,
+                    'Maintenance Cost': row.maint
+                });
+            });
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(rows);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Vehicle Report');
+
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+        saveAs(data, `Vehicle_Report_${selectedYear}.xlsx`);
+    };
+
 
 
     return (
@@ -141,6 +174,15 @@ export default function VehicleReportTable({onLoad}) {
                         ))}
                     </tbody>
                 </table>
+                <div className="mt-6 flex justify-end">
+                    <button
+                        onClick={handleDownload}
+                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
+                    >
+                        Download Report
+                    </button>
+                </div>
+
             </div>
         </div>
     );

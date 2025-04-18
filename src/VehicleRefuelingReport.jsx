@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from './Config/axios';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const months = [
   { label: 'Jan', value: 1 }, { label: 'Feb', value: 2 }, { label: 'Mar', value: 3 },
@@ -78,6 +80,27 @@ export default function RefuelingReportTable() {
     if (newPage >= 1 && newPage <= totalPages) setPage(newPage);
   };
 
+  const handleDownloadExcel = () => {
+    const rows = refuelings.map((r) => ({
+      'Vehicle No': r.NWVehicleNo,
+      'Vehicle': `${r.Vehicle?.make} ${r.Vehicle?.model} (${r.Vehicle?.vehType})`,
+      'Refueled By': `${r.User?.firstName} ${r.User?.lastName}`,
+      'Date': new Date(r.date).toLocaleDateString(),
+      'Fuel Added (gallons)': r.fuelAdded,
+      'Fuel Cost ($)': r.fuelCost,
+      'Current Mileage': r.currentMileage,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Refueling Report');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(data, `Refueling_Report_FY${fiscalYear}.xlsx`);
+  };
+
+
   return (
     <div className="p-6">
       <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
@@ -87,11 +110,10 @@ export default function RefuelingReportTable() {
             <button
               key={value}
               onClick={() => toggleMonth(value)}
-              className={`px-2 py-1 rounded border text-sm font-medium ${
-                selectedMonths.includes(value)
+              className={`px-2 py-1 rounded border text-sm font-medium ${selectedMonths.includes(value)
                   ? 'bg-green-600 text-white border-green-600'
                   : 'bg-white border-gray-300 text-gray-700'
-              }`}
+                }`}
             >
               {label}
             </button>
@@ -181,6 +203,15 @@ export default function RefuelingReportTable() {
           Next
         </button>
       </div>
+      <div className="flex justify-end mt-6">
+        <button
+          onClick={handleDownloadExcel}
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
+        >
+          Download Report
+        </button>
+      </div>
+
     </div>
   );
 }
