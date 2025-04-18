@@ -28,7 +28,7 @@ import {
   
 
 
-const MaintenanceChart = () => {
+const MaintenanceChart = ({onLoad}) => {
     const [chartData, setChartData] = useState({});
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [availableYears, setAvailableYears] = useState([]);
@@ -37,13 +37,15 @@ const MaintenanceChart = () => {
         const fetchYears = async () => {
             const result = await api.get('/maintenance/years');
             if (result?.data) {
-                setAvailableYears(result.data.years); // years is now an array of {label, value}
+                setAvailableYears(result.data.years); 
                 if (!result.data.years.some(y => y.value === selectedYear)) {
                     setSelectedYear(result.data.years[0]?.value);
                 }
             }
         };
-        fetchYears();
+        fetchYears().then(() => {
+            onLoad?.();
+        });
     }, []);
 
 

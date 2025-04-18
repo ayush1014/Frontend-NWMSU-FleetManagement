@@ -26,7 +26,7 @@ import {
     Legend
   );
   
-const RefuelingChart = () => {
+const RefuelingChart = ({onLoad}) => {
     const [chartData, setChartData] = useState({});
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [availableYears, setAvailableYears] = useState([]);
@@ -41,7 +41,9 @@ const RefuelingChart = () => {
                 }
             }
         };
-        fetchYears();
+        fetchYears().then(() => {
+            onLoad?.();
+        });;
     }, []);
 
     useEffect(() => {
