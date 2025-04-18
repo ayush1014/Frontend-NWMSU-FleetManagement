@@ -216,7 +216,7 @@ export default function Vehicle() {
                         placeholder="Search vehicles..."
                     />
                 </div>
-                <div className='mb-6'>
+                {role === 'Admin'?(<div className='mb-6'>
                     <button
                         type="button"
                         className="absolute right-[100px] rounded-md bg-green-100 px-3.5 py-2.5 text-base font-semibold text-green-800 shadow-sm hover:bg-green-100"
@@ -232,7 +232,7 @@ export default function Vehicle() {
                             </span>
                         </div>
                     </button>
-                </div>
+                </div>):(<div></div>)}
                 <div className="relative mt-24">
                     <div aria-hidden="true" className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-gray-300" />
