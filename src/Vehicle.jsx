@@ -9,6 +9,7 @@ import api from './Config/axios';
 import { HR } from 'flowbite-react';
 import noPreview from './assets/noPreview.png'
 import { OrbitProgress } from 'react-loading-indicators'
+import { useUser } from './AppContext/userContext';
 
 
 const departmentOptions = [
@@ -132,6 +133,8 @@ export default function Vehicle() {
     const [selectedDepartments, setSelectedDepartments] = useState('All');
     const [filterSelected, setFilterSelected] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [role, setRole] = useState('');
+    const {user} = useUser();
 
 
     const handleAddVehicleClick = () => {
@@ -139,8 +142,9 @@ export default function Vehicle() {
     };
 
     useEffect(() => {
+        setIsLoading(true)
+        user?setRole(user.role):null;
         const fetchVehicles = async () => {
-            setIsLoading(true)
             try {
                 const response = await api.get('/vehicles');
                 setVehicles(response.data);
@@ -248,7 +252,7 @@ export default function Vehicle() {
                             <div className="group relative overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-green-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
 
                                 {/* Three-dot Menu */}
-                                <Menu as="div" className="absolute top-2 right-2 z-10 text-left">
+                                {role === 'Admin'?(<Menu as="div" className="absolute top-2 right-2 z-10 text-left">
                                     <MenuButton
                                         className="inline-flex justify-center w-8 h-8 items-center bg-white bg-opacity-70 rounded-full shadow hover:bg-opacity-100 focus:outline-none"
                                         onClick={(e) => e.stopPropagation()}
@@ -280,7 +284,7 @@ export default function Vehicle() {
                                             </MenuItem>
                                         </div>
                                     </MenuItems>
-                                </Menu>
+                                </Menu>):<div></div>}
 
 
                                 {/* Vehicle Image */}
@@ -351,7 +355,7 @@ export default function Vehicle() {
                             <div className="group relative overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-green-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
 
                                 {/* Three-dot Menu */}
-                                <Menu as="div" className="absolute top-2 right-2 z-10 text-left">
+                                {role === 'Admin'?(<Menu as="div" className="absolute top-2 right-2 z-10 text-left">
                                     <MenuButton
                                         className="inline-flex justify-center w-8 h-8 items-center bg-white bg-opacity-70 rounded-full shadow hover:bg-opacity-100 focus:outline-none"
                                         onClick={(e) => e.stopPropagation()}
@@ -383,7 +387,7 @@ export default function Vehicle() {
                                             </MenuItem>
                                         </div>
                                     </MenuItems>
-                                </Menu>
+                                </Menu>):<div></div>}
 
 
                                 {/* Vehicle Image */}

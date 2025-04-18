@@ -34,15 +34,30 @@ export default function Navigation() {
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { user, logout } = useUser();
+    const [role, setRole] = useState('');
 
-    const navigation = [
+    useEffect(()=>{
+        if(user){
+            setRole(user.role);
+        }
+    },[user])
+
+    let navigation = []
+
+    if(role === 'Admin'){navigation = [
         { name: 'Dashboard', href: '/home', icon: HomeIcon, current: location.pathname ==='/home' },
         { name: 'Users', href: '/user-temp', icon: UsersIcon, current: location.pathname === '/user-temp' },
         { name: 'Vehicles', href: '/Vehicles', icon: TruckIcon, current: location.pathname === '/Vehicles' },
         { name: 'Refueling', href: '/refueling', icon: FaGasPump, current: location.pathname === '/refueling' },
         { name: 'Maintainence', href: '/maintenance', icon: WrenchScrewdriverIcon, current: location.pathname === '/maintenance' },
         { name: 'Reports', href: '/reports', icon: ChartPieIcon, current: location.pathname === '/reports' },
-    ];
+    ]}else{navigation = [
+        { name: 'Dashboard', href: '/home', icon: HomeIcon, current: location.pathname ==='/home' },
+        { name: 'Users', href: '/user-temp', icon: UsersIcon, current: location.pathname === '/user-temp' },
+        { name: 'Vehicles', href: '/Vehicles', icon: TruckIcon, current: location.pathname === '/Vehicles' },
+        { name: 'Refueling', href: '/refueling', icon: FaGasPump, current: location.pathname === '/refueling' },
+        { name: 'Maintainence', href: '/maintenance', icon: WrenchScrewdriverIcon, current: location.pathname === '/maintenance' },
+    ]}
 
     const userNavigation = [
         { name: 'Your profile', href: '/user-profile' },
