@@ -1,24 +1,3 @@
-import {
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-    Popover,
-    PopoverBackdrop,
-    PopoverButton,
-    PopoverPanel,
-} from '@headlessui/react'
-import {
-    ArrowLongLeftIcon,
-    CheckIcon,
-    HandThumbUpIcon,
-    HomeIcon,
-    MagnifyingGlassIcon,
-    PaperClipIcon,
-    QuestionMarkCircleIcon,
-    UserIcon,
-} from '@heroicons/react/20/solid'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Navigation from './Navigation'
 import api from './Config/axios';
 import { useParams } from 'react-router-dom';
@@ -26,10 +5,12 @@ import { useState, useEffect } from 'react';
 import { CalendarDaysIcon, CreditCardIcon, UserCircleIcon, KeyIcon } from '@heroicons/react/20/solid'
 import { FaGasPump } from 'react-icons/fa'
 import { WrenchScrewdriverIcon } from '@heroicons/react/24/solid';
+import QRCode from "react-qr-code";
 
 export default function VehicleMaintenence() {
     const { NWVehicleNo } = useParams();
     const [maintenences, setMaintenences] = useState([]);
+    const [qrVisibleForId, setQrVisibleForId] = useState(null);
 
     useEffect(() => {
         const fetchMaintenences = async () => {
@@ -140,7 +121,18 @@ export default function VehicleMaintenence() {
                                 {maintenences.map((maintenence) => (
                                     <li key={maintenence.maintainenceId} className="p-4">
                                         <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
-                                            <dl className="flex flex-wrap">
+                                        {qrVisibleForId === maintenence.maintainenceId ? (
+                                                <div className="flex flex-col items-center justify-center p-8">
+                                                    <QRCode value={maintenence.receiptImage} size={179} />
+                                                    <p className="mt-4 text-sm text-gray-700">Scan to view receipt</p>
+                                                    <button
+                                                        onClick={() => setQrVisibleForId(null)}
+                                                        className="mt-4 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700"
+                                                    >
+                                                        Done
+                                                    </button>
+                                                </div>
+                                            ) : (<dl className="flex flex-wrap">
                                                 <div className="flex-auto pl-6 pt-6">
                                                     <dt className="text-sm font-semibold text-gray-900">Amount</dt>
                                                     <dd className="mt-1 text-base font-semibold text-gray-900">${maintenence.maintainenceCost}</dd>
@@ -187,7 +179,15 @@ export default function VehicleMaintenence() {
                                                     </dt>
                                                     <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Description</span> {maintenence.maintainenceDescription} </dd>
                                                 </div>
-                                            </dl>
+                                                {maintenence.receiptImage ? (<div className='px-8 pt-8'>
+                                                    <button
+                                                        onClick={() => setQrVisibleForId(maintenence.maintainenceId)}
+                                                        className="text-sm font-semibold text-green-700 underline hover:text-green-900"
+                                                    >
+                                                        Get receipt on phone
+                                                    </button>
+                                                </div>) : (<div></div>)}
+                                            </dl>)}
                                             <div className="mt-6 border-t border-gray-900/5 px-6 py-6">
                                                 {maintenence.receiptImage ? (
                                                     <a
