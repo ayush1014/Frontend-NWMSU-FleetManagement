@@ -34,6 +34,7 @@ import { FaGasPump } from 'react-icons/fa'
 import api from './Config/axios';
 import Navigation from './Navigation';
 import { OrbitProgress } from 'react-loading-indicators';
+import QRCode from "react-qr-code";
 
 
 const moods = [
@@ -59,7 +60,8 @@ export default function VehicleProfile() {
     const [activity, setActivity] = useState([])
     const [downloadProgress, setDownloadProgress] = useState(false);
     const navigate = useNavigate();
-
+    const [qrRefuelingVisibleForId, setQrRefuelingVisibleForId] = useState(null);
+    const [qrMaintenanceVisibleForId, setQrMaintenanceVisibleForId] = useState(null);
 
     useEffect(() => {
         const fetchVehicleProfile = async () => {
@@ -346,72 +348,98 @@ export default function VehicleProfile() {
                                     .sort((a, b) => new Date(b.date) - new Date(a.date))
                                     .slice(0, 4)
                                     .map((refueling) => (
-                                        <li key={refueling.refuelingId} className="p-2">
-                                            <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
-                                                <dl className="flex flex-wrap">
-                                                    <div className="flex-auto pl-6 pt-6">
-                                                        <dt className="text-sm font-semibold text-gray-900">Amount</dt>
-                                                        <dd className="mt-1 text-base font-semibold text-gray-900">${refueling.fuelCost}</dd>
-                                                    </div>
-                                                    <div className="flex-none self-end px-6 pt-4">
-                                                        <dt className="sr-only">Status</dt>
-                                                        <dd className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                                            Paid
-                                                        </dd>
-                                                    </div>
-                                                    <div className="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
-                                                        <dt className="flex-none">
-                                                            <span className="sr-only">Client</span>
-                                                            <div className="">
-                                                                <img
-                                                                    alt=""
-                                                                    src={refueling.User.profile_pic}
-                                                                    className="size-8 object-cover object-center rounded-full ring-4 ring-white"
-                                                                />
-                                                            </div>
-                                                        </dt>
-                                                        <dd className="text-sm font-medium mt-1 text-gray-900">{refueling.User.firstName} {refueling.User.lastName}</dd>
-                                                    </div>
-                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
-                                                        <dt className="flex-none">
-                                                            <span className="sr-only">Due date</span>
-                                                            <CalendarDaysIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
-                                                        </dt>
-                                                        <dd className="text-sm text-gray-500">
-                                                            <time dateTime={refueling.date}>{new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>
-                                                        </dd>
-                                                    </div>
-                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
-                                                        <dt className="flex-none">
-                                                            <span className="sr-only">Status</span>
-                                                            <KeyIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
-                                                        </dt>
-                                                        <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Current Miles</span> {refueling.currentMileage} Miles</dd>
-                                                    </div>
-                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
-                                                        <dt className="flex-none">
-                                                            <span className="sr-only">Status</span>
-                                                            <FaGasPump aria-hidden="true" className="h-6 w-6 text-gray-400" />
-                                                        </dt>
-                                                        <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Fuel Added</span> {refueling.fuelAdded} Gallons</dd>
-                                                    </div>
-                                                </dl>
-                                                <div className="mt-6 border-t border-gray-900/5 px-6 py-6 hover-action-div ">
-                                                    {refueling.receiptImage ? (
-                                                        <a
-                                                            href={refueling.receiptImage}
-                                                            download
-                                                            className="text-sm font-semibold text-gray-900"
-                                                        >
-                                                            Download receipt <span className="download-link-arrow" aria-hidden="true">&rarr;</span>
-                                                        </a>
-                                                    ) : (
-                                                        <p className="text-sm font-semibold text-gray-500">No receipt available</p>
-                                                    )}
+                                        <li key={refueling.refuelingId} className="p-4">
+                                        <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
+                                            {qrRefuelingVisibleForId === refueling.refuelingId ? (
+                                                <div className="flex flex-col items-center justify-center p-8">
+                                                    <QRCode value={refueling.receiptImage} size={179} />
+                                                    <p className="mt-4 text-sm text-gray-700">Scan to view receipt</p>
+                                                    <button
+                                                        onClick={() => setQrRefuelingVisibleForId(null)}
+                                                        className="mt-4 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700"
+                                                    >
+                                                        Done
+                                                    </button>
                                                 </div>
+                                            ) : (<dl className="flex flex-wrap">
+                                                <div className="flex-auto pl-6 pt-6">
+                                                    <dt className="text-sm font-semibold text-gray-900">Amount</dt>
+                                                    <dd className="mt-1 text-base font-semibold text-gray-900">${refueling.fuelCost}</dd>
+                                                </div>
+                                                <div className="flex-none self-end px-6 pt-4">
+                                                    <dt className="sr-only">Status</dt>
+                                                    <dd className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                                        Paid
+                                                    </dd>
+                                                </div>
+                                                <div className="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
+                                                    <dt className="flex-none">
+                                                        <span className="sr-only">Client</span>
+                                                        <div className="">
+                                                            <img
+                                                                alt=""
+                                                                src={refueling.User.profile_pic}
+                                                                className="size-8 object-cover object-center rounded-full ring-4 ring-white"
+                                                            />
+                                                        </div>
+                                                    </dt>
+                                                    <dd className="text-sm font-medium mt-1 text-gray-900">{refueling.User.firstName} {refueling.User.lastName}</dd>
+                                                </div>
+                                                <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                    <dt className="flex-none">
+                                                        <span className="sr-only">Due date</span>
+                                                        <CalendarDaysIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                    </dt>
+                                                    <dd className="text-sm text-gray-500">
+                                                        <time dateTime={refueling.createdAt}>
+                                                            {new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}
+                                                        </time>
 
+                                                    </dd>
+                                                </div>
+                                                <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                    <dt className="flex-none">
+                                                        <span className="sr-only">Status</span>
+                                                        <KeyIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                    </dt>
+                                                    <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Current Miles</span> {refueling.currentMileage} Miles</dd>
+                                                </div>
+                                                <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                    <dt className="flex-none">
+                                                        <span className="sr-only">Status</span>
+                                                        <FaGasPump aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                    </dt>
+                                                    <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Fuel Added</span> {refueling.fuelAdded} Gallons</dd>
+                                                </div>
+                                                {refueling.receiptImage ? (<div className='px-8 pt-8'>
+                                                    <button
+                                                        onClick={() => setQrRefuelingVisibleForId(refueling.refuelingId)}
+                                                        className="text-sm font-semibold text-green-700 underline hover:text-green-900"
+                                                    >
+                                                        Get receipt on phone
+                                                    </button>
+                                                </div>) : (<div></div>)}
+                                            </dl>)}
+                                            <div className="mt-6 border-t border-gray-900/5 px-6 py-6">
+                                                {refueling.receiptImage ? (
+                                                    <>
+                                                        <div className="flex justify-between items-center">
+                                                            <a
+                                                                href={refueling.receiptImage}
+                                                                download
+                                                                className="text-sm font-semibold text-gray-900"
+                                                            >
+                                                                Download receipt <span aria-hidden="true">&rarr;</span>
+                                                            </a>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <p className="text-sm font-semibold text-gray-500">No receipt available</p>
+                                                )}
                                             </div>
-                                        </li>
+
+                                        </div>
+                                    </li>
                                     ))}
                             </ul>
 
@@ -428,7 +456,18 @@ export default function VehicleProfile() {
                                     .map((maintenence) => (
                                         <li key={maintenence.maintainenceId} className="p-4">
                                             <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
-                                                <dl className="flex flex-wrap">
+                                                {qrMaintenanceVisibleForId === maintenence.maintainenceId ? (
+                                                    <div className="flex flex-col items-center justify-center p-8">
+                                                        <QRCode value={maintenence.receiptImage} size={179} />
+                                                        <p className="mt-4 text-sm text-gray-700">Scan to view receipt</p>
+                                                        <button
+                                                            onClick={() => setQrMaintenanceVisibleForId(null)}
+                                                            className="mt-4 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700"
+                                                        >
+                                                            Done
+                                                        </button>
+                                                    </div>
+                                                ) : (<dl className="flex flex-wrap">
                                                     <div className="flex-auto pl-6 pt-6">
                                                         <dt className="text-sm font-semibold text-gray-900">Amount</dt>
                                                         <dd className="mt-1 text-base font-semibold text-gray-900">${maintenence.maintainenceCost}</dd>
@@ -475,15 +514,23 @@ export default function VehicleProfile() {
                                                         </dt>
                                                         <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Description</span> {maintenence.maintainenceDescription} </dd>
                                                     </div>
-                                                </dl>
+                                                    {maintenence.receiptImage ? (<div className='px-8 pt-8'>
+                                                        <button
+                                                            onClick={() => setQrMaintenanceVisibleForId(maintenence.maintainenceId)}
+                                                            className="text-sm font-semibold text-green-700 underline hover:text-green-900"
+                                                        >
+                                                            Get receipt on phone
+                                                        </button>
+                                                    </div>) : (<div></div>)}
+                                                </dl>)}
                                                 <div className="mt-6 border-t border-gray-900/5 px-6 py-6">
                                                     {maintenence.receiptImage ? (
                                                         <a
                                                             href={maintenence.receiptImage}
                                                             download
-                                                            className="text-sm font-semibold text-gray-900 hover-action-div"
+                                                            className="text-sm font-semibold text-gray-900"
                                                         >
-                                                            Download receipt <span className="download-link-arrow" aria-hidden="true">&rarr;</span>
+                                                            Download receipt <span aria-hidden="true">&rarr;</span>
                                                         </a>
                                                     ) : (
                                                         <p className="text-sm font-semibold text-gray-500">No receipt available</p>
