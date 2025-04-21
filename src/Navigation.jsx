@@ -28,6 +28,7 @@ import Home from './Home'
 import nwmsu_logo from './assets/nwmsu-logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from './AppContext/userContext'
+import bearcat from './assets/bearcat.webp'
 
 export default function Navigation() {
     const navigate = useNavigate();
@@ -146,7 +147,7 @@ export default function Navigation() {
                                             </li>
                                             <li className="mt-auto">
                                                 <a
-                                                    href="#"
+                                                    href={`/edit-user/${user.email}`}
                                                     className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white"
                                                 >
                                                     <Cog6ToothIcon aria-hidden="true" className="size-6 shrink-0" />
@@ -166,7 +167,7 @@ export default function Navigation() {
                         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-green-900 px-6 pb-4">
                             <div className="flex h-16 shrink-0 items-center">
                                 <img
-                                    alt="Your Company"
+                                    alt="NWMSU logo"
                                     src={nwmsu_logo}
                                     className="h-8 w-auto"
                                 />
@@ -195,7 +196,7 @@ export default function Navigation() {
                                     </li>
                                     <li className="mt-auto">
                                         <a
-                                            href="#"
+                                            href={`/edit-user/${user.email}`}
                                             className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white"
                                         >
                                             <Cog6ToothIcon aria-hidden="true" className="size-6 shrink-0" />
@@ -225,7 +226,7 @@ export default function Navigation() {
                                             <span className="sr-only">Open user menu</span>
                                             <img
                                                 alt=""
-                                                src = {user.profile_pic}
+                                                src = {user.profile_pic || bearcat}
                                                 className="size-8 rounded-full bg-gray-50 object-cover object-center"
                                             />
                                             <span className="hidden lg:flex lg:items-center">
