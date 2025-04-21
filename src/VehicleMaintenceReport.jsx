@@ -20,9 +20,11 @@ export default function MaintenanceReportTable() {
   const [fiscalYears, setFiscalYears] = useState([]);
   const [selectedMonths, setSelectedMonths] = useState(months.map(m => m.value));
 
-  const fetchMaintenances = async (pageNumber = 1, year = fiscalYear) => {
+  const fetchMaintenances = async (pageNumber, year) => {
     try {
-      const result = await api.post(`/maintenance/report?page=${pageNumber}`, {
+      const result = await api.post(`/maintenance/report`, {
+        page: pageNumber,
+        limit: 20,
         fiscalYear: year,
         months: selectedMonths
       });
@@ -68,22 +70,22 @@ export default function MaintenanceReportTable() {
 
   useEffect(() => {
     if (fiscalYear) {
-      fetchMaintenances(1, fiscalYear);
+      fetchMaintenances(page, fiscalYear);
     }
-  }, [fiscalYear, selectedMonths]);
+  }, [page, fiscalYear, selectedMonths]);
 
   useEffect(() => {
     if (fiscalYear) {
       fetchMaintenances(page, fiscalYear);
     }
-  }, [page]);
+  }, [page, fiscalYear, selectedMonths]);
 
   const handleDownloadExcel = () => {
     const rows = maintenances.map((m) => ({
       'Vehicle No': m.NWVehicleNo,
       'Vehicle': `${m.Vehicle?.make} ${m.Vehicle?.model} (${m.Vehicle?.vehType})`,
       'Maintenance By': `${m.User?.firstName} ${m.User?.lastName}`,
-      'Date': new Date(m.date).toLocaleDateString(),
+      'Date': new Date(m.date).toLocaleDateString('en-US', { timeZone: 'UTC' }),
       'Description': m.maintainenceDescription,
       'Cost ($)': m.maintainenceCost,
       'Current Mileage': m.currentMileage
@@ -170,7 +172,7 @@ export default function MaintenanceReportTable() {
                 <td className="border px-4 py-2">
                   {m.User?.firstName} {m.User?.lastName}
                 </td>
-                <td className="border px-4 py-2">{new Date(m.date).toLocaleDateString()}</td>
+                <td className="border px-4 py-2">{<time dateTime={m.date}>{new Date(m.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>}</td>
                 <td className="border px-4 py-2">{m.maintainenceDescription}</td>
                 <td className="border px-4 py-2">${m.maintainenceCost}</td>
                 <td className="border px-4 py-2">{m.currentMileage}</td>

@@ -35,7 +35,7 @@ const RefuelingChart = ({onLoad}) => {
         const fetchYears = async () => {
             const result = await api.get('/refueling/years');
             if (result?.data) {
-                setAvailableYears(result.data.years); // years is now an array of {label, value}
+                setAvailableYears(result.data.years); 
                 if (!result.data.years.some(y => y.value === selectedYear)) {
                     setSelectedYear(result.data.years[0]?.value);
                 }
@@ -191,7 +191,7 @@ const RefuelingChart = ({onLoad}) => {
                 },
                 ticks: {
                     precision: 0,
-                    color: '#006400'
+                    color: '#006400',
                 },
                 stacked: true
             },
@@ -227,7 +227,7 @@ const RefuelingChart = ({onLoad}) => {
                 },
                 ticks: {
                     autoSkip: false,
-                    maxRotation: 0,
+                    maxRotation: 45, 
                     minRotation: 0,
                     color: '#006400'
                 },
