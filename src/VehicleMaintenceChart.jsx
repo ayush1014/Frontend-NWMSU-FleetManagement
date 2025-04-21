@@ -147,10 +147,28 @@ const VehicleMaintenanceChart = () => {
     scales: {
       y: {
         beginAtZero: true,
-        title: { display: true, text: 'Maintenance Cost ($)' }
+        title: { display: true, 
+          text: 'Maintenance Cost ($)', 
+          color: '#006400',
+          font: {
+              size: 14,
+              weight: 'bold',
+          }}
       },
       x: {
-        title: { display: true, text: 'Month' }
+        title: { display: true, 
+          text: 'Month' , 
+          color: '#006400',
+          font: {
+              size: 14,
+              weight: 'bold',
+          }}, 
+        ticks: {
+          autoSkip: false,
+          maxRotation: 45,
+          minRotation: 0,
+          color: '#006400'
+      }
       }
     }
   };

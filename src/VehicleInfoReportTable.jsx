@@ -51,7 +51,7 @@ export default function VehicleInfoReportTable() {
         'Color': v.color,
         'License Plate': v.licensePlate,
         'Exempt': v.isExempt,
-        'Purchase Date': new Date(v.purchaseDate).toLocaleDateString()
+        'Purchase Date': new Date(v.purchaseDate).toLocaleDateString('en-US', { timeZone: 'UTC' })
       }));
 
       const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -102,7 +102,7 @@ export default function VehicleInfoReportTable() {
                 <td className="border px-4 py-2">{vehicle.color}</td>
                 <td className="border px-4 py-2">{vehicle.licensePlate}</td>
                 <td className="border px-4 py-2">{vehicle.isExempt}</td>
-                <td className="border px-4 py-2">{new Date(vehicle.purchaseDate).toLocaleDateString()}</td>
+                <td className="border px-4 py-2">{<time dateTime={vehicle.purchaseDate}>{new Date(vehicle.purchaseDate).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>}</td> 
               </tr>
             ))}
           </tbody>

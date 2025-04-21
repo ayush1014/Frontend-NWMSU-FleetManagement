@@ -200,7 +200,7 @@ const MaintenanceChart = ({onLoad}) => {
                 },
                 ticks: {
                     autoSkip: false,
-                    maxRotation: 0,
+                    maxRotation: 45,
                     minRotation: 0,
                     color: '#006400'
                 }

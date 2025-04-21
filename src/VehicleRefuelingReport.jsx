@@ -19,9 +19,11 @@ export default function RefuelingReportTable() {
   const [fiscalYears, setFiscalYears] = useState([]);
   const [selectedMonths, setSelectedMonths] = useState(months.map(m => m.value));
 
-  const fetchRefuelings = async (pageNumber = 1, year = fiscalYear) => {
+  const fetchRefuelings = async (pageNumber, year) => {
     try {
-      const result = await api.post(`/refueling/report?page=${pageNumber}`, {
+      const result = await api.post(`/refueling/report`, {
+        page: pageNumber,
+        limit: 20,
         fiscalYear: year,
         months: selectedMonths
       });
@@ -67,7 +69,7 @@ export default function RefuelingReportTable() {
 
   useEffect(() => {
     if (fiscalYear) {
-      fetchRefuelings(1, fiscalYear);
+      setPage(1);
     }
   }, [fiscalYear, selectedMonths]);
 
@@ -75,7 +77,7 @@ export default function RefuelingReportTable() {
     if (fiscalYear) {
       fetchRefuelings(page, fiscalYear);
     }
-  }, [page]);
+  }, [page, fiscalYear, selectedMonths]);
 
   const goToPage = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) setPage(newPage);
@@ -86,7 +88,7 @@ export default function RefuelingReportTable() {
       'Vehicle No': r.NWVehicleNo,
       'Vehicle': `${r.Vehicle?.make} ${r.Vehicle?.model} (${r.Vehicle?.vehType})`,
       'Refueled By': `${r.User?.firstName} ${r.User?.lastName}`,
-      'Date': new Date(r.date).toLocaleDateString(),
+      'Date': new Date(r.date).toLocaleDateString('en-US', { timeZone: 'UTC' }),
       'Fuel Added (gallons)': r.fuelAdded,
       'Fuel Cost ($)': r.fuelCost,
       'Current Mileage': r.currentMileage,
@@ -169,7 +171,7 @@ export default function RefuelingReportTable() {
                 <td className="border px-4 py-2">
                   {r.User?.firstName} {r.User?.lastName}
                 </td>
-                <td className="border px-4 py-2">{new Date(r.date).toLocaleDateString()}</td>
+                <td className="border px-4 py-2"><time dateTime={r.date}>{new Date(r.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time></td>
                 <td className="border px-4 py-2">{r.fuelAdded}</td>
                 <td className="border px-4 py-2">${r.fuelCost}</td>
                 <td className="border px-4 py-2">{r.currentMileage}</td>
