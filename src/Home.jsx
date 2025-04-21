@@ -60,14 +60,14 @@ export default function Home() {
                     title: 'Generate, Update & Report Analytics',
                     role: 'Admin',
                     imageUrl: HiDocumentReport,
-                    href: '#'
+                    href: '/reports'
                 },
                 {
                     name: 'Settings',
                     title: 'Update Password, User permissions & more',
                     role: 'Admin',
                     imageUrl: FcSettings,
-                    href: '#'
+                    href: `/edit-user/${user.email}`
                 },
             ]);
         } else {

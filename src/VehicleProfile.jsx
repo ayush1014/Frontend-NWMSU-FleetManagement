@@ -60,37 +60,54 @@ export default function VehicleProfile() {
     const [activity, setActivity] = useState([])
     const [downloadProgress, setDownloadProgress] = useState(false);
     const navigate = useNavigate();
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [availableYears, setAvailableYears] = useState([]);
+
     const [qrRefuelingVisibleForId, setQrRefuelingVisibleForId] = useState(null);
     const [qrMaintenanceVisibleForId, setQrMaintenanceVisibleForId] = useState(null);
 
     useEffect(() => {
         const fetchVehicleProfile = async () => {
-            setLoading(true)
+            setLoading(true);
             try {
                 const response = await api.get(`/vehicle-profile/${NWVehicleNo}`);
                 const data = response.data;
+
+                const extractAvailableYears = (data) => {
+                    const yearsSet = new Set();
+                
+                    (data.Maintainences || []).forEach((m) => yearsSet.add(new Date(m.date).getFullYear()));
+                    (data.Refuelings || []).forEach((r) => yearsSet.add(new Date(r.date).getFullYear()));
+                
+                    const currentYear = new Date().getFullYear();
+                    yearsSet.add(currentYear); 
+                
+                    const yearsArray = Array.from(yearsSet).sort((a, b) => b - a);
+                    setAvailableYears(yearsArray);
+                };
+                
+
+
                 setVehicle(data);
-                const currentYear = new Date().getFullYear();
-                setCurYear(currentYear);
+                extractAvailableYears(data);
 
                 const maintenanceCost = data.Maintainences?.reduce((sum, m) => {
-                    return new Date(m.date).getFullYear() === currentYear ? sum + m.maintainenceCost : sum;
+                    return new Date(m.date).getFullYear() === selectedYear ? sum + m.maintainenceCost : sum;
                 }, 0) || 0;
-                console.log('maintenanceCost', maintenanceCost)
-                setMaintenanceCost(maintenanceCost);
 
                 const refuelingCost = data.Refuelings?.reduce((sum, r) => {
-                    return new Date(r.date).getFullYear() === currentYear ? sum + r.fuelCost : sum;
+                    return new Date(r.date).getFullYear() === selectedYear ? sum + r.fuelCost : sum;
                 }, 0) || 0;
-                setRefuelingCost(refuelingCost)
 
+                setMaintenanceCost(maintenanceCost);
+                setRefuelingCost(refuelingCost);
                 setTotalCost(maintenanceCost + refuelingCost);
 
-                const combinedActivities = [...(data.Maintainences || []), ...(data.Refuelings || [])];
-                combinedActivities.sort((a, b) => new Date(b.date) - new Date(a.date));
-                setActivity(combinedActivities);
-                console.log('Activites', activity);
+                const combinedActivities = [...(data.Maintainences || []), ...(data.Refuelings || [])]
+                    .filter(item => new Date(item.date).getFullYear() === selectedYear)
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
+                setActivity(combinedActivities);
                 setLoading(false);
             } catch (err) {
                 console.error('Failed to fetch vehicle profile:', err);
@@ -99,12 +116,18 @@ export default function VehicleProfile() {
         };
 
         fetchVehicleProfile();
-    }, [NWVehicleNo]);
+    }, [NWVehicleNo, selectedYear]);
+
+    useEffect(() => {
+        if (!availableYears.includes(selectedYear)) {
+            setSelectedYear(new Date().getFullYear());
+        }
+    }, [availableYears]);
+    
 
     useEffect(() => {
         console.log('Vehicle Data: ', vehicle)
     }, [vehicle])
-
 
 
     if (loading) return <div className="fixed inset-0 bg-white bg-opacity-50 flex justify-center items-center z-50">
@@ -112,13 +135,15 @@ export default function VehicleProfile() {
     </div>;
     if (!vehicle) return <p>No vehicle data found.</p>;
 
+
+
     const handleDownload = async (NWVehicleNo) => {
         setDownloadProgress(true)
         const vehicleId = NWVehicleNo;
         console.log('VehicleId: ', vehicleId)
 
         try {
-            const response = await api.get(`/receipt/${vehicleId}`, {
+            const response = await api.get(`/receipt/${vehicleId}?year=${selectedYear}`, {
                 responseType: 'blob'
             });
 
@@ -128,7 +153,7 @@ export default function VehicleProfile() {
             const fileURL = window.URL.createObjectURL(new Blob([response.data]));
             const fileLink = document.createElement('a');
             fileLink.href = fileURL;
-            fileLink.setAttribute('download', `receipts_${vehicleId}.zip`);
+            fileLink.setAttribute('download', `${vehicleId}_${selectedYear}_receipts.zip`);
             document.body.appendChild(fileLink);
 
             fileLink.click();
@@ -183,11 +208,24 @@ export default function VehicleProfile() {
                 <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                     <div className="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                         <div className="lg:col-start-3 lg:row-end-1">
+                            <div className="flex justify-end mr-6 mt-4">
+                                <label className="text-base font-medium mr-2 mt-1">Select <span className='text-green-700 font-semibold text-xl'>Year:</span></label>
+                                <select
+                                    className="border border-2 border-green-700 px-3 py-1 rounded mb-6 "
+                                    value={selectedYear}
+                                    onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                                >
+                                    {availableYears.map((year) => (
+                                        <option key={year} value={year}>{year}</option>
+                                    ))}
+                                </select>
+                            </div>
+
                             <h2 className="sr-only">Summary</h2>
                             <div className="rounded-lg bg-white shadow-lg ring-1 ring-gray-900/5">
                                 <dl className="flex flex-wrap">
                                     <div className="flex-auto pl-6 pt-6">
-                                        <dt className="text-sm/6 font-semibold text-gray-900">Total Amount spent in <span className='text-green-600 text-base font-bold'>{curYear}</span></dt>
+                                        <dt className="text-sm/6 font-semibold text-gray-900">Total Amount spent in <span className='text-green-600 text-base font-bold'>{selectedYear}</span></dt>
                                         <dd className="mt-1 text-base font-bold text-green-900 ">${totalCost}</dd>
                                     </div>
                                     <div className="flex-none self-end px-6 pt-4">
@@ -209,7 +247,7 @@ export default function VehicleProfile() {
                                 </div>
                                 {vehicle.Refuelings > [0] || vehicle.Maintainences > [0] ? (<div className="mt-6 border-t border-gray-900/5 px-6 py-6 hover-action-div">
                                     <a onClick={() => handleDownload(NWVehicleNo)} className="text-sm font-semibold text-gray-900">
-                                        Download Receipts for {curYear}
+                                        Download Receipts for {selectedYear}
                                         <span
                                             className='download-link-arrow'
                                             aria-hidden="true"
@@ -271,47 +309,47 @@ export default function VehicleProfile() {
                                         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">NW Vehicle ID</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.NWVehicleNo}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.NWVehicleNo}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">VIN</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.VIN}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.VIN}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">License Plate</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.licensePlate}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.licensePlate}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Make</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.make}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.make}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Model</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.model}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.model}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Year</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.modelYear}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.modelYear}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Description</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.vehDescription}</dd>
+                                                <dd className="mt-1 text-sm text-green-900 font-semibold">{vehicle.vehDescription}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Type</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.vehType}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.vehType}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Department</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.vehicleDepartment}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.vehicleDepartment}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Weight</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.weight}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.weight}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Purchase Date</dt>
-                                                <dd className="text-sm whitespace-nowrap text-gray-900">
+                                                <dd className="text-base whitespace-nowrap text-green-900 font-semibold">
                                                     <time dateTime={vehicle.purchaseDate}>
                                                         {new Date(
                                                             new Date(vehicle.purchaseDate).getTime() + new Date().getTimezoneOffset() * 60000
@@ -325,132 +363,153 @@ export default function VehicleProfile() {
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Starting Mileage</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.startingMileage}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.startingMileage}</dd>
                                             </div>
                                             <div className="sm:col-span-1">
                                                 <dt className="text-sm font-medium text-gray-500">Current Mileage</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{vehicle.currentMileage}</dd>
+                                                <dd className="mt-1 text-base text-green-900 font-semibold">{vehicle.currentMileage}</dd>
                                             </div>
                                         </dl>
                                     </div>
                                 </div>
                             </section>
-                            {vehicle.Refuelings > [0] ? (<div className="relative flex justify-center">
-                                <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900">Refueling Recents Updates</span>
-                            </div>) : (<div className="relative flex justify-center">
-                                <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900">No Refueling & Maintenence Updates</span>
-                            </div>)}
+                            {(vehicle.Refuelings?.some(r => new Date(r.date).getFullYear() === selectedYear)) ? (
+                                <div className="relative flex justify-center">
+                                    <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900">
+                                        Refueling Recents Updates
+                                    </span>
+                                </div>
+                            ) : (
+                                <div className="relative flex justify-center">
+                                    <span className="bg-white px-3 my-8 text-base font-bold text-gray-900">
+                                        No refueling updates for year <span className='text-green-700 font-semibold text-xl'>{selectedYear}</span>
+                                    </span>
+                                </div>
+                            )}
+
                             <ul
                                 role="list"
                                 className="mt-5 grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0 md:grid-cols-2 md:divide-y-0 md:gap-1"
                             >
                                 {vehicle.Refuelings
+                                    .filter((r) => new Date(r.date).getFullYear() === selectedYear)
                                     .sort((a, b) => new Date(b.date) - new Date(a.date))
                                     .slice(0, 4)
                                     .map((refueling) => (
                                         <li key={refueling.refuelingId} className="p-4">
-                                        <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
-                                            {qrRefuelingVisibleForId === refueling.refuelingId ? (
-                                                <div className="flex flex-col items-center justify-center p-8">
-                                                    <QRCode value={refueling.receiptImage} size={179} />
-                                                    <p className="mt-4 text-sm text-gray-700">Scan to view receipt</p>
-                                                    <button
-                                                        onClick={() => setQrRefuelingVisibleForId(null)}
-                                                        className="mt-4 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700"
-                                                    >
-                                                        Done
-                                                    </button>
-                                                </div>
-                                            ) : (<dl className="flex flex-wrap">
-                                                <div className="flex-auto pl-6 pt-6">
-                                                    <dt className="text-sm font-semibold text-gray-900">Amount</dt>
-                                                    <dd className="mt-1 text-base font-semibold text-gray-900">${refueling.fuelCost}</dd>
-                                                </div>
-                                                <div className="flex-none self-end px-6 pt-4">
-                                                    <dt className="sr-only">Status</dt>
-                                                    <dd className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                                        Paid
-                                                    </dd>
-                                                </div>
-                                                <div className="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
-                                                    <dt className="flex-none">
-                                                        <span className="sr-only">Client</span>
-                                                        <div className="">
-                                                            <img
-                                                                alt=""
-                                                                src={refueling.User.profile_pic}
-                                                                className="size-8 object-cover object-center rounded-full ring-4 ring-white"
-                                                            />
-                                                        </div>
-                                                    </dt>
-                                                    <dd className="text-sm font-medium mt-1 text-gray-900">{refueling.User.firstName} {refueling.User.lastName}</dd>
-                                                </div>
-                                                <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
-                                                    <dt className="flex-none">
-                                                        <span className="sr-only">Due date</span>
-                                                        <CalendarDaysIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
-                                                    </dt>
-                                                    <dd className="text-sm text-gray-500">
-                                                        <time dateTime={refueling.createdAt}>
-                                                            {new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}
-                                                        </time>
+                                            <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
+                                                {qrRefuelingVisibleForId === refueling.refuelingId ? (
+                                                    <div className="flex flex-col items-center justify-center p-8">
+                                                        <QRCode value={refueling.receiptImage} size={179} />
+                                                        <p className="mt-4 text-sm text-gray-700">Scan to view receipt</p>
+                                                        <button
+                                                            onClick={() => setQrRefuelingVisibleForId(null)}
+                                                            className="mt-4 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700"
+                                                        >
+                                                            Done
+                                                        </button>
+                                                    </div>
+                                                ) : (<dl className="flex flex-wrap">
+                                                    <div className="flex-auto pl-6 pt-6">
+                                                        <dt className="text-sm font-semibold text-gray-900">Amount</dt>
+                                                        <dd className="mt-1 text-base font-semibold text-gray-900">${refueling.fuelCost}</dd>
+                                                    </div>
+                                                    <div className="flex-none self-end px-6 pt-4">
+                                                        <dt className="sr-only">Status</dt>
+                                                        <dd className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                                            Paid
+                                                        </dd>
+                                                    </div>
+                                                    <div className="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Client</span>
+                                                            <div className="">
+                                                                <img
+                                                                    alt=""
+                                                                    src={refueling.User.profile_pic}
+                                                                    className="size-8 object-cover object-center rounded-full ring-4 ring-white"
+                                                                />
+                                                            </div>
+                                                        </dt>
+                                                        <dd className="text-sm font-medium mt-1 text-gray-900">{refueling.User.firstName} {refueling.User.lastName}</dd>
+                                                    </div>
+                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Due date</span>
+                                                            <CalendarDaysIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                        </dt>
+                                                        <dd className="text-sm text-gray-500">
+                                                            <time dateTime={refueling.createdAt}>
+                                                                {new Date(refueling.date).toLocaleDateString('en-US', { timeZone: 'UTC' })}
+                                                            </time>
 
-                                                    </dd>
+                                                        </dd>
+                                                    </div>
+                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Status</span>
+                                                            <KeyIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                        </dt>
+                                                        <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Current Miles</span> {refueling.currentMileage} Miles</dd>
+                                                    </div>
+                                                    <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
+                                                        <dt className="flex-none">
+                                                            <span className="sr-only">Status</span>
+                                                            <FaGasPump aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                        </dt>
+                                                        <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Fuel Added</span> {refueling.fuelAdded} Gallons</dd>
+                                                    </div>
+                                                    {refueling.receiptImage ? (<div className='px-8 pt-8'>
+                                                        <button
+                                                            onClick={() => setQrRefuelingVisibleForId(refueling.refuelingId)}
+                                                            className="text-sm font-semibold text-green-700 underline hover:text-green-900"
+                                                        >
+                                                            Get receipt on phone
+                                                        </button>
+                                                    </div>) : (<div></div>)}
+                                                </dl>)}
+                                                <div className="mt-6 border-t border-gray-900/5 px-6 py-6">
+                                                    {refueling.receiptImage ? (
+                                                        <>
+                                                            <div className="flex justify-between items-center">
+                                                                <a
+                                                                    href={refueling.receiptImage}
+                                                                    download
+                                                                    className="text-sm font-semibold text-gray-900"
+                                                                >
+                                                                    Download receipt <span aria-hidden="true">&rarr;</span>
+                                                                </a>
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <p className="text-sm font-semibold text-gray-500">No receipt available</p>
+                                                    )}
                                                 </div>
-                                                <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
-                                                    <dt className="flex-none">
-                                                        <span className="sr-only">Status</span>
-                                                        <KeyIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
-                                                    </dt>
-                                                    <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Current Miles</span> {refueling.currentMileage} Miles</dd>
-                                                </div>
-                                                <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
-                                                    <dt className="flex-none">
-                                                        <span className="sr-only">Status</span>
-                                                        <FaGasPump aria-hidden="true" className="h-6 w-6 text-gray-400" />
-                                                    </dt>
-                                                    <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Fuel Added</span> {refueling.fuelAdded} Gallons</dd>
-                                                </div>
-                                                {refueling.receiptImage ? (<div className='px-8 pt-8'>
-                                                    <button
-                                                        onClick={() => setQrRefuelingVisibleForId(refueling.refuelingId)}
-                                                        className="text-sm font-semibold text-green-700 underline hover:text-green-900"
-                                                    >
-                                                        Get receipt on phone
-                                                    </button>
-                                                </div>) : (<div></div>)}
-                                            </dl>)}
-                                            <div className="mt-6 border-t border-gray-900/5 px-6 py-6">
-                                                {refueling.receiptImage ? (
-                                                    <>
-                                                        <div className="flex justify-between items-center">
-                                                            <a
-                                                                href={refueling.receiptImage}
-                                                                download
-                                                                className="text-sm font-semibold text-gray-900"
-                                                            >
-                                                                Download receipt <span aria-hidden="true">&rarr;</span>
-                                                            </a>
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <p className="text-sm font-semibold text-gray-500">No receipt available</p>
-                                                )}
+
                                             </div>
-
-                                        </div>
-                                    </li>
+                                        </li>
                                     ))}
                             </ul>
 
-                            {vehicle.Maintainences > [0] ? (<div className="relative flex justify-center">
-                                <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900">Maintenence Recents Updates</span>
-                            </div>) : (" ")}
+                            {(vehicle.Maintainences?.some(m => new Date(m.date).getFullYear() === selectedYear)) ? (
+                                <div className="relative flex justify-center">
+                                    <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900">
+                                        Maintenance Recents Updates
+                                    </span>
+                                </div>
+                            ) : (
+                                <div className="relative flex justify-center">
+                                    <span className="bg-white px-3 my-8 text-base font-bold text-gray-900">
+                                        No maintenance updates for year <span className='text-green-700 font-semibold text-xl'>{selectedYear}</span>
+                                    </span>
+                                </div>
+                            )}
                             <ul
                                 role="list"
                                 className="mt-5 grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0 md:grid-cols-2 md:divide-y-0 md:gap-4"
                             >
                                 {vehicle.Maintainences
+                                    .filter((m) => new Date(m.date).getFullYear() === selectedYear)
                                     .sort((a, b) => new Date(b.date) - new Date(a.date))
                                     .slice(0, 4)
                                     .map((maintenence) => (
