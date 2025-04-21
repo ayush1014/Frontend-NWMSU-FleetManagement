@@ -1,17 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel, TransitionChild } from '@headlessui/react'
-import {
-    Bars3Icon,
-    CalendarIcon,
-    CogIcon,
-    HomeIcon,
-    MagnifyingGlassCircleIcon,
-    MapIcon,
-    MegaphoneIcon,
-    SquaresPlusIcon,
-    UserGroupIcon,
-    XMarkIcon,
-} from '@heroicons/react/24/outline'
 import { ChevronLeftIcon, EnvelopeIcon, FunnelIcon, MagnifyingGlassIcon, PhoneIcon, EllipsisVerticalIcon, PencilIcon, TrashIcon, UserPlusIcon, CalendarDaysIcon, KeyIcon } from '@heroicons/react/20/solid'
 import Navigation from './Navigation'
 import api from './Config/axios'
@@ -435,7 +422,7 @@ export default function UserTemp() {
                                         </button>
 
                                     </form>
-                                    <div className='mb-[20%] mt-6'>
+                                    {user.role === 'Admin' ? (<div className='mb-[20%] mt-6'>
                                         <button
                                             type="button"
                                             className="absolute left-[10%] rounded-md bg-green-100 px-3.5 py-2.5 text-base font-semibold text-green-800 shadow-sm hover:bg-green-100"
@@ -443,7 +430,7 @@ export default function UserTemp() {
                                         >
                                             <div className='flex flex-row gap-2'><UserPlusIcon className='w-6 h-6' /> <span>Add Users</span></div>
                                         </button>
-                                    </div>
+                                    </div>) : (<div></div>)}
                                 </div>
 
                                 {/* Directory list */}
@@ -530,7 +517,7 @@ export default function UserTemp() {
                                     </button>
 
                                 </form>
-                                <div className='mb-[20%] mt-6'>
+                                {user.role === 'Admin' ? (<div className='mb-[20%] mt-6'>
                                     <button
                                         type="button"
                                         className="absolute left-[10%] rounded-md bg-green-100 px-3.5 py-2.5 text-base font-semibold text-green-800 shadow-sm hover:bg-green-100"
@@ -538,7 +525,7 @@ export default function UserTemp() {
                                     >
                                         <div className='flex flex-row gap-2'><UserPlusIcon className='w-6 h-6' /> <span>Add Users</span></div>
                                     </button>
-                                </div>
+                                </div>) : (<div></div>)}
                             </div>
                             {/* Directory list */}
                             <nav aria-label="Directory" className="min-h-0 flex-1 overflow-hidden overflow-y-auto">
