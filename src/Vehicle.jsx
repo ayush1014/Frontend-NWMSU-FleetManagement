@@ -129,9 +129,10 @@ export default function Vehicle() {
     const navigate = useNavigate();
     const [vehicles, setVehicles] = useState([]);
     const [recentVehicles, setRecentVehicles] = useState([]);
-    const [selectedDepartments, setSelectedDepartments] = useState('All');
+    const [selectedDepartments, setSelectedDepartments] = useState(['All']);
     const [filterSelected, setFilterSelected] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
 
     const handleAddVehicleClick = () => {
@@ -170,9 +171,21 @@ export default function Vehicle() {
         fetchRecentVehicles()
     }, []);
 
-    const filteredVehicles = vehicles.filter(vehicle =>
-        selectedDepartments.includes('All') || selectedDepartments.includes(vehicle.vehicleDepartment)
-    );
+    const filteredVehicles = vehicles.filter(vehicle => {
+        const term = searchTerm.trim().toLowerCase();
+      
+        const matchesSearch =
+          String(vehicle.NWVehicleNo).toLowerCase().includes(term) ||
+          String(vehicle.make).toLowerCase().includes(term) ||
+          String(vehicle.model).toLowerCase().includes(term) ||
+          String(vehicle.vehicleDepartment).toLowerCase().includes(term);
+      
+        const matchesDepartment =
+          selectedDepartments.includes('All') ||
+          selectedDepartments.includes(vehicle.vehicleDepartment);
+      
+        return matchesSearch && matchesDepartment;
+      });
 
     const handleDepartmentChange = (id) => {
         if (id === 'All') {
@@ -210,6 +223,8 @@ export default function Vehicle() {
                         id="search"
                         className="block w-full rounded-full border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
                         placeholder="Search vehicles..."
+                        value = {searchTerm}
+                        onChange = {(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
                 <div className='mb-6'>
