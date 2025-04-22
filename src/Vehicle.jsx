@@ -201,10 +201,6 @@ export default function Vehicle() {
     }, [selectedDepartments]);
 
 
-    const filteredVehicles = vehicles.filter(vehicle =>
-        selectedDepartments.includes('All') || selectedDepartments.includes(vehicle.vehicleDepartment)
-    );
-
     const indexOfLastVehicle = currentPage * itemsPerPage;
     const indexOfFirstVehicle = indexOfLastVehicle - itemsPerPage;
     const currentVehicles = filteredVehicles.slice(indexOfFirstVehicle, indexOfLastVehicle);
