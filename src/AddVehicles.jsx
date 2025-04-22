@@ -9,6 +9,7 @@ import api from './Config/axios';
 import { OrbitProgress } from 'react-loading-indicators';
 import SavedNotification from './SavedNotification';
 import { useNavigate } from 'react-router-dom';
+import { FaFileImage } from "react-icons/fa";
 
 const vehicleMakes = [
   'Ford', 'Chevrolet', 'Toyota', 'Honda', 'Nissan', 'Jeep', 'Hyundai', 'Kia',
@@ -221,6 +222,7 @@ export default function AddVehicles() {
                         name="nwId"
                         type="text"
                         autoComplete="nwId"
+                        placeholder='15-3'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setNWVehicleNo(e.target.value)}
                       />
@@ -236,6 +238,7 @@ export default function AddVehicles() {
                         name="vin"
                         type="text"
                         autoComplete="vin"
+                        placeholder='HGBH41JXMN109186'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setVIN(e.target.value)}
                       />
@@ -322,6 +325,7 @@ export default function AddVehicles() {
                         name="vehicle-model"
                         type="text"
                         autoComplete="car-name"
+                        placeholder='Ford'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setModel(e.target.value)}
                       />
@@ -369,6 +373,7 @@ export default function AddVehicles() {
                         name="vehicle-color"
                         type="text"
                         autoComplete="vehicle-color"
+                        placeholder='White'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setColor(e.target.value)}
                       />
@@ -385,6 +390,7 @@ export default function AddVehicles() {
                         name="miles"
                         type="text"
                         autoComplete="address-level2"
+                        placeholder='2398'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setStartingMileage(e.target.value)}
                       />
@@ -401,6 +407,7 @@ export default function AddVehicles() {
                         name="vehicle-license"
                         type="text"
                         autoComplete="vehicle-license"
+                        placeholder='ED6G8I'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setLicensePlate(e.target.value)}
                       />
@@ -558,9 +565,9 @@ export default function AddVehicles() {
                     </label>
                     <div className="mt-2 flex items-center gap-x-3">
                       {imagePreviewUrl ? (
-                        <img src={imagePreviewUrl} alt="Profile" className="size-24 object-cover object-center" />
+                        <img src={imagePreviewUrl} alt="Profile" className="size-48 object-cover object-center" />
                       ) : (
-                        <UserCircleIcon aria-hidden="true" className="size-48 text-gray-300" />
+                        <FaFileImage aria-hidden="true" className="size-48 text-gray-300" />
                       )}
                       <button
                         type="button"

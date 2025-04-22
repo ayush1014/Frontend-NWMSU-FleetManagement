@@ -6,6 +6,7 @@ import { OrbitProgress } from 'react-loading-indicators';
 import { Datepicker } from "flowbite-react";
 import api from './Config/axios';
 import SavedNotification from './SavedNotification';
+import { FaFileImage } from "react-icons/fa";
 
 export default function EditMaintainence() {
     const [NWVehicleNo, setNWVehicleNo] = useState('');
@@ -127,7 +128,7 @@ export default function EditMaintainence() {
                                                     name="NWVehicleNo"
                                                     type="text"
                                                     autoComplete="given-name"
-                                                    placeholder='Bobby'
+                                                    placeholder='12-2'
                                                     value={NWVehicleNo}
                                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-900 sm:text-sm/6"
                                                     onChange={(e) => setNWVehicleNo(e.target.value)}
@@ -145,7 +146,7 @@ export default function EditMaintainence() {
                                                     name="currentMileage"
                                                     type="text"
                                                     autoComplete="family-name"
-                                                    placeholder='Bearcat'
+                                                    placeholder='20138'
                                                     value={currentMileage}
                                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                                                     onChange={(e) => setCurrentMileage(e.target.value)}
@@ -164,7 +165,7 @@ export default function EditMaintainence() {
                                                         name="maintainenceDescription"
                                                         type="text"
                                                         rows={2}
-                                                        placeholder="bearcat@nwmissouri.edu"
+                                                        placeholder="Oil & Filter Change"
                                                         value={maintainenceDescription}
                                                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                                                         onChange={(e) => setMaintainenceDescription(e.target.value)}
@@ -178,11 +179,12 @@ export default function EditMaintainence() {
                                             </label>
                                             <div className="mt-2">
                                                 <div className="flex items-center rounded-md bg-white outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-green-600 ">
+                                                    <span className="px-3 text-gray-500 text-sm">$</span>
                                                     <input
                                                         id="maintainenceCost"
                                                         name="maintainenceCost"
                                                         type="text"
-                                                        placeholder="bearcat@nwmissouri.edu"
+                                                        placeholder="98"
                                                         value={maintainenceCost}
                                                         className="border-hidden block min-w-0 grow text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6 inline-block bg-white-100 dark:bg-white/10"
                                                         onChange={(e) => setMaintainenceCost(e.target.value)}
@@ -212,7 +214,7 @@ export default function EditMaintainence() {
                                                 {imagePreviewUrl ? (
                                                     <img src={imagePreviewUrl} alt="Profile" className="size-24 rounded-full object-cover object-center" />
                                                 ) : (
-                                                    <UserCircleIcon aria-hidden="true" className="size-12 text-gray-300" />
+                                                    <FaFileImage aria-hidden="true" className="size-24 text-gray-300" />
                                                 )}
                                                 <button
                                                     type="button"
