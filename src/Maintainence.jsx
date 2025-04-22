@@ -19,6 +19,8 @@ export default function Maintenance() {
     const [isLoading, setIsLoading] = useState(false);
     const [role, setRole] = useState('');
     const { user } = useUser();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
 
     useEffect(() => {
         setIsLoading(true)
@@ -40,6 +42,12 @@ export default function Maintenance() {
     const handleAddMaintenenceClick = () => {
         navigate('/add-maintainence');
     };
+
+    const indexOfLastMaintenance = currentPage * itemsPerPage;
+    const indexOfFirstMaintenance = indexOfLastMaintenance - itemsPerPage;
+    const currentMaintenance = maintenance.slice(indexOfFirstMaintenance, indexOfLastMaintenance);
+    const totalPages = Math.ceil(maintenance.length / itemsPerPage);
+
     return (
         <>
             <Navigation />
@@ -187,7 +195,7 @@ export default function Maintenance() {
                                 <h2 className="text-lg font-medium text-gray-900">All Maintenance</h2>
                             </div>
                             <ul role="list" className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
-                                {maintenance.map((maintenance) => (
+                                {currentMaintenance.map((maintenance) => (
                                     <li key={maintenance.maintenanceId}>
                                         <div className="group block" onClick={() => navigate(`/vehicleMaintence/${maintenance.NWVehicleNo}`)}>
                                             <div className="flex items-center px-4 py-5 sm:px-0 sm:py-6 cursor-pointer">
@@ -288,6 +296,36 @@ export default function Maintenance() {
                                     </li>
                                 ))}
                             </ul>
+                            <div className="flex justify-center mt-6 space-x-1 text-sm text-gray-700">
+                                <button
+                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
+                                    className="px-3 py-1 rounded-md hover:bg-gray-100 disabled:text-gray-400"
+                                >
+                                    ← Previous
+                                </button>
+
+                                {Array.from({ length: totalPages }, (_, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setCurrentPage(i + 1)}
+                                        className={`px-3 py-1 border-b-2 ${currentPage === i + 1
+                                            ? 'border-green-600 text-green-600 font-semibold'
+                                            : 'border-transparent text-gray-600'
+                                            }`}
+                                    >
+                                        {i + 1}
+                                    </button>
+                                ))}
+
+                                <button
+                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage === totalPages}
+                                    className="px-3 py-1 rounded-md hover:bg-gray-100 disabled:text-gray-400"
+                                >
+                                    Next →
+                                </button>
+                            </div>
                         </div>)}
                 </main>
             </div>

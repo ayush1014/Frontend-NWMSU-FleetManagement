@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { ChevronLeftIcon, EnvelopeIcon, FunnelIcon, MagnifyingGlassIcon, PhoneIcon, EllipsisVerticalIcon, PencilIcon, TrashIcon, UserPlusIcon, CalendarDaysIcon, KeyIcon } from '@heroicons/react/20/solid'
+import { ChevronLeftIcon, EnvelopeIcon, FunnelIcon, MagnifyingGlassIcon, PhoneIcon, EllipsisVerticalIcon, PencilIcon, TrashIcon, UserPlusIcon, CalendarDaysIcon, KeyIcon, WrenchScrewdriverIcon } from '@heroicons/react/20/solid'
 import Navigation from './Navigation'
 import api from './Config/axios'
 import { useNavigate } from 'react-router-dom'
@@ -8,6 +8,7 @@ import bearcat from './assets/bearcat.webp'
 import { FaGasPump } from 'react-icons/fa'
 import { OrbitProgress } from 'react-loading-indicators'
 import { useUser } from './AppContext/userContext'
+import { HR } from 'flowbite-react';
 
 export default function UserTemp() {
     const [people, setPeople] = useState([]);
@@ -19,6 +20,9 @@ export default function UserTemp() {
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useUser();
     const [role, setRole] = useState();
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [availableYears, setAvailableYears] = useState([]);
+
 
 
     useEffect(() => {
@@ -53,12 +57,10 @@ export default function UserTemp() {
             }
         };
 
-        // Add event listeners
         document.addEventListener('mousedown', handleClickOutside);
         document.addEventListener('keydown', handleKeyDown);
 
         return () => {
-            // Clean up
             document.removeEventListener('mousedown', handleClickOutside);
             document.removeEventListener('keydown', handleKeyDown);
         };
@@ -80,17 +82,38 @@ export default function UserTemp() {
 
 
     const handleSelectEmail = (email) => {
-        console.log('clicked', email)
-        setSelectedEmail(email);
         const selectedUser = people.find(person => person.email === email);
+        setSelectedEmail(email);
+        const yearsSet = new Set();
+        selectedUser.Refuelings?.forEach(r => yearsSet.add(new Date(r.date).getFullYear()));
+        selectedUser.Maintainences?.forEach(m => yearsSet.add(new Date(m.date).getFullYear()));
+        yearsSet.add(new Date().getFullYear());
+        const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
         const combinedActivities = [...(selectedUser.Maintainences || []), ...(selectedUser.Refuelings || [])];
         combinedActivities.sort((a, b) => new Date(b.date) - new Date(a.date));
         setActivity(combinedActivities);
+        setAvailableYears(sortedYears);
+        setSelectedYear(new Date().getFullYear());
+    };
 
-    }
     console.log(activity)
 
     const selectedUser = people.find(person => person.email === selectedEmail);
+
+    console.log(selectedUser)
+
+    const filteredActivity = activity.filter(item => {
+        return new Date(item.date).getFullYear() === selectedYear;
+    });
+
+    const filteredRefuelings = selectedUser?.Refuelings?.filter(r =>
+        new Date(r.date).getFullYear() === selectedYear
+    ) || [];
+
+    const filteredMaintenences = selectedUser?.Maintainences?.filter(m =>
+        new Date(m.date).getFullYear() === selectedYear
+    ) || [];
+
 
     const profile = {
         imageUrl:
@@ -156,20 +179,13 @@ export default function UserTemp() {
                                                 <div className="mt-6 min-w-0 flex-1 2xl:block">
                                                 </div>
                                                 <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-x-4 sm:space-y-0">
-                                                    <button
-                                                        type="button"
+                                                    <a
+                                                        href={`mailto:${selectedUser?.email}`}
                                                         className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                                                     >
                                                         <EnvelopeIcon aria-hidden="true" className="-ml-0.5 size-5 text-gray-400" />
-                                                        Message
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                                    >
-                                                        <PhoneIcon aria-hidden="true" className="-ml-0.5 size-5 text-gray-400" />
-                                                        Call
-                                                    </button>
+                                                        Email
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -190,19 +206,37 @@ export default function UserTemp() {
                                         ))}
                                     </dl>
 
+                                    {availableYears.length > 0 && (selectedUser.Maintainences.length > 0 || selectedUser.Refuelings.length > 0) ? (
+                                        <div className="flex justify-end mr-6 mt-4">
+                                            <label className="text-base font-medium mr-2 mt-1">Select <span className='text-green-700 font-semibold text-xl'>Year:</span></label>
+                                            <select
+                                                className="border border-2 border-green-700 px-3 py-1 rounded mb-6 "
+                                                value={selectedYear}
+                                                onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                                            >
+                                                {availableYears.map((year) => (
+                                                    <option key={year} value={year}>{year}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (<div>
+
+                                    </div>)}
+
+
                                     <div>
-                                        {activity > [0] ? (
-                                            <h2 className="text-lg font-semibold text-gray-900 mt-12">
+                                        {filteredActivity > [0] ? (
+                                            <h2 className="text-xl font-semibold text-gray-700 mt-12">
                                                 Activity
                                             </h2>) :
                                             (<h2 className="text-sm font-semibold text-gray-900 mt-12">
-                                                No Refueling & Maintenence recorded on <span className='text-green-900 text-bold text-xl'>{selectedUser.firstName} {selectedUser.lastName}</span>
+                                                No Refueling & Maintenence recorded for <span className='text-green-900 text-bold text-xl'>{selectedUser.firstName} {selectedUser.lastName} in {selectedYear}</span>
                                             </h2>)}
                                         <ul role="list" className="mt-6 space-y-6">
-                                            {activity.map((item, idx) => (
+                                            {filteredActivity.map((item, idx) => (
                                                 <li key={idx} className="relative flex gap-x-4 lg:px-24">
                                                     <div
-                                                        className={`absolute left-4 lg:left-28 top-0 flex w-6 justify-center ${idx === activity.length - 1 ? 'h-6' : '-bottom-6'
+                                                        className={`absolute left-4 lg:left-28 top-0 flex w-6 justify-center ${idx === filteredActivity.length - 1 ? 'h-6' : '-bottom-6'
                                                             }`}
                                                     >
                                                         <div className="w-px bg-gray-200" />
@@ -231,17 +265,18 @@ export default function UserTemp() {
                                                 </li>
                                             ))}
                                         </ul>
+                                        <HR />
 
-                                        {selectedUser.Refuelings > [0] ? (<div className="relative flex justify-center">
-                                            <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900"><span className='text-base font-green-700 text-semibold'>{selectedUser.firstName} Refuelings in 2025</span> </span>
+                                        {filteredRefuelings > [0] ? (<div className="relative flex ml-8 mt-8">
+                                            <span className="bg-white px-3 my-6 text-xl font-semibold text-gray-700"><span className='text-xl text-gray-700 text-semibold'>{selectedUser.firstName}'s</span> Refuelings in <span className='text-xxl font-semibold text-green-700'>{selectedYear}</span></span>
                                         </div>) : (<div className="relative flex justify-center">
-                                            <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900">No Refueling & Maintenence Updates for {selectedUser.firstName}</span>
+                                            <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900">No Refueling Updates for {selectedUser.firstName}</span>
                                         </div>)}
                                         <ul
                                             role="list"
                                             className="mt-5 grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0 md:grid-cols-2 md:divide-y-0 md:gap-1"
                                         >
-                                            {selectedUser.Refuelings
+                                            {filteredRefuelings
                                                 .sort((a, b) => new Date(b.date) - new Date(a.date))
                                                 .slice(0, 4)
                                                 .map((refueling) => (
@@ -314,14 +349,14 @@ export default function UserTemp() {
                                                 ))}
                                         </ul>
 
-                                        {selectedUser.Maintainences > [0] ? (<div className="relative flex justify-center">
-                                            <span className="bg-white px-3 my-8 text-base font-semibold text-gray-900"><span className='text-base font-green-700 text-semibold'>{selectedUser.firstName} Maintenence in 202</span>5</span>
+                                        {filteredMaintenences > [0] ? (<div className="relative flex mt-16 ml-8">
+                                            <span className="bg-white px-3 my-6 text-xl font-semibold text-gray-700"><span className='text-xl text-gray-700 text-semibold'>{selectedUser.firstName}'s </span> Maintenance in <span className='text-xxl font-semibold text-green-700'>{selectedYear}</span></span>
                                         </div>) : (" ")}
                                         <ul
                                             role="list"
                                             className="mt-5 grid grid-cols-1 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0 md:grid-cols-2 md:divide-y-0 md:gap-4"
                                         >
-                                            {selectedUser.Maintainences
+                                            {filteredMaintenences
                                                 .sort((a, b) => new Date(b.date) - new Date(a.date))
                                                 .slice(0, 4)
                                                 .map((maintenence) => (
@@ -370,9 +405,9 @@ export default function UserTemp() {
                                                                 <div className="mt-4 flex w-full flex-none gap-x-4 px-6">
                                                                     <dt className="flex-none">
                                                                         <span className="sr-only">Status</span>
-                                                                        <FaGasPump aria-hidden="true" className="h-6 w-6 text-gray-400" />
+                                                                        <WrenchScrewdriverIcon aria-hidden="true" className="h-6 w-6 text-gray-400" />
                                                                     </dt>
-                                                                    <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Fuel Added</span> {maintenence.fuelAdded} Gallons</dd>
+                                                                    <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Description</span> {maintenence.maintainenceDescription}</dd>
                                                                 </div>
                                                             </dl>
                                                             <div className="mt-6 border-t border-gray-900/5 px-6 py-6">

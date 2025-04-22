@@ -56,7 +56,6 @@ export default function VehicleProfile() {
     const { NWVehicleNo } = useParams();
     const [maintenenceCost, setMaintenanceCost] = useState('')
     const [refuelingCost, setRefuelingCost] = useState('')
-    const [curYear, setCurYear] = useState('')
     const [activity, setActivity] = useState([])
     const [downloadProgress, setDownloadProgress] = useState(false);
     const navigate = useNavigate();

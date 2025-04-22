@@ -23,6 +23,7 @@ import RefuelingChart from './RefuelingCharts';
 import EditVehicles from './VehicleEdit';
 import EditRefueling from './EditRefueling';
 import EditMaintainence from './EditMaintenance';
+import UserProfile from './userProfile';
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
           <Route path='/edit-vehicle/:NWVehicleNo' element={<ProtectedRoute><EditVehicles/></ProtectedRoute>}/>
           <Route path='/edit-refueling/:refuelingId' element={<ProtectedRoute><EditRefueling/></ProtectedRoute>}/>
           <Route path='/edit-maintenance/:maintenanceId' element={<ProtectedRoute><EditMaintainence/></ProtectedRoute>}/>
+          <Route path='/user-profile/:email' element={<ProtectedRoute><UserProfile/></ProtectedRoute>}/>
       </Routes>
 
     </Router>
