@@ -11,14 +11,20 @@ import { useNavigate } from 'react-router-dom';
 import { OrbitProgress } from 'react-loading-indicators'
 import { UserCircleIcon, TruckIcon, PlusCircleIcon, WrenchScrewdriverIcon } from '@heroicons/react/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { useUser } from './AppContext/userContext';
 
 export default function Maintenance() {
     const [maintenance, setMaintenance] = useState([]);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const [role, setRole] = useState('');
+    const { user } = useUser();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
 
     useEffect(() => {
         setIsLoading(true)
+        user ? setRole(user.role) : null;
         const fetchMaintenance = async () => {
             try {
                 const response = await api.get('/showMaintainence');
@@ -36,6 +42,12 @@ export default function Maintenance() {
     const handleAddMaintenenceClick = () => {
         navigate('/add-maintainence');
     };
+
+    const indexOfLastMaintenance = currentPage * itemsPerPage;
+    const indexOfFirstMaintenance = indexOfLastMaintenance - itemsPerPage;
+    const currentMaintenance = maintenance.slice(indexOfFirstMaintenance, indexOfLastMaintenance);
+    const totalPages = Math.ceil(maintenance.length / itemsPerPage);
+
     return (
         <>
             <Navigation />
@@ -120,7 +132,7 @@ export default function Maintenance() {
 
                                                     <div>
                                                         <div>
-                                                            <div className="relative z-10 ml-4">
+                                                            {role === 'Admin' ? (<div className="relative z-10 ml-4">
                                                                 <Menu as="div" className="relative inline-block text-left">
                                                                     <Menu.Button
                                                                         onClick={(e) => e.stopPropagation()}
@@ -164,12 +176,12 @@ export default function Maintenance() {
                                                                         </div>
                                                                     </Menu.Items>
                                                                 </Menu>
-                                                            </div>
+                                                            </div>) : (
+                                                                <ChevronRightIcon
+                                                                    aria-hidden="true"
+                                                                    className="size-5 text-gray-400 group-hover:text-gray-700"
+                                                                />)}
                                                         </div>
-                                                        {/* <ChevronRightIcon
-                                                            aria-hidden="true"
-                                                            className="size-5 text-gray-400 group-hover:text-gray-700"
-                                                        /> */}
                                                     </div>
                                                 </div>
 
@@ -183,7 +195,7 @@ export default function Maintenance() {
                                 <h2 className="text-lg font-medium text-gray-900">All Maintenance</h2>
                             </div>
                             <ul role="list" className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
-                                {maintenance.map((maintenance) => (
+                                {currentMaintenance.map((maintenance) => (
                                     <li key={maintenance.maintenanceId}>
                                         <div className="group block" onClick={() => navigate(`/vehicleMaintence/${maintenance.NWVehicleNo}`)}>
                                             <div className="flex items-center px-4 py-5 sm:px-0 sm:py-6 cursor-pointer">
@@ -225,61 +237,95 @@ export default function Maintenance() {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div className="relative z-10 ml-4">
-                                                        <Menu as="div" className="relative inline-block text-left">
-                                                            <Menu.Button
-                                                                onClick={(e) => e.stopPropagation()}
-                                                                className="inline-flex w-8 h-8 items-center justify-center rounded-full bg-white shadow hover:bg-gray-100 focus:outline-none"
-                                                            >
-                                                                <svg className="h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12h.01M12 12h.01M18 12h.01" />
-                                                                </svg>
-                                                            </Menu.Button>
-                                                            <Menu.Items className="absolute right-0 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                                                <div className="py-1">
-                                                                    <Menu.Item>
-                                                                        {({ active }) => (
-                                                                            <button
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                    navigate(`/edit-maintenance/${maintenance.maintainenceId}`);
-                                                                                }}
-                                                                                className={`${active ? 'bg-gray-100' : ''
-                                                                                    } flex w-full items-center px-4 py-2 text-sm text-gray-700`}
-                                                                            >
-                                                                                Edit
-                                                                            </button>
-                                                                        )}
-                                                                    </Menu.Item>
-                                                                    <Menu.Item>
-                                                                        {({ active }) => (
-                                                                            <button
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                    // Replace with your delete logic
-                                                                                    console.log('Delete maintenance:', maintenance.maintainenceId);
-                                                                                }}
-                                                                                className={`${active ? 'bg-gray-100' : ''
-                                                                                    } flex w-full items-center px-4 py-2 text-sm text-red-600`}
-                                                                            >
-                                                                                Delete
-                                                                            </button>
-                                                                        )}
-                                                                    </Menu.Item>
-                                                                </div>
-                                                            </Menu.Items>
-                                                        </Menu>
+                                                    <div>
+                                                        <div>
+                                                            {role === 'Admin' ? (<div className="relative z-10 ml-4">
+                                                                <Menu as="div" className="relative inline-block text-left">
+                                                                    <Menu.Button
+                                                                        onClick={(e) => e.stopPropagation()}
+                                                                        className="inline-flex w-8 h-8 items-center justify-center rounded-full bg-white shadow hover:bg-gray-100 focus:outline-none"
+                                                                    >
+                                                                        <svg className="h-5 w-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12h.01M12 12h.01M18 12h.01" />
+                                                                        </svg>
+                                                                    </Menu.Button>
+                                                                    <Menu.Items className="absolute right-0 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                                        <div className="py-1">
+                                                                            <Menu.Item>
+                                                                                {({ active }) => (
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            navigate(`/edit-maintenance/${maintenance.maintainenceId}`);
+                                                                                        }}
+                                                                                        className={`${active ? 'bg-gray-100' : ''
+                                                                                            } flex w-full items-center px-4 py-2 text-sm text-gray-700`}
+                                                                                    >
+                                                                                        Edit
+                                                                                    </button>
+                                                                                )}
+                                                                            </Menu.Item>
+                                                                            <Menu.Item>
+                                                                                {({ active }) => (
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            // Replace with your delete logic
+                                                                                            console.log('Delete maintenance:', maintenance.maintainenceId);
+                                                                                        }}
+                                                                                        className={`${active ? 'bg-gray-100' : ''
+                                                                                            } flex w-full items-center px-4 py-2 text-sm text-red-600`}
+                                                                                    >
+                                                                                        Delete
+                                                                                    </button>
+                                                                                )}
+                                                                            </Menu.Item>
+                                                                        </div>
+                                                                    </Menu.Items>
+                                                                </Menu>
+                                                            </div>) : (
+                                                                <ChevronRightIcon
+                                                                    aria-hidden="true"
+                                                                    className="size-5 text-gray-400 group-hover:text-gray-700"
+                                                                />)}
+                                                        </div>
                                                     </div>
-                                                    {/* <ChevronRightIcon
-                                                        aria-hidden="true"
-                                                        className="size-5 text-gray-400 group-hover:text-gray-700"
-                                                    /> */}
                                                 </div>
                                             </div>
                                         </div>
                                     </li>
                                 ))}
                             </ul>
+                            <div className="flex justify-center mt-6 space-x-1 text-sm text-gray-700">
+                                <button
+                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
+                                    className="px-3 py-1 rounded-md hover:bg-gray-100 disabled:text-gray-400"
+                                >
+                                    ← Previous
+                                </button>
+
+                                {Array.from({ length: totalPages }, (_, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setCurrentPage(i + 1)}
+                                        className={`px-3 py-1 border-b-2 ${currentPage === i + 1
+                                            ? 'border-green-600 text-green-600 font-semibold'
+                                            : 'border-transparent text-gray-600'
+                                            }`}
+                                    >
+                                        {i + 1}
+                                    </button>
+                                ))}
+
+                                <button
+                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage === totalPages}
+                                    className="px-3 py-1 rounded-md hover:bg-gray-100 disabled:text-gray-400"
+                                >
+                                    Next →
+                                </button>
+                            </div>
                         </div>)}
                 </main>
             </div>

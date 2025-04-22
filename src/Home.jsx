@@ -60,14 +60,14 @@ export default function Home() {
                     title: 'Generate, Update & Report Analytics',
                     role: 'Admin',
                     imageUrl: HiDocumentReport,
-                    href: '#'
+                    href: '/reports'
                 },
                 {
                     name: 'Settings',
                     title: 'Update Password, User permissions & more',
                     role: 'Admin',
                     imageUrl: FcSettings,
-                    href: '#'
+                    href: `/edit-user/${user.email}`
                 },
             ]);
         } else {
@@ -104,34 +104,18 @@ export default function Home() {
         }
     }, [role]);
 
-    // useEffect(() => {
-    //     try {
-    //         const data = sessionStorage.getItem('userData');
-    //         const userData = JSON.parse(data)
-
-    //         if (userData) {
-
-    //         } else {
-    //             console.log('Internal Server Error, Error fetching user information')
-    //         }
-
-    //     } catch (error) {
-    //         console.log('error fetching data from the session storage: ', error)
-    //     }
-    // })
-
     return (
         <div className='min-h-screen bg-gray-200'>
             <Navigation />
             <main className='lg:pl-[25%] lg:pr-[4%] mt-[6%] pb-[5%]'>
-                {role === 'Admin' ?(<ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 mt-10 cursor-pointer">
+                {role === 'Admin' ?(<ul role="list" className=" p-2 gap-2 md:pd-0 grid grid-cols-2 md:gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 mt-10 cursor-pointer">
                     {content.map((grid) => (
                         <li
                             key={grid.name}
-                            className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow"
+                            className="col-span-1 flex flex-col divide-y divide-gray-200 md:rounded-lg bg-white text-center shadow"
                             onClick={() => navigate(grid.href)}
                         >
-                            <div className="flex flex-1 flex-col p-8 ">
+                            <div className="flex flex-1 flex-col p-2 md:p-8 ">
                                 <div className="mx-auto size-28 shrink-0 rounded-full">
                                     <grid.imageUrl
                                         className="size-28 text-gray-400"

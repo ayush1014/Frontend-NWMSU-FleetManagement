@@ -7,6 +7,8 @@ import api from './Config/axios'
 import { useParams } from 'react-router-dom';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom';
+import bearcat from './assets/bearcat.webp'
+import { useUser } from './AppContext/userContext';
 
 export default function EditUser() {
     const [selectedOption, setSelectedOption] = useState('');
@@ -30,6 +32,7 @@ export default function EditUser() {
     const [passwordMatch, setPasswordMatch] = useState();
     const [openPassChange, setOpenPassChange] = useState(false);
     const navigate = useNavigate();
+    const {user} = useUser();
 
 
     useEffect(() => {
@@ -253,7 +256,7 @@ export default function EditUser() {
                                             {imagePreviewUrl ? (
                                                 <img src={imagePreviewUrl} alt="Profile" className="size-24 rounded-full object-cover object-center" />
                                             ) : (
-                                                <UserCircleIcon aria-hidden="true" className="size-12 text-gray-300" />
+                                                <img src={bearcat} alt="Profile" className="size-24 rounded-full object-cover object-center" />
                                             )}
                                             <button
                                                 type="button"
@@ -299,7 +302,8 @@ export default function EditUser() {
                                 </div>
                                 <div className="max-w-2xl space-y-10 md:col-span-2 mt-10">
                                     <fieldset>
-                                        <legend className="text-sm/6 font-semibold text-gray-900">User Access</legend>
+                                    {user.role === 'Admin' ?(
+                                        <><legend className="text-sm/6 font-semibold text-gray-900">User Access</legend>
                                         <div className="mt-6 space-y-6">
                                             {/* Admin Checkbox */}
                                             <div className="flex gap-3">
@@ -375,7 +379,7 @@ export default function EditUser() {
                                                     </p>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div></>):(<div> </div>)}
                                         <button
                                             type="button"
                                             className="rounded-md bg-green-50 px-3.5 py-2.5 text-sm font-semibold text-green-600 shadow-sm hover:bg-green-100 mt-8 ml-8"

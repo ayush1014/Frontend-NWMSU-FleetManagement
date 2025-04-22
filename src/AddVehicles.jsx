@@ -9,6 +9,7 @@ import api from './Config/axios';
 import { OrbitProgress } from 'react-loading-indicators';
 import SavedNotification from './SavedNotification';
 import { useNavigate } from 'react-router-dom';
+import { FaFileImage } from "react-icons/fa";
 
 const vehicleMakes = [
   'Ford', 'Chevrolet', 'Toyota', 'Honda', 'Nissan', 'Jeep', 'Hyundai', 'Kia',
@@ -77,6 +78,7 @@ export default function AddVehicles() {
   const [licensePlate, setLicensePlate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [noti, setNoti] = useState(false)
+  const [notiError, setNotiError] = useState(false)
   const [data, setData] = useState([])
   const navigate = useNavigate();
 
@@ -135,8 +137,9 @@ export default function AddVehicles() {
       // document.location.reload();
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        alert('Vehicle already exists');
-        setIsLoading(false)
+        setIsLoading(false);
+        setNotiError(true);
+        setData({ error: 'NW Vehicle ID already exists. Please use a unique ID.' });
       } else {
         console.error('Technical error while submitting the add vehicle form:', error);
         alert('An error occurred');
@@ -195,6 +198,14 @@ export default function AddVehicles() {
         ) : (
           <form>
             {noti ? (<div><SavedNotification data={data} type="Vehicle" /></div>) : (<></>)}
+            {notiError && data?.error ? (
+              <div className="rounded-md bg-red-50 p-4 mb-4 border border-red-200">
+                <p className="text-sm text-red-800">{data.error}</p>
+              </div>
+            ) : noti ? (
+              <SavedNotification data={data} type="Vehicle" />
+            ) : null}
+
             <div className="space-y-12">
               <div className="border-b border-gray-900/10 pb-12">
                 <h2 className="text-base/7 font-semibold text-gray-900">Vehicle Information</h2>
@@ -211,6 +222,7 @@ export default function AddVehicles() {
                         name="nwId"
                         type="text"
                         autoComplete="nwId"
+                        placeholder='15-3'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setNWVehicleNo(e.target.value)}
                       />
@@ -226,6 +238,7 @@ export default function AddVehicles() {
                         name="vin"
                         type="text"
                         autoComplete="vin"
+                        placeholder='HGBH41JXMN109186'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setVIN(e.target.value)}
                       />
@@ -312,6 +325,7 @@ export default function AddVehicles() {
                         name="vehicle-model"
                         type="text"
                         autoComplete="car-name"
+                        placeholder='Ford'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setModel(e.target.value)}
                       />
@@ -359,6 +373,7 @@ export default function AddVehicles() {
                         name="vehicle-color"
                         type="text"
                         autoComplete="vehicle-color"
+                        placeholder='White'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setColor(e.target.value)}
                       />
@@ -375,6 +390,7 @@ export default function AddVehicles() {
                         name="miles"
                         type="text"
                         autoComplete="address-level2"
+                        placeholder='2398'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setStartingMileage(e.target.value)}
                       />
@@ -391,6 +407,7 @@ export default function AddVehicles() {
                         name="vehicle-license"
                         type="text"
                         autoComplete="vehicle-license"
+                        placeholder='ED6G8I'
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                         onChange={(e) => setLicensePlate(e.target.value)}
                       />
@@ -428,7 +445,7 @@ export default function AddVehicles() {
                         className="block w-full overflow-hidden rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm"
                         defaultValue="Null"
                         onChange={(e) => setVehicleDepartment(e.target.value)}
-                      > 
+                      >
                         <option value="Null">Select the department</option>
                         <option value="Admissions - Recruiters">Admissions - Recruiters</option>
                         <option value="Ag Transportation">Ag Transportation</option>
@@ -537,7 +554,7 @@ export default function AddVehicles() {
                         <option value="University Archives">University Archives</option>
                         <option value="University Police Department">University Police Department</option>
                         <option value="University Marketing & Communication">University Marketing & Communication</option> */}
-                        
+
                       </select>
                     </div>
                   </div>
@@ -548,9 +565,9 @@ export default function AddVehicles() {
                     </label>
                     <div className="mt-2 flex items-center gap-x-3">
                       {imagePreviewUrl ? (
-                        <img src={imagePreviewUrl} alt="Profile" className="size-24 object-cover object-center" />
+                        <img src={imagePreviewUrl} alt="Profile" className="size-48 object-cover object-center" />
                       ) : (
-                        <UserCircleIcon aria-hidden="true" className="size-48 text-gray-300" />
+                        <FaFileImage aria-hidden="true" className="size-48 text-gray-300" />
                       )}
                       <button
                         type="button"
@@ -580,7 +597,7 @@ export default function AddVehicles() {
             </div>
 
             <div className="mt-6 pb-6 flex items-center justify-end gap-x-[5%] md:gap-x-[35%] lg:gap-x-[23%] ">
-              <button onClick={()=>navigate('/Vehicles')} type="button" className="text-sm/6 font-semibold text-gray-900 mt-4">
+              <button onClick={() => navigate('/Vehicles')} type="button" className="text-sm/6 font-semibold text-gray-900 mt-4">
                 Cancel
               </button>
               <div className='mb-6'>

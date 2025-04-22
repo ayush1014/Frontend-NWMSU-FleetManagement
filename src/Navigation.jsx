@@ -28,24 +28,40 @@ import Home from './Home'
 import nwmsu_logo from './assets/nwmsu-logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from './AppContext/userContext'
+import bearcat from './assets/bearcat.webp'
 
 export default function Navigation() {
     const navigate = useNavigate();
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { user, logout } = useUser();
+    const [role, setRole] = useState('');
 
-    const navigation = [
+    useEffect(()=>{
+        if(user){
+            setRole(user.role);
+        }
+    },[user])
+
+    let navigation = []
+
+    if(role === 'Admin'){navigation = [
         { name: 'Dashboard', href: '/home', icon: HomeIcon, current: location.pathname ==='/home' },
         { name: 'Users', href: '/user-temp', icon: UsersIcon, current: location.pathname === '/user-temp' },
         { name: 'Vehicles', href: '/Vehicles', icon: TruckIcon, current: location.pathname === '/Vehicles' },
         { name: 'Refueling', href: '/refueling', icon: FaGasPump, current: location.pathname === '/refueling' },
         { name: 'Maintainence', href: '/maintenance', icon: WrenchScrewdriverIcon, current: location.pathname === '/maintenance' },
         { name: 'Reports', href: '/reports', icon: ChartPieIcon, current: location.pathname === '/reports' },
-    ];
+    ]}else{navigation = [
+        { name: 'Dashboard', href: '/home', icon: HomeIcon, current: location.pathname ==='/home' },
+        { name: 'Users', href: '/user-temp', icon: UsersIcon, current: location.pathname === '/user-temp' },
+        { name: 'Vehicles', href: '/Vehicles', icon: TruckIcon, current: location.pathname === '/Vehicles' },
+        { name: 'Refueling', href: '/refueling', icon: FaGasPump, current: location.pathname === '/refueling' },
+        { name: 'Maintainence', href: '/maintenance', icon: WrenchScrewdriverIcon, current: location.pathname === '/maintenance' },
+    ]}
 
     const userNavigation = [
-        { name: 'Your profile', href: '/user-profile' },
+        { name: 'Your profile', href: `/user-profile/${user.email}` },
         { name: 'Sign out', action: 'logout', href: '/' },
     ];
 
@@ -131,7 +147,7 @@ export default function Navigation() {
                                             </li>
                                             <li className="mt-auto">
                                                 <a
-                                                    href="#"
+                                                    href={`/edit-user/${user.email}`}
                                                     className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white"
                                                 >
                                                     <Cog6ToothIcon aria-hidden="true" className="size-6 shrink-0" />
@@ -151,7 +167,7 @@ export default function Navigation() {
                         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-green-900 px-6 pb-4">
                             <div className="flex h-16 shrink-0 items-center">
                                 <img
-                                    alt="Your Company"
+                                    alt="NWMSU logo"
                                     src={nwmsu_logo}
                                     className="h-8 w-auto"
                                 />
@@ -180,7 +196,7 @@ export default function Navigation() {
                                     </li>
                                     <li className="mt-auto">
                                         <a
-                                            href="#"
+                                            href={`/edit-user/${user.email}`}
                                             className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white"
                                         >
                                             <Cog6ToothIcon aria-hidden="true" className="size-6 shrink-0" />
@@ -204,21 +220,13 @@ export default function Navigation() {
  
                             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                                 <div className="flex items-center gap-x-4 lg:gap-x-6">
-                                    <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-                                        <span className="sr-only">View notifications</span>
-                                        <BellIcon aria-hidden="true" className="size-6" />
-                                    </button>
- 
-                                    {/* Separator */}
-                                    <div aria-hidden="true" className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" />
- 
                                     {/* Profile dropdown */}
                                     <Menu as="div" className="relative">
                                         <MenuButton className="-m-1.5 flex items-center p-1.5">
                                             <span className="sr-only">Open user menu</span>
                                             <img
                                                 alt=""
-                                                src = {user.profile_pic}
+                                                src = {user.profile_pic || bearcat}
                                                 className="size-8 rounded-full bg-gray-50 object-cover object-center"
                                             />
                                             <span className="hidden lg:flex lg:items-center">

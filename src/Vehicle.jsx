@@ -9,6 +9,7 @@ import api from './Config/axios';
 import { HR } from 'flowbite-react';
 import noPreview from './assets/noPreview.png'
 import { OrbitProgress } from 'react-loading-indicators'
+import { useUser } from './AppContext/userContext';
 
 
 const departmentOptions = [
@@ -133,6 +134,12 @@ export default function Vehicle() {
     const [filterSelected, setFilterSelected] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [role, setRole] = useState('');
+    const { user } = useUser();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 12;
+
+
 
 
     const handleAddVehicleClick = () => {
@@ -140,8 +147,9 @@ export default function Vehicle() {
     };
 
     useEffect(() => {
+        setIsLoading(true)
+        user ? setRole(user.role) : null;
         const fetchVehicles = async () => {
-            setIsLoading(true)
             try {
                 const response = await api.get('/vehicles');
                 setVehicles(response.data);
@@ -171,6 +179,7 @@ export default function Vehicle() {
         fetchRecentVehicles()
     }, []);
 
+
     const filteredVehicles = vehicles.filter(vehicle => {
         const term = searchTerm.trim().toLowerCase();
       
@@ -186,6 +195,20 @@ export default function Vehicle() {
       
         return matchesSearch && matchesDepartment;
       });
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedDepartments]);
+
+
+    const filteredVehicles = vehicles.filter(vehicle =>
+        selectedDepartments.includes('All') || selectedDepartments.includes(vehicle.vehicleDepartment)
+    );
+
+    const indexOfLastVehicle = currentPage * itemsPerPage;
+    const indexOfFirstVehicle = indexOfLastVehicle - itemsPerPage;
+    const currentVehicles = filteredVehicles.slice(indexOfFirstVehicle, indexOfLastVehicle);
+    const totalPages = Math.ceil(filteredVehicles.length / itemsPerPage);
 
     const handleDepartmentChange = (id) => {
         if (id === 'All') {
@@ -227,7 +250,7 @@ export default function Vehicle() {
                         onChange = {(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <div className='mb-6'>
+                {role === 'Admin' ? (<div className='mb-6'>
                     <button
                         type="button"
                         className="absolute right-[100px] rounded-md bg-green-100 px-3.5 py-2.5 text-base font-semibold text-green-800 shadow-sm hover:bg-green-100"
@@ -243,7 +266,7 @@ export default function Vehicle() {
                             </span>
                         </div>
                     </button>
-                </div>
+                </div>) : (<div></div>)}
                 <div className="relative mt-24">
                     <div aria-hidden="true" className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-gray-300" />
@@ -263,7 +286,7 @@ export default function Vehicle() {
                             <div className="group relative overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-green-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
 
                                 {/* Three-dot Menu */}
-                                <Menu as="div" className="absolute top-2 right-2 z-10 text-left">
+                                {role === 'Admin' ? (<Menu as="div" className="absolute top-2 right-2 z-10 text-left">
                                     <MenuButton
                                         className="inline-flex justify-center w-8 h-8 items-center bg-white bg-opacity-70 rounded-full shadow hover:bg-opacity-100 focus:outline-none"
                                         onClick={(e) => e.stopPropagation()}
@@ -295,7 +318,7 @@ export default function Vehicle() {
                                             </MenuItem>
                                         </div>
                                     </MenuItems>
-                                </Menu>
+                                </Menu>) : <div></div>}
 
 
                                 {/* Vehicle Image */}
@@ -361,12 +384,12 @@ export default function Vehicle() {
                         <OrbitProgress color={["#031a03", "#094709", "#0e750e", "#13a313"]} />
                     </div>
                 ) : (<ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-2 pt-8">
-                    {filteredVehicles.map((vehicle) => (
+                    {currentVehicles.map((vehicle) => (
                         <li key={vehicle.NWVehicleNo} className="relative">
                             <div className="group relative overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-green-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100" onClick={() => navigate(`/vehicle-profile/${vehicle.NWVehicleNo}`)}>
 
                                 {/* Three-dot Menu */}
-                                <Menu as="div" className="absolute top-2 right-2 z-10 text-left">
+                                {role === 'Admin' ? (<Menu as="div" className="absolute top-2 right-2 z-10 text-left">
                                     <MenuButton
                                         className="inline-flex justify-center w-8 h-8 items-center bg-white bg-opacity-70 rounded-full shadow hover:bg-opacity-100 focus:outline-none"
                                         onClick={(e) => e.stopPropagation()}
@@ -398,7 +421,7 @@ export default function Vehicle() {
                                             </MenuItem>
                                         </div>
                                     </MenuItems>
-                                </Menu>
+                                </Menu>) : <div></div>}
 
 
                                 {/* Vehicle Image */}
@@ -421,6 +444,38 @@ export default function Vehicle() {
                         </li>
                     ))}
                 </ul>)}
+
+                <div className="flex justify-center mt-10 space-x-1 text-sm font-medium text-gray-700">
+                    <button
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        className="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-600 hover:text-green-700"
+                        disabled={currentPage === 1}
+                    >
+                        ← Previous
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => setCurrentPage(i + 1)}
+                            className={`relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold ${currentPage === i + 1
+                                    ? 'text-green-700 border-b-2 border-green-700'
+                                    : 'text-gray-500 hover:text-green-600'
+                                }`}
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+
+                    <button
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                        className="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-600 hover:text-green-700"
+                        disabled={currentPage === totalPages}
+                    >
+                        Next →
+                    </button>
+                </div>
+
 
                 <HR />
             </main>

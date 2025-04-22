@@ -10,6 +10,7 @@ import { OrbitProgress } from 'react-loading-indicators';
 import SavedNotification from './SavedNotification';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { FaFileImage } from "react-icons/fa";
 
 export default function EditRefueling() {
     const [NWVehicleNo, setNWVehicleNo] = useState('');
@@ -42,7 +43,7 @@ export default function EditRefueling() {
                 const correctDate = new Date(data.date);
                 correctDate.setMinutes(correctDate.getMinutes() + correctDate.getTimezoneOffset());
                 setDate(correctDate);
-                
+
             } catch (error) {
                 console.error('Error fetching refueling details:', error);
             }
@@ -55,7 +56,7 @@ export default function EditRefueling() {
     const handleAddRefuelingSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(true);
-        
+
         const formData = new FormData();
         formData.append('NWVehicleNo', NWVehicleNo);
         formData.append('currentMileage', currentMileage);
@@ -145,7 +146,7 @@ export default function EditRefueling() {
                                                     name="NWVehicleNo"
                                                     type="text"
                                                     autoComplete="given-name"
-                                                    placeholder='Bobby'
+                                                    placeholder='15-3'
                                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-900 sm:text-sm/6"
                                                     value={NWVehicleNo}
                                                     onChange={(e) => setNWVehicleNo(e.target.value)}
@@ -164,7 +165,7 @@ export default function EditRefueling() {
                                                     name="currentMileage"
                                                     type="text"
                                                     autoComplete="family-name"
-                                                    placeholder='Bearcat'
+                                                    placeholder='32949'
                                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                                                     value={currentMileage}
                                                     onChange={(e) => setCurrentMileage(e.target.value)}
@@ -182,11 +183,12 @@ export default function EditRefueling() {
                                                         id="fuelAdded"
                                                         name="fuelAdded"
                                                         type="text"
-                                                        placeholder="bearcat@nwmissouri.edu"
+                                                        placeholder="12"
                                                         className="border-hidden block min-w-0 grow text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6 inline-block bg-white-100 dark:bg-white/10"
                                                         value={fuelAdded}
                                                         onChange={(e) => setFuelAdded(e.target.value)}
                                                     />
+                                                    <span className="px-3 text-gray-500 text-sm">Gallons</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -196,11 +198,12 @@ export default function EditRefueling() {
                                             </label>
                                             <div className="mt-2">
                                                 <div className="flex items-center rounded-md bg-white outline outline-1 -outline-offset-1 outline-gray-300 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-green-600 ">
+                                                    <span className="px-3 text-gray-500 text-sm">$</span>
                                                     <input
                                                         id="fuelCost"
                                                         name="fuelCost"
                                                         type="text"
-                                                        placeholder="bearcat@nwmissouri.edu"
+                                                        placeholder="23"
                                                         className="border-hidden block min-w-0 grow text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6 inline-block bg-white-100 dark:bg-white/10"
                                                         value={fuelCost}
                                                         onChange={(e) => setFuelCost(e.target.value)}
@@ -231,7 +234,7 @@ export default function EditRefueling() {
                                                 {imagePreviewUrl ? (
                                                     <img src={imagePreviewUrl} alt="Profile" className="size-24 rounded-full object-cover object-center" />
                                                 ) : (
-                                                    <UserCircleIcon aria-hidden="true" className="size-12 text-gray-300" />
+                                                    <FaFileImage aria-hidden="true" className="size-24 text-gray-300" />
                                                 )}
                                                 <button
                                                     type="button"

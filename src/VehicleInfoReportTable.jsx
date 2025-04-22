@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from './Config/axios';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { IoMdDownload } from "react-icons/io";
+
 
 export default function VehicleInfoReportTable() {
   const [vehicles, setVehicles] = useState([]);
@@ -29,6 +33,40 @@ export default function VehicleInfoReportTable() {
       setPage(newPage);
     }
   };
+
+  const handleDownloadExcel = async () => {
+    try {
+      const response = await api.get('/vehicleInfo/info?all=true');
+      const allVehicles = response.data.data || [];
+
+      const rows = allVehicles.map((v) => ({
+        'Vehicle No': v.NWVehicleNo,
+        'VIN': v.VIN,
+        'Model Year': v.modelYear,
+        'Make': v.make,
+        'Model': v.model,
+        'Weight': v.weight,
+        'Type': v.vehType,
+        'Department': v.vehicleDepartment,
+        'Color': v.color,
+        'License Plate': v.licensePlate,
+        'Exempt': v.isExempt,
+        'Purchase Date': new Date(v.purchaseDate).toLocaleDateString('en-US', { timeZone: 'UTC' })
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Vehicle Info');
+
+      const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([buffer], { type: 'application/octet-stream' });
+      saveAs(blob, `All_Vehicle_Info.xlsx`);
+    } catch (error) {
+      console.error('Error downloading full vehicle report:', error);
+      alert('Failed to download vehicle report.');
+    }
+  };
+
 
   return (
     <div className="p-6">
@@ -64,7 +102,7 @@ export default function VehicleInfoReportTable() {
                 <td className="border px-4 py-2">{vehicle.color}</td>
                 <td className="border px-4 py-2">{vehicle.licensePlate}</td>
                 <td className="border px-4 py-2">{vehicle.isExempt}</td>
-                <td className="border px-4 py-2">{new Date(vehicle.purchaseDate).toLocaleDateString()}</td>
+                <td className="border px-4 py-2">{<time dateTime={vehicle.purchaseDate}>{new Date(vehicle.purchaseDate).toLocaleDateString('en-US', { timeZone: 'UTC' })}</time>}</td> 
               </tr>
             ))}
           </tbody>
@@ -96,6 +134,22 @@ export default function VehicleInfoReportTable() {
           Next
         </button>
       </div>
+      <div className="flex justify-end mt-6">
+        <button
+          onClick={handleDownloadExcel}
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
+        >
+          <div className='flex gap-2'>
+            <div>
+              <IoMdDownload size={24} />
+            </div>
+            <div>
+              Download Report
+            </div>
+          </div>
+        </button>
+      </div>
+
     </div>
   );
 }

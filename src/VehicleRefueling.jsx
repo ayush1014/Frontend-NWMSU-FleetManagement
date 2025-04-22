@@ -4,10 +4,14 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { CalendarDaysIcon, CreditCardIcon, UserCircleIcon, KeyIcon } from '@heroicons/react/20/solid'
 import { FaGasPump } from 'react-icons/fa'
+import QRCode from "react-qr-code";
+
 
 export default function VehicleRefueling() {
     const { NWVehicleNo } = useParams();
     const [refuelings, setRefuelings] = useState([]);
+    const [qrVisibleForId, setQrVisibleForId] = useState(null);
+
 
     useEffect(() => {
         const fetchRefuelings = async () => {
@@ -118,7 +122,18 @@ export default function VehicleRefueling() {
                                 {refuelings.map((refueling) => (
                                     <li key={refueling.refuelingId} className="p-4">
                                         <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
-                                            <dl className="flex flex-wrap">
+                                            {qrVisibleForId === refueling.refuelingId ? (
+                                                <div className="flex flex-col items-center justify-center p-8">
+                                                    <QRCode value={refueling.receiptImage} size={179} />
+                                                    <p className="mt-4 text-sm text-gray-700">Scan to view receipt</p>
+                                                    <button
+                                                        onClick={() => setQrVisibleForId(null)}
+                                                        className="mt-4 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700"
+                                                    >
+                                                        Done
+                                                    </button>
+                                                </div>
+                                            ) : (<dl className="flex flex-wrap">
                                                 <div className="flex-auto pl-6 pt-6">
                                                     <dt className="text-sm font-semibold text-gray-900">Amount</dt>
                                                     <dd className="mt-1 text-base font-semibold text-gray-900">${refueling.fuelCost}</dd>
@@ -168,16 +183,28 @@ export default function VehicleRefueling() {
                                                     </dt>
                                                     <dd className="text-sm text-gray-500"><span className='text-green-800 font-semibold'>Fuel Added</span> {refueling.fuelAdded} Gallons</dd>
                                                 </div>
-                                            </dl>
+                                                {refueling.receiptImage ? (<div className='px-8 pt-8'>
+                                                    <button
+                                                        onClick={() => setQrVisibleForId(refueling.refuelingId)}
+                                                        className="text-sm font-semibold text-green-700 underline hover:text-green-900"
+                                                    >
+                                                        Get receipt on phone
+                                                    </button>
+                                                </div>) : (<div></div>)}
+                                            </dl>)}
                                             <div className="mt-6 border-t border-gray-900/5 px-6 py-6">
                                                 {refueling.receiptImage ? (
-                                                    <a
-                                                        href={refueling.receiptImage}
-                                                        download
-                                                        className="text-sm font-semibold text-gray-900"
-                                                    >
-                                                        Download receipt <span aria-hidden="true">&rarr;</span>
-                                                    </a>
+                                                    <>
+                                                        <div className="flex justify-between items-center">
+                                                            <a
+                                                                href={refueling.receiptImage}
+                                                                download
+                                                                className="text-sm font-semibold text-gray-900"
+                                                            >
+                                                                Download receipt <span aria-hidden="true">&rarr;</span>
+                                                            </a>
+                                                        </div>
+                                                    </>
                                                 ) : (
                                                     <p className="text-sm font-semibold text-gray-500">No receipt available</p>
                                                 )}
