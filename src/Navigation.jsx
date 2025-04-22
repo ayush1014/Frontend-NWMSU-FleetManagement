@@ -61,7 +61,7 @@ export default function Navigation() {
     ]}
 
     const userNavigation = [
-        { name: 'Your profile', href: '/user-profile' },
+        { name: 'Your profile', href: `/user-profile/${user.email}` },
         { name: 'Sign out', action: 'logout', href: '/' },
     ];
 
