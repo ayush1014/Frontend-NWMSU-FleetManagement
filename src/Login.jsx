@@ -15,6 +15,18 @@ export default function Login() {
     const [failedLogin, setFailedLogin] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const fromPortfolio = params.get('fromPortfolio');
+      
+        if (fromPortfolio === 'true') {
+          setEmail("ayushkanaujia14@gmail.com");
+          setPassword("ayush");
+        }
+      }, []);
+
+      
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("Following APi")
@@ -99,6 +111,7 @@ export default function Login() {
                                                 autoComplete="email"
                                                 className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-800 sm:text-sm sm:leading-6"
                                                 onChange={(e) => setEmail(e.target.value)}
+                                                value={email}
                                             />
                                         </div>
                                     </div>
@@ -116,6 +129,7 @@ export default function Login() {
                                                 autoComplete="current-password"
                                                 className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-800 sm:text-sm sm:leading-6"
                                                 onChange={(e) => setPassword(e.target.value)}
+                                                value={password}
                                             />
                                         </div>
                                     </div>
